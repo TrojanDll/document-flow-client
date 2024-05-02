@@ -7,9 +7,35 @@ import { Button, Form, InputGroup } from "react-bootstrap";
 import searchImg from "./../../assets/img/icons/search.svg";
 import FilterDropdown from "../../components/FilterDropdown/FilterDropdown";
 import FilterModal from "../../components/FilterModal/FilterModal";
+import TableUsers from "../../components/TableUsers/TableUsers";
 
 const AdminPage = () => {
   const [modalShow, setModalShow] = useState(false);
+  const usersList: IUser[] = [
+    {
+      id: 1,
+      department: "Отдел1",
+      email: "example@example.com",
+      first_name: "Иван",
+      last_name: "Иванов",
+      patronymic: "Иванович",
+      post: "Почтальон",
+      user_group: 124,
+      role: "user",
+    },
+
+    {
+      id: 2,
+      department: "Отдел1",
+      email: "example2@example.com",
+      first_name: "Петр",
+      last_name: "Иванов",
+      patronymic: "Петрович",
+      post: "Бухгалтер",
+      user_group: 10,
+      role: "user",
+    },
+  ];
 
   return (
     <div>
@@ -44,6 +70,7 @@ const AdminPage = () => {
             </Button>
           </Form>
         </div>
+        <TableUsers users={usersList} />
       </ContentContainer>
     </div>
   );
