@@ -1,3 +1,18 @@
 .searchInput {
   width: 400px;
 }
+
+.filters {
+  margin-top: 20px;
+  display: flex;
+  column-gap: 12px;
+}
+
+.groupWrapper {
+  width: 180px;
+}
+
+.addGroupWrapper {
+  width: 350px;
+  display: flex;
+}

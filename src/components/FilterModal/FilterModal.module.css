@@ -1,0 +1,8 @@
+.filtersWrapper {
+  display: flex;
+  column-gap: 12px;
+}
+
+.dropdownWrapper {
+  width: 150px;
+}
