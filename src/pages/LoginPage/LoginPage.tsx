@@ -6,6 +6,9 @@ import { setCredentials } from "./../../features/auth/authSlice";
 import { useLoginMutation } from "./../../features/auth/authApiSlice";
 import Login from "../../components/Login/Login";
 
+import styles from "./LoginPage.module.css";
+import Registration from "../../components/Registration/Registration";
+
 const LoginPage = () => {
   const userRef = useRef();
   const [user, setUser] = useState("");
@@ -13,9 +16,16 @@ const LoginPage = () => {
   const [errMsg, setErrMsg] = useState("");
   const [isRegPage, setIsRegPage] = useState(false);
   const navigate = useNavigate();
-
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [patronymic, setPatronymic] = useState("");
+  const [department, setDepartment] = useState("");
+  const [post, setPost] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {}, []);
 
@@ -27,7 +37,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const userData = await login({ user, pwd }).unwrap();
+      const userData = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...userData, user }));
       setUser("");
       setPwd("");
@@ -78,7 +88,19 @@ const LoginPage = () => {
     </section>
   );
 
-  const content = isRegPage ? "" : <Login />;
+  const handleToggleRegPage = () => {
+    setIsRegPage(!isRegPage);
+  };
+
+  const content = isRegPage ? (
+    <div className={styles.layout}>
+      <Registration onClick={handleToggleRegPage} />
+    </div>
+  ) : (
+    <div className={styles.layout}>
+      <Login onClick={handleToggleRegPage} />
+    </div>
+  );
 
   return content;
 };

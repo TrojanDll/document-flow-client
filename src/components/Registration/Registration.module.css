@@ -1,5 +1,5 @@
 .wrapper {
-  width: 500px;
+  width: 700px;
   border: 1px solid var(--dark-bg-300);
   border-radius: 12px;
   padding: 20px;
@@ -10,6 +10,17 @@
   font-size: 22px;
   font-weight: 500;
   margin-bottom: 12px;
+}
+
+.inputsRow {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 16px;
+}
+
+.input {
+  margin-top: 16px;
+  width: 50%;
 }
 
 .buttonsWrapper {
