@@ -1,13 +1,85 @@
-import React, { FC } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { useRef, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const LoginPage: FC = () => {
-  return (
-    <div>
-      <Link to="/documents">documents</Link>
-      <Outlet />
-    </div>
+import { useDispatch } from "react-redux";
+import { setCredentials } from "./../../features/auth/authSlice";
+import { useLoginMutation } from "./../../features/auth/authApiSlice";
+import Login from "../../components/Login/Login";
+
+const LoginPage = () => {
+  const userRef = useRef();
+  const [user, setUser] = useState("");
+  const [pwd, setPwd] = useState("");
+  const [errMsg, setErrMsg] = useState("");
+  const [isRegPage, setIsRegPage] = useState(false);
+  const navigate = useNavigate();
+
+  const [login, { isLoading }] = useLoginMutation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {}, []);
+
+  useEffect(() => {
+    setErrMsg("");
+  }, [user, pwd]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const userData = await login({ user, pwd }).unwrap();
+      dispatch(setCredentials({ ...userData, user }));
+      setUser("");
+      setPwd("");
+      navigate("/welcome");
+    } catch (err) {
+      if (!err?.originalStatus) {
+        // isLoading: true until timeout occurs
+        setErrMsg("No Server Response");
+      } else if (err.originalStatus === 400) {
+        setErrMsg("Missing Username or Password");
+      } else if (err.originalStatus === 401) {
+        setErrMsg("Unauthorized");
+      } else {
+        setErrMsg("Login Failed");
+      }
+    }
+  };
+
+  const handleUserInput = (e) => setUser(e.target.value);
+
+  const handlePwdInput = (e) => setPwd(e.target.value);
+
+  const content1 = isLoading ? (
+    <h1>Loading...</h1>
+  ) : (
+    <section className="login">
+      <p className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
+        {errMsg}
+      </p>
+
+      <h1>Employee Login</h1>
+
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="username">Username:</label>
+        <input
+          type="text"
+          id="username"
+          value={user}
+          onChange={handleUserInput}
+          autoComplete="off"
+          required
+        />
+
+        <label htmlFor="password">Password:</label>
+        <input type="password" id="password" onChange={handlePwdInput} value={pwd} required />
+        <button>Sign In</button>
+      </form>
+    </section>
   );
-};
 
+  const content = isRegPage ? "" : <Login />;
+
+  return content;
+};
 export default LoginPage;

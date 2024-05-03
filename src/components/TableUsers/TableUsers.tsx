@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import styles from "./TableUsers.module.css";
 import { Table } from "react-bootstrap";
-import TableUsersItem from "../TableUsersItem/TableUsersItem";
+import TableUsersItem, { TableUsersItemVariants } from "../TableUsersItem/TableUsersItem";
 
 interface TableUsersProps {
   users: IUser[];
@@ -9,8 +9,8 @@ interface TableUsersProps {
 
 const TableUsers: FC<TableUsersProps> = ({ users }) => {
   return (
-    <Table className={styles.table}>
-      <thead>
+    <Table bordered className={styles.table}>
+      <thead className={styles.tableHead}>
         <tr>
           <th>№</th>
           <th>ФИО</th>
@@ -22,8 +22,12 @@ const TableUsers: FC<TableUsersProps> = ({ users }) => {
       </thead>
 
       <tbody>
-        {users.map((user) => (
-          <TableUsersItem key={user.id} user={user} />
+        {users.map((user, i) => (
+          <TableUsersItem
+            variant={i % 2 === 0 ? TableUsersItemVariants.light : TableUsersItemVariants.dark}
+            key={user.id}
+            user={user}
+          />
         ))}
       </tbody>
     </Table>

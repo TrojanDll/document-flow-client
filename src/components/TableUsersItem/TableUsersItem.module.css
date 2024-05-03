@@ -1,3 +1,7 @@
-.tableRow td {
+.light td {
+  background-color: #ffffff;
+}
+
+.dark td {
   background-color: var(--dark-bg-100);
 }
