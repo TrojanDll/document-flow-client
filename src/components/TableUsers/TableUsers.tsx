@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import styles from "./TableUsers.module.css";
 import { Table } from "react-bootstrap";
+import TableUsersItem from "../TableUsersItem/TableUsersItem";
 
 interface TableUsersProps {
   users: IUser[];
@@ -19,6 +20,12 @@ const TableUsers: FC<TableUsersProps> = ({ users }) => {
           <th>Группа</th>
         </tr>
       </thead>
+
+      <tbody>
+        {users.map((user) => (
+          <TableUsersItem key={user.id} user={user} />
+        ))}
+      </tbody>
     </Table>
   );
 };
