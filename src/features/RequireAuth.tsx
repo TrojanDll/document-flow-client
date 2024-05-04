@@ -1,12 +1,12 @@
 import { useLocation, Navigate, Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectCurrentAccessToken } from "./auth/authSlice";
 
 const RequireAuth = () => {
   // Понять как получить стейт из authSlice
-  const token = useSelector(selectCurrentAccessToken());
+  const token = localStorage.getItem("accessToken");
+  console.log(`access из RequireAuth ${token}`);
   const location = useLocation();
-  console.log(`Редирект. Токен: ${token}`);
+  console.log(`Редирект. access: ${token}`);
+  console.log(`Редирект. refresh: ${localStorage.getItem("refreshToken")}`);
 
   return token ? <Outlet /> : <Navigate to="/" state={{ from: location }} replace />;
 };

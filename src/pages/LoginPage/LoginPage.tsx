@@ -44,7 +44,7 @@ const LoginPage = () => {
       dispatch(setCredentials({ ...userData, user }));
       setEmail("");
       setPassword("");
-      navigate("documents");
+      navigate("/documents");
     } catch (err) {
       console.log(err);
     }
@@ -67,7 +67,7 @@ const LoginPage = () => {
       dispatch(setCredentials({ ...userData, user }));
       setEmail("");
       setPassword("");
-      navigate("documents");
+      navigate("/documents");
     } catch (err) {
       console.log(err);
     }
