@@ -25,5 +25,5 @@ export const { setCredentials } = authSlice.actions;
 
 export default authSlice.reducer;
 
-export const selectCurrentAccessToken = (state: any) => state.auth.accessToken;
-export const selectCurrentRefreshToken = (state: any) => state.auth.refreshToken;
+export const selectCurrentAccessToken = (state: IauthSliceState) => state.accessToken;
+export const selectCurrentRefreshToken = (state: IauthSliceState) => state.refreshToken;

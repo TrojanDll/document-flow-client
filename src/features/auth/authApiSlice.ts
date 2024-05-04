@@ -5,31 +5,41 @@ interface Ilogin {
   password: string;
 }
 
+interface IRegister {
+  firstName: string;
+  lastName: string;
+  patronymic: string;
+  department: string;
+  post: string;
+  email: string;
+  password: string;
+}
+
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
-      query: ({ email, password }) => ({
+      query: (credentials: Ilogin) => ({
         url: "/api/auth/login",
         method: "POST",
-        body: { email, password },
+        body: { email: credentials.email, password: credentials.password },
       }),
     }),
-    register: builder.query({
-      query: (credentials) => ({
-        url: "/auth",
+    register: builder.mutation({
+      query: (credentials: IRegister) => ({
+        url: "/api/auth/register",
         method: "POST",
         body: {
-          firstName: "string",
-          lastName: "string",
-          patronymic: "string",
-          department: "string",
-          post: "string",
-          email: "string",
-          password: "string",
+          firstName: credentials.firstName,
+          lastName: credentials.lastName,
+          patronymic: credentials.patronymic,
+          department: credentials.department,
+          post: credentials.post,
+          email: credentials.email,
+          password: credentials.password,
         },
       }),
     }),
   }),
 });
 
-export const { useLoginMutation } = authApiSlice;
+export const { useLoginMutation, useRegisterMutation } = authApiSlice;
