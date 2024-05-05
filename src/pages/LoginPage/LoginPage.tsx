@@ -198,7 +198,7 @@ const LoginPage = () => {
             <Form.Control
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              type="password"
+              type="text"
               placeholder="Пароль"
               required
             />

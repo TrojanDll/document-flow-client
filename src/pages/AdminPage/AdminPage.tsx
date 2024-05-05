@@ -5,12 +5,17 @@ import styles from "./AdminPage.module.css";
 import PageTitle from "../../components/PageTitle/PageTitle";
 import { Button, Form, InputGroup } from "react-bootstrap";
 import searchImg from "./../../assets/img/icons/search.svg";
-import FilterDropdown from "../../components/FilterDropdown/FilterDropdown";
 import FilterModal from "../../components/FilterModal/FilterModal";
 import TableUsers from "../../components/TableUsers/TableUsers";
+import { useGetUsersQuery } from "../../features/users/usersApiSlice";
+import { useDispatch } from "react-redux";
+import { logOut } from "../../features/auth/authSlice";
 
 const AdminPage = () => {
   const [modalShow, setModalShow] = useState(false);
+  const { data: users } = useGetUsersQuery({ email: "dsdfsdf@ssdv" });
+  console.log(users);
+
   const usersList: IUser[] = [
     {
       id: 1,

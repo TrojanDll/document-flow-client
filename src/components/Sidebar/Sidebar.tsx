@@ -8,8 +8,16 @@ import documentImg from "./../../assets/img/icons/document.svg";
 import mailImg from "./../../assets/img/icons/mail.svg";
 import gearImg from "./../../assets/img/icons/gear.svg";
 import { Button } from "react-bootstrap";
+import { logOut, setCredentials } from "../../features/auth/authSlice";
+import { useDispatch } from "react-redux";
 
 const Sidebar: FC = () => {
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logOut({}));
+    dispatch(setCredentials({}));
+  };
   return (
     <div className={styles.sidebar}>
       <div className={styles.title}>Монтаж-сервис</div>
@@ -41,7 +49,7 @@ const Sidebar: FC = () => {
           <div className={styles.linkText}>Администрирование</div>
         </Link>
 
-        <Button variant="light" className={styles.logout}>
+        <Button onClick={handleLogout} variant="light" className={styles.logout}>
           Выход
         </Button>
       </div>
