@@ -45,7 +45,7 @@ const Sidebar: FC = () => {
       </div>
 
       <div className={styles.bottomLinks}>
-        <Link to="/profile" className={styles.linkWrapper}>
+        <Link to="/admin" className={styles.linkWrapper}>
           <img src={gearImg} alt="peopleImg" className={styles.linkImg} />
           <div className={styles.linkText}>Администрирование</div>
         </Link>

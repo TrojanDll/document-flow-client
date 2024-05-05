@@ -5,13 +5,16 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import Layout from "./features/Layout";
 import RequireAuth from "./features/RequireAuth";
+import UnrequiredAuth from "./features/UnrequiredAuth";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* public routes */}
-        <Route index element={<LoginPage />} />
+        <Route element={<UnrequiredAuth />}>
+          <Route index element={<LoginPage />} />
+        </Route>
 
         {/* protected routes */}
         <Route element={<RequireAuth />}>

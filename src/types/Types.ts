@@ -1,11 +1,12 @@
 interface IUser {
   id: number;
-  first_name: string;
-  last_name: string;
+  active: boolean;
+  firstName: string;
+  lastName: string;
   patronymic: string;
-  email: string;
-  department: string;
   post: string;
-  user_group: number;
   role: string;
+  email: string;
+  userGroup?: string | null | undefined;
+  department?: string | null | undefined;
 }

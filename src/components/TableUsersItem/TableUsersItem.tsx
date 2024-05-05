@@ -10,25 +10,26 @@ export enum TableUsersItemVariants {
 interface TableUsersItemProps {
   user: IUser;
   variant: TableUsersItemVariants;
+  number: number;
 }
 
-const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant }) => {
-  const { id, first_name, last_name, patronymic, email, department, post, user_group } = user;
+const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number }) => {
+  const { firstName, lastName, patronymic, email, department, post, userGroup } = user;
 
   const dispatch = useDispatch();
 
   return (
     <tr className={styles[variant]}>
-      <td>{id}</td>
+      <td>{number}</td>
       <td>
-        {first_name} <br />
-        {last_name} <br />
+        {firstName} <br />
+        {lastName} <br />
         {patronymic} <br />
       </td>
       <td>{email}</td>
       <td>{department}</td>
       <td>{post}</td>
-      <td>{user_group}</td>
+      <td>{userGroup}</td>
     </tr>
   );
 };

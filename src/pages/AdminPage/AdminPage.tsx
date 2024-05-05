@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import ContentContainer from "../../components/ContentContainer/ContentContainer";
 import styles from "./AdminPage.module.css";
@@ -11,34 +11,37 @@ import { useGetUsersQuery } from "../../features/users/usersApiSlice";
 
 const AdminPage = () => {
   const [modalShow, setModalShow] = useState(false);
-  const { data: users } = useGetUsersQuery({});
-  console.log(users);
+  const { data: fetchedUsers, isLoading } = useGetUsersQuery({});
+  const [modifiedUsers, setModifiedUsers] = useState([]);
+  // const [users, setUsers] = useState(useSelector(selectAllUsers));
+  // const dispatch = useDispatch();
 
-  const usersList: IUser[] = [
-    {
-      id: 1,
-      department: "Отдел1",
-      email: "example@example.com",
-      first_name: "Иван",
-      last_name: "Иванов",
-      patronymic: "Иванович",
-      post: "Почтальон",
-      user_group: 124,
-      role: "user",
-    },
+  function sortByField<T>(arr: T[], field: keyof T): T[] {
+    return arr.slice().sort((a, b) => {
+      if (a[field] < b[field]) return -1;
+      if (a[field] > b[field]) return 1;
+      return 0;
+    });
+  }
 
-    {
-      id: 2,
-      department: "Отдел1",
-      email: "example2@example.com",
-      first_name: "Петр",
-      last_name: "Иванов",
-      patronymic: "Петрович",
-      post: "Бухгалтер",
-      user_group: 10,
-      role: "user",
-    },
-  ];
+  async function sortUsersByField(field: string) {
+    if (!isLoading) {
+      const sortedUsers = await sortByField(fetchedUsers, field);
+      // console.log(sortedUsers);
+      setModifiedUsers(sortedUsers);
+    }
+  }
+
+  useEffect(() => {
+    sortUsersByField("firstName");
+  }, [isLoading, fetchedUsers]);
+
+  // useEffect(() => {
+  //   console.log("useEffect");
+  //   if (!isLoading) {
+  //     sortUsersByField("firstName");
+  //   }
+  // }, []);
 
   return (
     <div>
@@ -73,7 +76,8 @@ const AdminPage = () => {
             </Button>
           </Form>
         </div>
-        <TableUsers users={usersList} />
+        {modifiedUsers && <TableUsers users={modifiedUsers} />}
+        {/* <TableUsers users={users} /> */}
       </ContentContainer>
     </div>
   );
