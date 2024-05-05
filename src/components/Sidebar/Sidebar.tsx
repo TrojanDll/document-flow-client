@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import styles from "./Sidebar.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import peopleImg from "./../../assets/img/icons/people-fill.svg";
 import taskImg from "./../../assets/img/icons/checkmark.svg";
@@ -8,15 +8,16 @@ import documentImg from "./../../assets/img/icons/document.svg";
 import mailImg from "./../../assets/img/icons/mail.svg";
 import gearImg from "./../../assets/img/icons/gear.svg";
 import { Button } from "react-bootstrap";
-import { logOut, setCredentials } from "../../features/auth/authSlice";
+import { logOut } from "../../features/auth/authSlice";
 import { useDispatch } from "react-redux";
 
 const Sidebar: FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    dispatch(logOut({}));
-    dispatch(setCredentials({}));
+    dispatch(logOut());
+    navigate("/");
   };
   return (
     <div className={styles.sidebar}>

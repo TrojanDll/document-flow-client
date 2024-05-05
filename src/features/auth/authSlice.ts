@@ -1,4 +1,4 @@
-import { createSelector, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 interface IauthSliceState {
   accessToken: string;
@@ -17,14 +17,8 @@ const authSlice = createSlice({
       localStorage.setItem("refreshToken", refreshToken);
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
-      // console.log("refreshToken", refreshToken);
-      // console.log(`accessToken: ${accessToken}`);
-      // console.log(`refreshToken ${refreshToken}`);
     },
-    logOut: (state, action) => {
-      const data = action.payload;
-      // console.log(state);
-      console.log(data);
+    logOut: () => {
       localStorage.setItem("accessToken", "");
       localStorage.setItem("refreshToken", "");
     },
@@ -34,6 +28,3 @@ const authSlice = createSlice({
 export const { setCredentials, logOut } = authSlice.actions;
 
 export default authSlice.reducer;
-
-// export const selectCurrentAccessToken = (state: any) => state.auth.accessToken;
-// export const selectCurrentRefreshToken = (state: any) => state.auth.refreshToken;

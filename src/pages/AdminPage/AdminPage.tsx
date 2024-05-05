@@ -8,12 +8,10 @@ import searchImg from "./../../assets/img/icons/search.svg";
 import FilterModal from "../../components/FilterModal/FilterModal";
 import TableUsers from "../../components/TableUsers/TableUsers";
 import { useGetUsersQuery } from "../../features/users/usersApiSlice";
-import { useDispatch } from "react-redux";
-import { logOut } from "../../features/auth/authSlice";
 
 const AdminPage = () => {
   const [modalShow, setModalShow] = useState(false);
-  const { data: users } = useGetUsersQuery({ email: "dsdfsdf@ssdv" });
+  const { data: users } = useGetUsersQuery({});
   console.log(users);
 
   const usersList: IUser[] = [

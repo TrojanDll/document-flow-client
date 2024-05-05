@@ -4,23 +4,17 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "./../../features/auth/authSlice";
 import { useLoginMutation, useRegisterMutation } from "./../../features/auth/authApiSlice";
-import Login from "../../components/Login/Login";
 
 import styles from "./LoginPage.module.css";
-import Registration from "../../components/Registration/Registration";
 import { Button, Form } from "react-bootstrap";
 
 const LoginPage = () => {
-  const userRef = useRef();
-  const [user, setUser] = useState("");
-  const [pwd, setPwd] = useState("");
-  const [errMsg, setErrMsg] = useState("");
-  const [isRegPage, setIsRegPage] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [login, { isLoading }] = useLoginMutation();
   const [register] = useRegisterMutation();
-  const dispatch = useDispatch();
 
+  const [isRegPage, setIsRegPage] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [patronymic, setPatronymic] = useState("");
@@ -29,19 +23,13 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  useEffect(() => {}, []);
-
-  useEffect(() => {
-    setErrMsg("");
-  }, [user, pwd]);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       const userData = await login({ email, password });
       console.log(userData);
-      dispatch(setCredentials({ ...userData, user }));
+      dispatch(setCredentials({ ...userData }));
       setEmail("");
       setPassword("");
       navigate("/documents");
@@ -64,7 +52,7 @@ const LoginPage = () => {
         password,
       });
       console.log(userData);
-      dispatch(setCredentials({ ...userData, user }));
+      dispatch(setCredentials({ ...userData }));
       setEmail("");
       setPassword("");
       navigate("/documents");
@@ -198,7 +186,7 @@ const LoginPage = () => {
             <Form.Control
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              type="text"
+              type="password"
               placeholder="Пароль"
               required
             />
