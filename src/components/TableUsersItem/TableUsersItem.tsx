@@ -26,13 +26,13 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number }) => {
   const [getUserById, { isLoading }] = useGetUserByIdMutation();
 
   let updatedUser: any;
-  let content;
+  let receivedContent = null;
 
   const handleEdit = async (userId: number) => {
     updatedUser = await getUserById({ id: userId });
     setIsUserChanged(true);
     console.log(updatedUser.data);
-    content = (
+    receivedContent = (
       <tr className={styles[variant]}>
         <td>{number}</td>
         <td>
@@ -58,7 +58,7 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number }) => {
     );
   };
 
-  return (
+  const mainContent = (
     <tr className={styles[variant]}>
       <td>{number}</td>
       <td>
@@ -67,9 +67,9 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number }) => {
         {patronymic} <br />
       </td>
       <td>{email}</td>
-      <td>{department}</td>
+      <td>{department ? department : "Отдел не задан"}</td>
       <td>{post}</td>
-      <td>{userGroup}</td>
+      <td>{userGroup ? userGroup : "Группа не задана"}</td>
       <td className={styles.editButtonСell}>
         <div className={styles.editButtonWrapper}>
           <Button
@@ -82,6 +82,8 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number }) => {
       </td>
     </tr>
   );
+
+  return <>{receivedContent ? receivedContent : mainContent}</>;
 };
 
 export default TableUsersItem;
