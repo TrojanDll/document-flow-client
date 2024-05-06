@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import styles from "./TableUsersItem.module.css";
 import { Button } from "react-bootstrap";
 import { useGetUserByIdMutation } from "../../features/admin/adminApiSlice";
+import CreateUserModal from "../EditUserModal/CreateUserModal";
 
 export enum TableUsersItemVariants {
   light = "light",
@@ -15,6 +16,7 @@ interface TableUsersItemProps {
 }
 
 const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number }) => {
+  const [modalShow, setModalShow] = useState(false);
   const [isUserChanged, setIsUserChanged] = useState(false);
   const { id, firstName, lastName, patronymic, email, department, post, userGroup } = user;
   const [getUserById] = useGetUserByIdMutation();
@@ -27,48 +29,40 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number }) => {
     updatedUser = await getUserById({ id: userId });
     setIsUserChanged(true);
     console.log(updatedUser.data);
-    receivedContent = (
-      <tr className={styles[variant]}>
-        <td>{number}</td>
-        <td>
-          {updatedUser.data.firstName} <br />
-          {updatedUser.data.lastName} <br />
-          {updatedUser.data.patronymic} <br />
-        </td>
-        <td>{updatedUser.data.email}</td>
-        <td>{updatedUser.data.department}</td>
-        <td>{updatedUser.data.post}</td>
-        <td>{updatedUser.data.userGroup}</td>
-        <td className={styles.editButtonСell}>
-          <div className={styles.editButtonWrapper}>
-            <Button
-              onClick={() => handleEdit(id)}
-              className={styles.editButton}
-              variant="outline-secondary">
-              Редактировать
-            </Button>
-          </div>
-        </td>
-      </tr>
-    );
   };
 
-  const mainContent = (
+  return (
     <tr className={styles[variant]}>
       <td>{number}</td>
       <td>
-        {firstName} <br />
-        {lastName} <br />
-        {patronymic} <br />
+        {updatedUser ? updatedUser.data.firstName : firstName} <br />
+        {updatedUser ? updatedUser.data.lastName : lastName} <br />
+        {updatedUser ? updatedUser.data.lastName : patronymic} <br />
       </td>
-      <td>{email}</td>
-      <td>{department ? department : "Отдел не задан"}</td>
+      <td>{updatedUser ? updatedUser.data.lastName : email}</td>
+      <td>
+        {updatedUser
+          ? updatedUser.data.department
+            ? updatedUser.data.department
+            : "Отдел не задан"
+          : department
+          ? department
+          : "Отдел не задан"}
+      </td>
       <td>{post}</td>
-      <td>{userGroup ? userGroup : "Группа не задана"}</td>
+      <td>
+        {updatedUser
+          ? updatedUser.data.userGroup
+            ? updatedUser.data.userGroup
+            : "Отдел не задан"
+          : userGroup
+          ? userGroup
+          : "Отдел не задан"}
+      </td>
       <td className={styles.editButtonСell}>
         <div className={styles.editButtonWrapper}>
           <Button
-            onClick={() => handleEdit(id)}
+            onClick={() => setModalShow(true)}
             className={styles.editButton}
             variant="outline-secondary">
             Редактировать
@@ -77,8 +71,6 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number }) => {
       </td>
     </tr>
   );
-
-  return <>{receivedContent ? receivedContent : mainContent}</>;
 };
 
 export default TableUsersItem;

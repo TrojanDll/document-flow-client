@@ -2,11 +2,13 @@ import { apiSlice } from "../../app/api/apiSlice";
 
 export const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getUsers: builder.query({
-      query: () => "/api/admin/users",
-      keepUnusedDataFor: 5,
+    getUsers: builder.mutation({
+      query: () => ({
+        url: "/api/admin/users",
+        method: "GET",
+      }),
     }),
   }),
 });
 
-export const { useGetUsersQuery } = usersApiSlice;
+export const { useGetUsersMutation } = usersApiSlice;
