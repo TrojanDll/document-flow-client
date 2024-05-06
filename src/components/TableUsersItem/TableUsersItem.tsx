@@ -1,13 +1,7 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import styles from "./TableUsersItem.module.css";
-import { useDispatch } from "react-redux";
 import { Button } from "react-bootstrap";
-import {
-  useGetUserByIdMutation,
-  useUpdateUserByIdMutation,
-} from "../../features/admin/adminApiSlice";
-import axios from "axios";
-import { BASE_URL } from "../../app/api/apiSlice";
+import { useGetUserByIdMutation } from "../../features/admin/adminApiSlice";
 
 export enum TableUsersItemVariants {
   light = "light",
@@ -23,7 +17,8 @@ interface TableUsersItemProps {
 const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number }) => {
   const [isUserChanged, setIsUserChanged] = useState(false);
   const { id, firstName, lastName, patronymic, email, department, post, userGroup } = user;
-  const [getUserById, { isLoading }] = useGetUserByIdMutation();
+  const [getUserById] = useGetUserByIdMutation();
+  console.log(isUserChanged);
 
   let updatedUser: any;
   let receivedContent = null;

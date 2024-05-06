@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import FilterDropdown from "../FilterDropdown/FilterDropdown";
 import styles from "./FilterModal.module.css";
@@ -17,6 +17,8 @@ const FilterModal: FC<FilterModalProps> = (props) => {
     "department2",
     "department3",
   ]);
+
+  console.log(setGroupFilterItems, setPostFilterItems, setDepartmentFilterItems);
 
   const { show } = props;
   return (

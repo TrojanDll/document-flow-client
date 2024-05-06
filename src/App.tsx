@@ -1,11 +1,10 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import DocumentsPage from "./pages/DocumentsPage/DocumentsPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 // import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import Layout from "./features/Layout";
 import RequireAuth from "./features/RequireAuth";
-import UnrequiredAuth from "./features/UnrequiredAuth";
 
 function App() {
   return (

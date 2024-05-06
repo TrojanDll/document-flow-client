@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import ContentContainer from "../../components/ContentContainer/ContentContainer";
 import styles from "./AdminPage.module.css";
@@ -12,7 +12,7 @@ import { useGetUsersQuery } from "../../features/users/usersApiSlice";
 const AdminPage = () => {
   const [modalShow, setModalShow] = useState(false);
   const { data: fetchedUsers, isLoading } = useGetUsersQuery({});
-  const [modifiedUsers, setModifiedUsers] = useState([]);
+  const [modifiedUsers, setModifiedUsers] = useState<IUser[]>([]);
 
   function sortByField<T>(arr: T[], field: keyof T): T[] {
     return arr.slice().sort((a, b) => {
@@ -22,9 +22,9 @@ const AdminPage = () => {
     });
   }
 
-  async function sortUsersByField(field: string) {
+  async function sortUsersByField(field: keyof IUser) {
     if (!isLoading) {
-      const sortedUsers = await sortByField(fetchedUsers, field);
+      const sortedUsers: IUser[] = await sortByField<IUser>(fetchedUsers, field);
       // console.log(sortedUsers);
       setModifiedUsers(sortedUsers);
     }

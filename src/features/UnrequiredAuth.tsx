@@ -1,8 +1,7 @@
-import { useLocation, Outlet, Navigate } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 
 const UnrequiredAuth = () => {
   const token = localStorage.getItem("accessToken");
-  const location = useLocation();
   console.log("UnrequiredAuth");
 
   if (token) {
