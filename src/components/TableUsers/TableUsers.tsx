@@ -18,6 +18,7 @@ const TableUsers: FC<ITableUsersProps> = ({ users }) => {
           <th>Отдел</th>
           <th>Должность</th>
           <th>Группа</th>
+          <th></th>
         </tr>
       </thead>
 

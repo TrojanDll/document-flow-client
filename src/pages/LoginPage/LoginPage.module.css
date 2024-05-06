@@ -53,3 +53,7 @@
   margin: 0 auto;
   margin-top: 6px;
 }
+
+.errorMessage {
+  color: var(--error);
+}

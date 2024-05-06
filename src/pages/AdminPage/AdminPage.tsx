@@ -13,8 +13,6 @@ const AdminPage = () => {
   const [modalShow, setModalShow] = useState(false);
   const { data: fetchedUsers, isLoading } = useGetUsersQuery({});
   const [modifiedUsers, setModifiedUsers] = useState([]);
-  // const [users, setUsers] = useState(useSelector(selectAllUsers));
-  // const dispatch = useDispatch();
 
   function sortByField<T>(arr: T[], field: keyof T): T[] {
     return arr.slice().sort((a, b) => {
@@ -35,13 +33,6 @@ const AdminPage = () => {
   useEffect(() => {
     sortUsersByField("firstName");
   }, [isLoading, fetchedUsers]);
-
-  // useEffect(() => {
-  //   console.log("useEffect");
-  //   if (!isLoading) {
-  //     sortUsersByField("firstName");
-  //   }
-  // }, []);
 
   return (
     <div>
@@ -77,7 +68,6 @@ const AdminPage = () => {
           </Form>
         </div>
         {modifiedUsers && <TableUsers users={modifiedUsers} />}
-        {/* <TableUsers users={users} /> */}
       </ContentContainer>
     </div>
   );

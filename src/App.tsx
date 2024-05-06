@@ -12,9 +12,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* public routes */}
-        <Route element={<UnrequiredAuth />}>
-          <Route index element={<LoginPage />} />
-        </Route>
+        <Route index element={<LoginPage />} />
 
         {/* protected routes */}
         <Route element={<RequireAuth />}>

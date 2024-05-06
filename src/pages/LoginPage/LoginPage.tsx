@@ -11,7 +11,7 @@ import { Button, Form } from "react-bootstrap";
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [login, { isLoading }] = useLoginMutation();
+  const [login, { isError }] = useLoginMutation();
   const [register] = useRegisterMutation();
 
   const [isRegPage, setIsRegPage] = useState(false);
@@ -66,6 +66,18 @@ const LoginPage = () => {
   const handleToggleRegPage = () => {
     setIsRegPage(!isRegPage);
   };
+
+  useEffect(() => {
+    if (isError) {
+      setError("Ошибка. Неверный логин или пароль!");
+    } else {
+      setError("");
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    setError("");
+  }, [email, password]);
 
   const content = isRegPage ? (
     <div className={styles.layout}>
@@ -193,6 +205,7 @@ const LoginPage = () => {
               required
             />
           </Form.Group>
+          <div className={styles.errorMessage}>{error}</div>
           <div className={styles.buttonsWrapper}>
             <Button className={styles.loginButton} variant="primary" type="submit">
               Войти
