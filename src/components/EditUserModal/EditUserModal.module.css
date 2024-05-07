@@ -1,0 +1,63 @@
+.layout {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper {
+  width: 700px;
+  border: 1px solid var(--dark-bg-300);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.inputsRow {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 12px;
+}
+
+.input {
+  margin-top: 16px;
+  width: 50%;
+}
+
+.nameInput {
+  width: 33%;
+}
+
+.buttonsWrapper {
+  text-align: center;
+}
+
+.orText {
+  margin-top: 6px;
+}
+
+.loginButton {
+  margin-top: 12px;
+}
+
+.button {
+  display: block;
+  margin: 0 auto;
+  margin-top: 6px;
+}
+
+.errorMessage {
+  color: var(--error);
+}

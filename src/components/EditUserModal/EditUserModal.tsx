@@ -1,56 +1,56 @@
 import { FC, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import styles from "./CreateUserModal.module.css";
-import { useRegisterMutation } from "../../features/auth/authApiSlice";
+import styles from "./EditUserModal.module.css";
+import { useUpdateUserByIdMutation } from "../../features/admin/adminApiSlice";
 
-interface CreateUserModalProps {
+interface EditUserModalProps {
   props?: any;
   onHide: () => void;
   show?: boolean;
-  onCreateUser: () => void;
+  handleUdateTable: () => void;
+  userData: IUser;
 }
 
-const CreateUserModal: FC<CreateUserModalProps> = (props) => {
-  const { show } = props;
-  const [register] = useRegisterMutation();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [patronymic, setPatronymic] = useState("");
-  const [department, setDepartment] = useState("");
-  const [post, setPost] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const EditUserModal: FC<EditUserModalProps> = (props) => {
+  const { show, userData, onHide, handleUdateTable } = props;
+  const [editUserById] = useUpdateUserByIdMutation();
+  const [firstName, setFirstName] = useState(userData.firstName);
+  const [lastName, setLastName] = useState(userData.lastName);
+  const [patronymic, setPatronymic] = useState(userData.patronymic);
+  const [department, setDepartment] = useState(userData.department);
+  const [post, setPost] = useState(userData.post);
+  const [email, setEmail] = useState(userData.email);
+  const [groupId, setGroupId] = useState(userData.userGroup);
 
   const handleRegistrationSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const userData = await register({
+      const udatedUserData = await editUserById({
+        userId: userData.id,
         firstName,
         lastName,
         patronymic,
         department,
         post,
         email,
-        password,
       });
-      props.onHide();
-      props.onCreateUser();
-      console.log(userData);
+      onHide();
+      handleUdateTable();
+      console.log(udatedUserData);
     } catch (err) {
       console.log(err);
     }
   };
 
   const handleRefuseButton = () => {
-    props.onHide();
+    onHide();
     setFirstName("");
     setLastName("");
     setPatronymic("");
     setDepartment("");
     setPost("");
     setEmail("");
-    setPassword("");
   };
 
   return (
@@ -65,7 +65,7 @@ const CreateUserModal: FC<CreateUserModalProps> = (props) => {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleRegistrationSubmit}>
-          <div className={styles.title}>Добавление пользователя</div>
+          <div className={styles.title}>Редактирование пользователя</div>
           <div className={styles.inputsRow}>
             <Form.Group className={`mt-3 ${styles.nameInput}`} controlId="firstName">
               <Form.Label>Имя</Form.Label>
@@ -136,17 +136,6 @@ const CreateUserModal: FC<CreateUserModalProps> = (props) => {
                 required
               />
             </Form.Group>
-
-            <Form.Group className={styles.input} controlId="password">
-              <Form.Label>Пароль</Form.Label>
-              <Form.Control
-                value={password}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-                type="password"
-                placeholder="Пароль"
-                required
-              />
-            </Form.Group>
           </div>
 
           <div className={styles.buttonsWrapper}>
@@ -163,4 +152,4 @@ const CreateUserModal: FC<CreateUserModalProps> = (props) => {
   );
 };
 
-export default CreateUserModal;
+export default EditUserModal;

@@ -7,6 +7,6 @@ interface IUser {
   post?: string;
   role?: string;
   email?: string;
-  userGroup?: string | null | undefined;
-  department?: string | null | undefined;
+  userGroup?: string | undefined;
+  department?: string | undefined;
 }

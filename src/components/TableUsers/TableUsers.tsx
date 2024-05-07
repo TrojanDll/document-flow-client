@@ -5,9 +5,10 @@ import TableUsersItem, { TableUsersItemVariants } from "../TableUsersItem/TableU
 
 interface ITableUsersProps {
   users: IUser[];
+  handleUdateTable: () => void;
 }
 
-const TableUsers: FC<ITableUsersProps> = ({ users }) => {
+const TableUsers: FC<ITableUsersProps> = ({ users, handleUdateTable }) => {
   return (
     <Table bordered className={styles.table}>
       <thead className={styles.tableHead}>
@@ -29,6 +30,7 @@ const TableUsers: FC<ITableUsersProps> = ({ users }) => {
             key={user.id}
             user={user}
             number={i + 1}
+            handleUdateTable={() => handleUdateTable()}
           />
         ))}
       </tbody>

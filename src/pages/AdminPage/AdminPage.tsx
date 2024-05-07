@@ -7,8 +7,7 @@ import { Button, Form, InputGroup } from "react-bootstrap";
 import searchImg from "./../../assets/img/icons/search.svg";
 import FilterModal from "../../components/FilterModal/FilterModal";
 import TableUsers from "../../components/TableUsers/TableUsers";
-import { useGetUsersMutation } from "../../features/users/usersApiSlice";
-import CreateUserModal from "../../components/EditUserModal/CreateUserModal";
+import CreateUserModal from "../../components/CreateUserModal/CreateUserModal";
 import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
 
 const AdminPage = () => {
@@ -17,7 +16,6 @@ const AdminPage = () => {
   // const [usersList, setUsersList] = useState<IUser[]>([]);
   const { data: fetchedUsers, isLoading, refetch: getUsers } = useGetUsersQuery({});
   const [modifiedUsers, setModifiedUsers] = useState<IUser[]>([]);
-  const [rerender, setRerender] = useState(true);
 
   function sortByField<T>(arr: T[], field: keyof T): T[] {
     return arr.slice().sort((a, b) => {
@@ -27,9 +25,9 @@ const AdminPage = () => {
     });
   }
 
-  async function sortUsersByField(field: keyof IUser) {
+  async function sortUsersByField(listToSort: IUser[], field: keyof IUser) {
     // if (!isLoading) {
-    const sortedUsers: IUser[] = await sortByField<IUser>(fetchedUsers, field);
+    const sortedUsers: IUser[] = await sortByField<IUser>(listToSort, field);
     // console.log(sortedUsers);
     setModifiedUsers(sortedUsers);
     // }
@@ -37,13 +35,16 @@ const AdminPage = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      sortUsersByField("firstName");
+      sortUsersByField(fetchedUsers, "firstName");
     }
   }, [isLoading]);
 
-  // Положить в обычный useEffect
-  const handleCreateUser = () => {
-    getUsers();
+  let refetchedUsers: IUser[];
+
+  const handleUdateTable = async () => {
+    const resp = await getUsers();
+    refetchedUsers = resp.data;
+    sortUsersByField(refetchedUsers, "firstName");
   };
 
   return (
@@ -84,12 +85,12 @@ const AdminPage = () => {
             Добавить пользователя
           </Button>
           <CreateUserModal
-            onCreateUser={handleCreateUser}
+            handleUdateTable={() => handleUdateTable()}
             show={modalCreateUserShow}
             onHide={() => setModalCreateUserShow(false)}
           />
         </div>
-        {modifiedUsers && <TableUsers users={modifiedUsers} />}
+        {modifiedUsers && <TableUsers handleUdateTable={handleUdateTable} users={modifiedUsers} />}
       </ContentContainer>
     </div>
   );

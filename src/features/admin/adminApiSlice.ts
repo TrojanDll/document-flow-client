@@ -1,12 +1,14 @@
 import { apiSlice } from "../../app/api/apiSlice";
 
-interface IUpdateUserById {
+export interface IUpdateUserById {
   userId: number;
   firstName?: string;
   lastName?: string;
   patronymic?: string;
   email?: string;
   post?: string;
+  department?: string;
+  groupId?: number;
 }
 
 interface IGetUserById {
@@ -24,7 +26,7 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         url: `/api/users/${data?.id}`,
       }),
     }),
-    updateUserById: builder.mutation({
+    updateUserById: builder.mutation<IUpdateUserById, IUpdateUserById>({
       query: (userData: IUpdateUserById) => ({
         url: `/api/admin/users/${userData.userId}`,
         method: "PUT",
@@ -37,11 +39,21 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
+    deleteUserById: builder.mutation({
+      query: (userId: number) => ({
+        url: `/api/admin/users/${userId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
-export const { useGetUsersQuery, useUpdateUserByIdMutation, useGetUserByIdMutation } =
-  adminApiSlice;
+export const {
+  useGetUsersQuery,
+  useUpdateUserByIdMutation,
+  useGetUserByIdMutation,
+  useDeleteUserByIdMutation,
+} = adminApiSlice;
 
 // query: (credentials: Ilogin) => ({
 //   url: "/api/auth/login",

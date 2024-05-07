@@ -1,8 +1,11 @@
 import { FC, useState } from "react";
 import styles from "./TableUsersItem.module.css";
 import { Button } from "react-bootstrap";
-import { useGetUserByIdMutation } from "../../features/admin/adminApiSlice";
-import CreateUserModal from "../EditUserModal/CreateUserModal";
+import {
+  useDeleteUserByIdMutation,
+  useGetUserByIdMutation,
+} from "../../features/admin/adminApiSlice";
+import EditUserModal from "../EditUserModal/EditUserModal";
 
 export enum TableUsersItemVariants {
   light = "light",
@@ -13,14 +16,16 @@ interface TableUsersItemProps {
   user: IUser;
   variant: TableUsersItemVariants;
   number: number;
+  handleUdateTable: () => void;
 }
 
-const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number }) => {
-  const [modalShow, setModalShow] = useState(false);
+const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handleUdateTable }) => {
+  const [modalUditUserShow, setModalUditUserShow] = useState(false);
   const [isUserChanged, setIsUserChanged] = useState(false);
   const { id, firstName, lastName, patronymic, email, department, post, userGroup } = user;
   const [getUserById] = useGetUserByIdMutation();
-  console.log(isUserChanged);
+  const [deleteUserById] = useDeleteUserByIdMutation();
+  // console.log(isUserChanged);
 
   let updatedUser: any;
   let receivedContent = null;
@@ -29,6 +34,10 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number }) => {
     updatedUser = await getUserById({ id: userId });
     setIsUserChanged(true);
     console.log(updatedUser.data);
+  };
+
+  const handleDeleteUser = (userId: number) => {
+    deleteUserById(userId);
   };
 
   return (
@@ -62,10 +71,23 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number }) => {
       <td className={styles.editButtonСell}>
         <div className={styles.editButtonWrapper}>
           <Button
-            onClick={() => setModalShow(true)}
+            onClick={() => setModalUditUserShow(true)}
             className={styles.editButton}
             variant="outline-secondary">
             Редактировать
+          </Button>
+
+          <EditUserModal
+            userData={user}
+            handleUdateTable={() => handleUdateTable()} // Передача пропа handleUdateTable в компонент EditUserModal
+            show={modalUditUserShow}
+            onHide={() => setModalUditUserShow(false)}
+          />
+          <Button
+            onClick={() => handleDeleteUser(id)}
+            className={styles.editButton}
+            variant="outline-danger">
+            Удалить
           </Button>
         </div>
       </td>
