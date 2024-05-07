@@ -9,9 +9,18 @@ const usersSlice = createSlice({
   initialState: <IUsersState>{},
   reducers: {
     addUser: (state, action) => {
-      const { id, active, firstName, lastName, patronymic, post, role, email } = action.payload;
-      const department = null;
-      const userGroup = null;
+      const {
+        id,
+        active,
+        firstName,
+        lastName,
+        patronymic,
+        post,
+        role,
+        email,
+        userGroup,
+        department,
+      } = action.payload;
       state.data.push({
         id,
         active,
