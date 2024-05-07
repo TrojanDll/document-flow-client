@@ -1,10 +1,7 @@
 import { FC, useState } from "react";
 import styles from "./TableUsersItem.module.css";
 import { Button } from "react-bootstrap";
-import {
-  useDeleteUserByIdMutation,
-  useGetUserByIdMutation,
-} from "../../features/admin/adminApiSlice";
+import { useDeleteUserByIdMutation } from "../../features/admin/adminApiSlice";
 import EditUserModal from "../EditUserModal/EditUserModal";
 
 export enum TableUsersItemVariants {
@@ -21,20 +18,20 @@ interface TableUsersItemProps {
 
 const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handleUdateTable }) => {
   const [modalUditUserShow, setModalUditUserShow] = useState(false);
-  const [isUserChanged, setIsUserChanged] = useState(false);
+  // const [isUserChanged, setIsUserChanged] = useState(false);
   const { id, firstName, lastName, patronymic, email, department, post, userGroup, role } = user;
-  const [getUserById] = useGetUserByIdMutation();
+  // const [getUserById] = useGetUserByIdMutation();
   const [deleteUserById] = useDeleteUserByIdMutation();
   // console.log(isUserChanged);
 
   let updatedUser: any;
-  let receivedContent = null;
+  // let receivedContent = null;
 
-  const handleEdit = async (userId: number) => {
-    updatedUser = await getUserById({ id: userId });
-    setIsUserChanged(true);
-    console.log(updatedUser.data);
-  };
+  // const handleEdit = async (userId: number) => {
+  //   updatedUser = await getUserById({ id: userId });
+  //   setIsUserChanged(true);
+  //   console.log(updatedUser.data);
+  // };
 
   const handleDeleteUser = async (userId: number) => {
     const resp = await deleteUserById(userId);

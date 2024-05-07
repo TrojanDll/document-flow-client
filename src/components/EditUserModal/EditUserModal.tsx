@@ -20,7 +20,7 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
   const [department, setDepartment] = useState(userData.department);
   const [post, setPost] = useState(userData.post);
   const [email, setEmail] = useState(userData.email);
-  const [groupId, setGroupId] = useState(userData.userGroup);
+  // const [groupId, setGroupId] = useState(userData.userGroup);
 
   const handleRegistrationSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
