@@ -7,6 +7,16 @@ interface IUser {
   post?: string;
   role?: string;
   email?: string;
-  userGroup?: string | undefined;
+  userGroup?: number | undefined;
   department?: string | undefined;
+  groupResponseDTO?: {
+    id: number;
+    name: string;
+  };
+}
+
+interface IUserGroup {
+  id: number;
+  name: string;
+  members: IUser[];
 }

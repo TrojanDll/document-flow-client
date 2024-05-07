@@ -61,3 +61,7 @@
 .errorMessage {
   color: var(--error);
 }
+
+.inputWide {
+  width: 100%;
+}

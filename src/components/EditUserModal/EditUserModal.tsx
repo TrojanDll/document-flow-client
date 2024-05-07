@@ -1,7 +1,10 @@
-import { FC, useState } from "react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditUserModal.module.css";
-import { useUpdateUserByIdMutation } from "../../features/admin/adminApiSlice";
+import {
+  useGetAllUsersGroupsQuery,
+  useUpdateUserByIdMutation,
+} from "../../features/admin/adminApiSlice";
 
 interface EditUserModalProps {
   props?: any;
@@ -14,19 +17,30 @@ interface EditUserModalProps {
 const EditUserModal: FC<EditUserModalProps> = (props) => {
   const { show, userData, onHide, handleUdateTable } = props;
   const [editUserById] = useUpdateUserByIdMutation();
+  const { data: allUsersGroups, refetch: getAllUsersGroups } = useGetAllUsersGroupsQuery();
   const [firstName, setFirstName] = useState(userData.firstName);
   const [lastName, setLastName] = useState(userData.lastName);
   const [patronymic, setPatronymic] = useState(userData.patronymic);
   const [department, setDepartment] = useState(userData.department);
   const [post, setPost] = useState(userData.post);
   const [email, setEmail] = useState(userData.email);
-  // const [groupId, setGroupId] = useState(userData.userGroup);
+  const [userGroup, setUserGroup] = useState(userData.groupResponseDTO?.id);
 
-  const handleRegistrationSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleEditUserSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       const udatedUserData = await editUserById({
+        id: userData.id,
+        firstName,
+        lastName,
+        patronymic,
+        department,
+        post,
+        email,
+        userGroup,
+      });
+      console.log({
         userId: userData.id,
         firstName,
         lastName,
@@ -34,6 +48,7 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
         department,
         post,
         email,
+        userGroup,
       });
       onHide();
       handleUdateTable();
@@ -53,6 +68,15 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
     setEmail("");
   };
 
+  // let fetchedUsersGroups;
+  // useEffect(() => {
+  //   console.log(userGroup);
+  // }, [userGroup]);
+
+  const handleUserGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setUserGroup(+e.target.value);
+  };
+
   return (
     <Modal
       {...props}
@@ -61,11 +85,10 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
       aria-labelledby="contained-modal-title-vcenter"
       centered>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Modal heading</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">Редактирование пользователя</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleRegistrationSubmit}>
-          <div className={styles.title}>Редактирование пользователя</div>
+        <Form onSubmit={handleEditUserSubmit}>
           <div className={styles.inputsRow}>
             <Form.Group className={`mt-3 ${styles.nameInput}`} controlId="firstName">
               <Form.Label>Имя</Form.Label>
@@ -102,19 +125,8 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
           </div>
 
           <div className={styles.inputsRow}>
-            <Form.Group className={styles.input} controlId="department">
-              <Form.Label>Отдел</Form.Label>
-              <Form.Control
-                value={department}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDepartment(e.target.value)}
-                type="text"
-                placeholder="Отдел"
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className={styles.input} controlId="post">
-              <Form.Label>Ваша должность</Form.Label>
+            <Form.Group className={`${styles.inputWide} ${styles.input}`} controlId="post">
+              <Form.Label>Должность</Form.Label>
               <Form.Control
                 value={post}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPost(e.target.value)}
@@ -126,6 +138,23 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
           </div>
 
           <div className={styles.inputsRow}>
+            <Form.Group className={styles.input} controlId="department">
+              <Form.Label>Группа</Form.Label>
+              <Form.Select
+                value={userGroup}
+                onChange={(e: ChangeEvent<HTMLSelectElement>) => handleUserGroupChange(e)}
+                aria-label="Выберите группу">
+                <option>Список групп</option>
+                {allUsersGroups
+                  ? allUsersGroups.map((group) => (
+                      <option key={group.id} value={group.id}>
+                        {group.name}
+                      </option>
+                    ))
+                  : ""}
+              </Form.Select>
+            </Form.Group>
+
             <Form.Group className={styles.input} controlId="email">
               <Form.Label>Электронная почта</Form.Label>
               <Form.Control

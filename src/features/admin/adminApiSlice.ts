@@ -8,7 +8,7 @@ export interface IUpdateUserById {
   email?: string;
   post?: string;
   department?: string;
-  groupId?: number;
+  userGroup?: number;
 }
 
 interface IGetUserById {
@@ -26,9 +26,9 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         url: `/api/users/${data?.id}`,
       }),
     }),
-    updateUserById: builder.mutation<IUpdateUserById, IUpdateUserById>({
-      query: (userData: IUpdateUserById) => ({
-        url: `/api/admin/users/${userData.userId}`,
+    updateUserById: builder.mutation<IUser, IUser>({
+      query: (userData: IUser) => ({
+        url: `/api/admin/users/${userData.id}`,
         method: "PUT",
         body: {
           firstName: userData.firstName,
@@ -36,12 +36,33 @@ export const adminApiSlice = apiSlice.injectEndpoints({
           patronymic: userData.patronymic,
           email: userData.email,
           post: userData.post,
+          department: userData.department,
+          groupId: userData.userGroup,
         },
       }),
     }),
     deleteUserById: builder.mutation({
       query: (userId: number) => ({
         url: `/api/admin/users/${userId}`,
+        method: "DELETE",
+      }),
+    }),
+    getAllUsersGroups: builder.query<IUserGroup[], void>({
+      query: () => "/api/admin/usergroups/all",
+    }),
+    createUsersGroup: builder.mutation({
+      query: (name: string) => ({
+        url: `/api/admin/usergroups/new`,
+        method: "POST",
+        body: {
+          name,
+          emails: [],
+        },
+      }),
+    }),
+    deleteUsersGroupById: builder.mutation({
+      query: (userGroupId: number) => ({
+        url: `/api/admin/usergroups/${userGroupId}`,
         method: "DELETE",
       }),
     }),
@@ -53,6 +74,9 @@ export const {
   useUpdateUserByIdMutation,
   useGetUserByIdMutation,
   useDeleteUserByIdMutation,
+  useCreateUsersGroupMutation,
+  useGetAllUsersGroupsQuery,
+  useDeleteUsersGroupByIdMutation,
 } = adminApiSlice;
 
 // query: (credentials: Ilogin) => ({

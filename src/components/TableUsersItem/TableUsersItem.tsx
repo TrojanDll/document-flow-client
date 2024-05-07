@@ -19,7 +19,8 @@ interface TableUsersItemProps {
 const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handleUdateTable }) => {
   const [modalUditUserShow, setModalUditUserShow] = useState(false);
   // const [isUserChanged, setIsUserChanged] = useState(false);
-  const { id, firstName, lastName, patronymic, email, department, post, userGroup, role } = user;
+  const { id, firstName, lastName, patronymic, email, department, post, groupResponseDTO, role } =
+    user;
   // const [getUserById] = useGetUserByIdMutation();
   const [deleteUserById] = useDeleteUserByIdMutation();
   // console.log(isUserChanged);
@@ -64,10 +65,10 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handle
         {updatedUser
           ? updatedUser.data.userGroup
             ? updatedUser.data.userGroup
-            : "Отдел не задан"
-          : userGroup
-          ? userGroup
-          : "Отдел не задан"}
+            : "Группа не задана"
+          : groupResponseDTO?.name
+          ? groupResponseDTO.name
+          : "Группа не задана"}
       </td>
       <td className={styles.editButtonСell}>
         <div className={styles.editButtonWrapper}>
