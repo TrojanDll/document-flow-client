@@ -22,7 +22,7 @@ interface TableUsersItemProps {
 const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handleUdateTable }) => {
   const [modalUditUserShow, setModalUditUserShow] = useState(false);
   const [isUserChanged, setIsUserChanged] = useState(false);
-  const { id, firstName, lastName, patronymic, email, department, post, userGroup } = user;
+  const { id, firstName, lastName, patronymic, email, department, post, userGroup, role } = user;
   const [getUserById] = useGetUserByIdMutation();
   const [deleteUserById] = useDeleteUserByIdMutation();
   // console.log(isUserChanged);
@@ -36,8 +36,12 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handle
     console.log(updatedUser.data);
   };
 
-  const handleDeleteUser = (userId: number) => {
-    deleteUserById(userId);
+  const handleDeleteUser = async (userId: number) => {
+    const resp = await deleteUserById(userId);
+    console.log("Удаление пользователя");
+    if (resp) {
+      handleUdateTable();
+    }
   };
 
   return (
@@ -79,16 +83,21 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handle
 
           <EditUserModal
             userData={user}
-            handleUdateTable={() => handleUdateTable()} // Передача пропа handleUdateTable в компонент EditUserModal
+            handleUdateTable={() => handleUdateTable()}
             show={modalUditUserShow}
             onHide={() => setModalUditUserShow(false)}
           />
-          <Button
-            onClick={() => handleDeleteUser(id)}
-            className={styles.editButton}
-            variant="outline-danger">
-            Удалить
-          </Button>
+
+          {role === "USER" ? (
+            <Button
+              onClick={() => handleDeleteUser(id)}
+              className={styles.editButton}
+              variant="outline-danger">
+              Удалить
+            </Button>
+          ) : (
+            ""
+          )}
         </div>
       </td>
     </tr>
