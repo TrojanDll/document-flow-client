@@ -27,5 +27,22 @@ interface IDocument {
   url?: string;
   type?: string;
   owner?: string;
+  createdDate?: string;
+  expirationDate?: string;
+  parentDocId?: string;
+  status?: string;
+  relatedDocs?: string[];
+  userGroups?: string[];
+  comment?: string;
   size?: number;
+}
+
+interface IDocumentEdit {
+  id: string;
+  expirationDate?: string;
+  parentDocId?: string;
+  relatedDocs?: string[];
+  userGroups?: string[];
+  comment?: string;
+  relatedUserGroupIds?: string[];
 }

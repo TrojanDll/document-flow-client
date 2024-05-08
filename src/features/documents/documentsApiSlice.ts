@@ -17,22 +17,33 @@ interface IGetUserById {
 
 export const adminApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getUsers: builder.query({
-      query: () => "/api/admin/users",
-      keepUnusedDataFor: 5,
-    }),
     getUserById: builder.mutation({
       query: (data?: IGetUserById) => ({
         url: `/api/users/${data?.id}`,
       }),
     }),
-    getAllDocuments: builder.query<IDocument, void>({
+    getAllDocuments: builder.query<IDocument[], void>({
       query: () => "/api/admin/docs/all",
+    }),
+    deleteDocumentById: builder.mutation<void, string>({
+      query: (docId: string) => ({
+        url: `/api/docs/${docId}`,
+        method: "DELETE",
+      }),
+    }),
+    updateDocumentById: builder.mutation<void, IDocumentEdit>({
+      query: (documentData: IDocumentEdit) => ({
+        url: "/api/docs/set-doc-properties",
+        method: "PUT",
+        body: {
+          ...documentData,
+        },
+      }),
     }),
   }),
 });
 
-export const { useGetAllDocumentsQuery } = adminApiSlice;
+export const { useGetAllDocumentsQuery, useDeleteDocumentByIdMutation, useUpdateDocumentByIdMutation } = adminApiSlice;
 
 // query: (credentials: Ilogin) => ({
 //   url: "/api/auth/login",

@@ -6,7 +6,6 @@ import AdminPage from "./pages/AdminPage/AdminPage";
 import Layout from "./features/Layout";
 import RequireAuth from "./features/RequireAuth";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
-import "bootstrap/dist/css/bootstrap.min.css";
 import AdminRoleRequired from "./features/AdminRoleRequired";
 
 function App() {

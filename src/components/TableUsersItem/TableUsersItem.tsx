@@ -17,10 +17,9 @@ interface TableUsersItemProps {
 }
 
 const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handleUdateTable }) => {
-  const [modalUditUserShow, setModalUditUserShow] = useState(false);
+  const [modalEditUserShow, setModalEditUserShow] = useState(false);
   // const [isUserChanged, setIsUserChanged] = useState(false);
-  const { id, firstName, lastName, patronymic, email, department, post, groupResponseDTO, role } =
-    user;
+  const { id, firstName, lastName, patronymic, email, department, post, groupResponseDTO, role } = user;
   // const [getUserById] = useGetUserByIdMutation();
   const [deleteUserById] = useDeleteUserByIdMutation();
   // console.log(isUserChanged);
@@ -72,25 +71,19 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handle
       </td>
       <td className={styles.editButtonСell}>
         <div className={styles.editButtonWrapper}>
-          <Button
-            onClick={() => setModalUditUserShow(true)}
-            className={styles.editButton}
-            variant="outline-secondary">
+          <Button onClick={() => setModalEditUserShow(true)} className={styles.editButton} variant="outline-secondary">
             Редактировать
           </Button>
 
           <EditUserModal
             userData={user}
             handleUdateTable={() => handleUdateTable()}
-            show={modalUditUserShow}
-            onHide={() => setModalUditUserShow(false)}
+            show={modalEditUserShow}
+            onHide={() => setModalEditUserShow(false)}
           />
 
           {role === "USER" ? (
-            <Button
-              onClick={() => handleDeleteUser(id)}
-              className={styles.editButton}
-              variant="outline-danger">
+            <Button onClick={() => handleDeleteUser(id)} className={styles.editButton} variant="outline-danger">
               Удалить
             </Button>
           ) : (
