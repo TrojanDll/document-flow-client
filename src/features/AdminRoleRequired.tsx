@@ -8,7 +8,7 @@ const AdminRoleRequired = () => {
   if (token && role === "ADMIN") {
     // Если есть токен, перенаправляем на предыдущую страницу
     // history.back();
-    return <Navigate to="/profile" replace />; // Возвращаем null, чтобы компонент ничего не рендерил
+    return <Outlet />; // Возвращаем null, чтобы компонент ничего не рендерил
   } else {
     console.log("RequireAuth");
     return token ? <Navigate to="/profile" replace /> : <Outlet />;
