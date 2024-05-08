@@ -23,6 +23,12 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  useEffect(() => {
+    if (localStorage.getItem("accessToken")) {
+      navigate("/profile");
+    }
+  }, []);
+
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,7 +40,7 @@ const LoginPage = () => {
       dispatch(setCredentials({ ...userData }));
       setEmail("");
       setPassword("");
-      navigate("/documents");
+      navigate("/profile");
     } catch (err) {
       console.log(err);
     }
