@@ -5,14 +5,14 @@ import styles from "./AdminPage.module.css";
 import PageTitle from "../../components/PageTitle/PageTitle";
 import { Button, Form, InputGroup } from "react-bootstrap";
 import searchImg from "./../../assets/img/icons/search.svg";
-import FilterModal from "../../components/FilterModal/FilterModal";
+// import FilterModal from "../../components/FilterModal/FilterModal";
 import TableUsers from "../../components/TableUsers/TableUsers";
 import CreateUserModal from "../../components/CreateUserModal/CreateUserModal";
 import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
 import CreateGroupModal from "../../components/CreateGroupModal/CreateGroupModal";
 
 const AdminPage = () => {
-  const [modalFilterShow, setModalFilterShow] = useState(false);
+  // const [modalFilterShow, setModalFilterShow] = useState(false);
   const [modalCreateUserShow, setModalCreateUserShow] = useState(false);
   const [modalCreateGroupShow, setModalCreateGroupShow] = useState(false);
   // const [usersList, setUsersList] = useState<IUser[]>([]);
@@ -35,7 +35,7 @@ const AdminPage = () => {
     // }
   }
 
-  const filterUsers = () => {};
+  // const filterUsers = () => {};
 
   useEffect(() => {
     if (!isLoading) {

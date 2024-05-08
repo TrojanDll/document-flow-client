@@ -19,7 +19,7 @@ const FilterModal: FC<FilterModalProps> = (props) => {
     "department3",
   ]);
 
-  // console.log(setGroupFilterItems, setPostFilterItems, setDepartmentFilterItems);
+  console.log(setGroupFilterItems, setPostFilterItems, setDepartmentFilterItems);
 
   const { show } = props;
   return (

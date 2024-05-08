@@ -3,7 +3,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import ContentContainer from "../../components/ContentContainer/ContentContainer";
 import PageTitle from "../../components/PageTitle/PageTitle";
 import styles from "./ProfilePage.module.css";
-import { Form, InputGroup } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 // import searchImg from "./../../assets/img/icons/search.svg";
 import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
 import spinner from "./../../assets/img/icons/spinner.svg";

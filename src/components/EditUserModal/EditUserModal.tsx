@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditUserModal.module.css";
 import {
@@ -17,7 +17,7 @@ interface EditUserModalProps {
 const EditUserModal: FC<EditUserModalProps> = (props) => {
   const { show, userData, onHide, handleUdateTable } = props;
   const [editUserById] = useUpdateUserByIdMutation();
-  const { data: allUsersGroups, refetch: getAllUsersGroups } = useGetAllUsersGroupsQuery();
+  const { data: allUsersGroups } = useGetAllUsersGroupsQuery();
   const [firstName, setFirstName] = useState(userData.firstName);
   const [lastName, setLastName] = useState(userData.lastName);
   const [patronymic, setPatronymic] = useState(userData.patronymic);

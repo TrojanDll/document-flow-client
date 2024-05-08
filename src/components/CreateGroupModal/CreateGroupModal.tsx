@@ -18,7 +18,7 @@ const CreateGroupModal: FC<CreateGroupModalProps> = (props) => {
   const [newGroupName, setNewGroupName] = useState("");
   const [createUsersGroup] = useCreateUsersGroupMutation();
   const [deleteUsersGroupById] = useDeleteUsersGroupByIdMutation();
-  const [userGroup, setUserGroup] = useState(0);
+  // const [userGroup, setUserGroup] = useState(0);
   const [userGroupToDelete, setUserGroupToDelete] = useState(0);
 
   const { data: allUsersGroups, refetch: getAllUsersGroups } = useGetAllUsersGroupsQuery();
