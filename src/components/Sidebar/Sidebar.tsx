@@ -19,6 +19,8 @@ const Sidebar: FC = () => {
     dispatch(logOut());
     navigate("/");
   };
+
+  const role = localStorage.getItem("role");
   return (
     <div className={styles.sidebar}>
       <div className={styles.title}>Монтаж-сервис</div>
@@ -45,10 +47,12 @@ const Sidebar: FC = () => {
       </div>
 
       <div className={styles.bottomLinks}>
-        <Link to="/admin" className={styles.linkWrapper}>
-          <img src={gearImg} alt="peopleImg" className={styles.linkImg} />
-          <div className={styles.linkText}>Администрирование</div>
-        </Link>
+        {role === "ADMIN" && (
+          <Link to="/admin" className={styles.linkWrapper}>
+            <img src={gearImg} alt="peopleImg" className={styles.linkImg} />
+            <div className={styles.linkText}>Администрирование</div>
+          </Link>
+        )}
 
         <Button onClick={handleLogout} variant="light" className={styles.logout}>
           Выход

@@ -35,6 +35,8 @@ const AdminPage = () => {
     // }
   }
 
+  const filterUsers = () => {};
+
   useEffect(() => {
     if (!isLoading) {
       sortUsersByField(fetchedUsers, "firstName");
@@ -63,11 +65,11 @@ const AdminPage = () => {
             <Form.Control placeholder="Поиск..." aria-label="Username" />
           </InputGroup>
 
-          <Button variant="outline-primary" onClick={() => setModalFilterShow(true)}>
+          {/* <Button variant="outline-primary" onClick={() => setModalFilterShow(true)}>
             Фильтры
           </Button>
 
-          <FilterModal show={modalFilterShow} onHide={() => setModalFilterShow(false)} />
+          <FilterModal user show={modalFilterShow} onHide={() => setModalFilterShow(false)} /> */}
 
           <Button variant="secondary" onClick={() => setModalCreateGroupShow(true)}>
             Настроить группы пользователей

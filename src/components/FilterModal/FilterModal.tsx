@@ -7,6 +7,7 @@ interface FilterModalProps {
   props?: any;
   onHide?: () => void;
   show?: boolean;
+  users: IUser[];
 }
 
 const FilterModal: FC<FilterModalProps> = (props) => {

@@ -12,15 +12,17 @@ const authSlice = createSlice({
     setCredentials: (state, action) => {
       console.log(action.payload);
 
-      const { accessToken, refreshToken } = action.payload.data;
+      const { accessToken, refreshToken, role } = action.payload.data;
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("role", role);
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
     },
     logOut: () => {
       localStorage.setItem("accessToken", "");
       localStorage.setItem("refreshToken", "");
+      localStorage.setItem("role", "");
     },
   },
 });

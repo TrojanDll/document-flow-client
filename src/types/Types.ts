@@ -20,3 +20,12 @@ interface IUserGroup {
   name: string;
   members: IUser[];
 }
+
+interface IDocument {
+  id: string;
+  name?: string;
+  url?: string;
+  type?: string;
+  owner?: string;
+  size?: number;
+}
