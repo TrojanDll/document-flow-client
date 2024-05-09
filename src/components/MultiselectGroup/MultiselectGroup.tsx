@@ -7,19 +7,29 @@ import closeImg from "./../../assets/img/icons/close.svg";
 
 interface MultiselectGroupProps {
   handleUpdateUsersGrups: (arg: string[]) => void;
+  currientDocumentInfo: IDocument;
+  usersGroups: IUserGroup[];
 }
 
-const MultiselectGroup: FC<MultiselectGroupProps> = ({ handleUpdateUsersGrups }) => {
-  const { data: fetchedUsersGroups, isLoading, isSuccess } = useGetAllUsersGroupsQuery();
+const MultiselectGroup: FC<MultiselectGroupProps> = ({ handleUpdateUsersGrups, currientDocumentInfo, usersGroups }) => {
   const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
   const [selectedUsersGroups, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
   const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!isLoading && isSuccess) {
-      setNotSelectedUsersGroups(fetchedUsersGroups);
-    }
-  }, [isLoading]);
+    let baseSelectedGroups: IUserGroup[] = [];
+    setNotSelectedUsersGroups(
+      usersGroups.filter((group) => {
+        const currientDocumentUsersGroups = currientDocumentInfo.userGroups;
+        if (currientDocumentUsersGroups?.indexOf(group.id.toString()) === -1) {
+          return group;
+        } else {
+          baseSelectedGroups.push(group);
+        }
+      }),
+    );
+    setSelectedUsersGroups(baseSelectedGroups);
+  }, []);
 
   // useEffect(() => {
   //   console.log(notSelectedUsersGroups);
@@ -107,11 +117,11 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({ handleUpdateUsersGrups })
           selectedUsersGroups.map((group) => (
             <Button
               key={group.id}
-              variant="primary"
+              variant="outline-secondary"
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleUnselectUsersGroup(e)}
               data-value={group.id}>
               {group.name}
-              <Badge bg="secondary">
+              <Badge bg="light">
                 <img src={closeImg} alt="closeImg" />
               </Badge>
             </Button>

@@ -19,6 +19,8 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   // const [editUserById] = useEditD();
   const [editDocument] = useUpdateDocumentByIdMutation();
   const { data: fetchedDocuments, isLoading, isSuccess } = useGetAllDocumentsQuery();
+  const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
+
   // const { data: fetchedUsersGroups, isLoading, isSuccess } = useGetAllUsersGroupsQuery();
 
   const [expirationDate, setExpirationDate] = useState("");
@@ -112,8 +114,13 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
       <Modal.Body>
         <Form onSubmit={handleEditDocumentSubmit}>
           <div className={styles.inputsRow}>
-            <MultiselectGroup handleUpdateUsersGrups={handleUpdateUsersGrups} />
+            <MultiselectGroup
+              currientDocumentInfo={documentData}
+              usersGroups={fetchedUsersGroups ? fetchedUsersGroups : []}
+              handleUpdateUsersGrups={handleUpdateUsersGrups}
+            />
             <MultiselectRelatedDocs
+              currientDocumentInfo={documentData}
               documents={fetchedDocuments ? fetchedDocuments : []}
               handleUpdateDocuments={handleUpdateDocuments}
             />

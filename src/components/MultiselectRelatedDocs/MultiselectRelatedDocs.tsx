@@ -7,13 +7,33 @@ import closeImg from "./../../assets/img/icons/close.svg";
 
 interface MultiselectGroupProps {
   handleUpdateDocuments: (arg: string[]) => void;
+  currientDocumentInfo: IDocument;
   documents: IDocument[];
 }
 
-const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({ handleUpdateDocuments, documents }) => {
-  const [notSelectedDocuments, setNotSelectedDocuments] = useState(documents);
+const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({
+  handleUpdateDocuments,
+  currientDocumentInfo,
+  documents,
+}) => {
+  const [notSelectedDocuments, setNotSelectedDocuments] = useState<IDocument[]>([]);
   const [selectedDocuments, setSelectedDocuments] = useState<IDocument[]>([]);
   const [documentsIds, setDocumentsIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    let baseSelectedDocs: IDocument[] = [];
+    setNotSelectedDocuments(
+      documents.filter((document) => {
+        const currientDocumentRelatedDocs = currientDocumentInfo.relatedDocs;
+        if (currientDocumentRelatedDocs?.indexOf(document.id) === -1) {
+          return document;
+        } else {
+          baseSelectedDocs.push(document);
+        }
+      }),
+    );
+    setSelectedDocuments(baseSelectedDocs);
+  }, []);
 
   // useEffect(() => {
   //   console.log(notSelectedUsersGroups);
@@ -25,7 +45,8 @@ const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({ handleUpdateDocumen
   // }, [userGroup]);
 
   useEffect(() => {
-    setDocumentsIds(selectedDocuments.map((item) => item.id.toString()));
+    setDocumentsIds(selectedDocuments.map((item) => item.id));
+    console.log(selectedDocuments);
   }, [selectedDocuments]);
 
   useEffect(() => {
@@ -101,11 +122,11 @@ const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({ handleUpdateDocumen
           selectedDocuments.map((documents) => (
             <Button
               key={documents.id}
-              variant="primary"
+              variant="outline-secondary"
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleUnselectDocuments(e)}
               data-value={documents.id}>
               {documents.name}
-              <Badge bg="secondary">
+              <Badge bg="light">
                 <img src={closeImg} alt="closeImg" />
               </Badge>
             </Button>
