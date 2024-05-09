@@ -105,7 +105,7 @@ const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({
 
   return (
     <Form.Group controlId="department">
-      <Form.Label>Группа</Form.Label>
+      <Form.Label>Связанные документы</Form.Label>
       <Form.Select
         onChange={(e: ChangeEvent<HTMLSelectElement>) => handleSelectDocuments(e)}
         aria-label="Выберите документы">

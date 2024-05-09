@@ -26,8 +26,8 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   const [expirationDate, setExpirationDate] = useState("");
   const [currientRelatedDocId, setCurrientRelatedDocId] = useState("");
   const [relatedDocIdList, setRelatedDocIdList] = useState<string[]>([]);
-  const [parentDocId, setParentDocId] = useState("");
-  const [comment, setComment] = useState("");
+  const [parentDocId, setParentDocId] = useState(documentData.parentDocId);
+  const [comment, setComment] = useState(documentData.comment);
   // const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
   // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
   const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
@@ -54,7 +54,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         parentDocId: parentDocId,
         relatedUserGroupIds: usersGroupsIds,
         expirationDate: expirationDate,
-        comment: documentData.comment,
+        comment: comment,
       });
       console.log({
         id: documentData.id,
@@ -63,7 +63,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         parentDocId: parentDocId,
         relatedUserGroupIds: usersGroupsIds,
         expirationDate: expirationDate,
-        comment: documentData.comment,
+        comment: comment,
       });
       onHide();
       handleUdateTable();
@@ -119,6 +119,9 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
               usersGroups={fetchedUsersGroups ? fetchedUsersGroups : []}
               handleUpdateUsersGrups={handleUpdateUsersGrups}
             />
+          </div>
+
+          <div className={styles.inputsRow}>
             <MultiselectRelatedDocs
               currientDocumentInfo={documentData}
               documents={fetchedDocuments ? fetchedDocuments : []}
@@ -127,17 +130,28 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
           </div>
 
           <div className={styles.inputsRow}>
-            {/* <Form.Select
-        onChange={(e: ChangeEvent<HTMLSelectElement>) => setParentDocId(e.target.value)}
-        aria-label="Выберите документы">
-        <option>Список документов</option>
-        {notSelectedDocuments &&
-          notSelectedDocuments.map((documents) => (
-            <option key={documents.id} value={documents.id}>
-              {documents.name}
-            </option>
-          ))}
-      </Form.Select> */}
+            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+              <Form.Label>Описание</Form.Label>
+              <Form.Control value={comment} onChange={(e) => setComment(e.target.value)} as="textarea" rows={3} />
+            </Form.Group>
+          </div>
+
+          <div className={styles.inputsRow}>
+            <Form.Group controlId="department">
+              <Form.Label>Родительский документ</Form.Label>
+              <Form.Select
+                value={parentDocId}
+                onChange={(e: ChangeEvent<HTMLSelectElement>) => setParentDocId(e.target.value)}
+                aria-label="Выберите документы">
+                <option>Список документов</option>
+                {fetchedDocuments &&
+                  fetchedDocuments.map((document) => (
+                    <option key={document.parentDocId} value={document.parentDocId}>
+                      {document.name}
+                    </option>
+                  ))}
+              </Form.Select>
+            </Form.Group>
           </div>
 
           <div className={styles.buttonsWrapper}>

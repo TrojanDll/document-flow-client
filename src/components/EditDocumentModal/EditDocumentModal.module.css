@@ -1,0 +1,9 @@
+.inputsRow {
+  margin-top: 16px;
+}
+
+.buttonsWrapper {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
