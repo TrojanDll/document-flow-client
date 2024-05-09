@@ -7,19 +7,13 @@ import closeImg from "./../../assets/img/icons/close.svg";
 
 interface MultiselectGroupProps {
   handleUpdateDocuments: (arg: string[]) => void;
+  documents: IDocument[];
 }
 
-const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({ handleUpdateDocuments }) => {
-  const { data: fetchedDocuments, isLoading, isSuccess } = useGetAllDocumentsQuery();
-  const [notSelectedDocuments, setNotSelectedDocuments] = useState<IDocument[]>([]);
+const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({ handleUpdateDocuments, documents }) => {
+  const [notSelectedDocuments, setNotSelectedDocuments] = useState(documents);
   const [selectedDocuments, setSelectedDocuments] = useState<IDocument[]>([]);
   const [documentsIds, setDocumentsIds] = useState<string[]>([]);
-
-  useEffect(() => {
-    if (!isLoading && isSuccess) {
-      setNotSelectedDocuments(fetchedDocuments);
-    }
-  }, [isLoading]);
 
   // useEffect(() => {
   //   console.log(notSelectedUsersGroups);

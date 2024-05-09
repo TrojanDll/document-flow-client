@@ -2,7 +2,7 @@ import { ChangeEvent, FC, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditDocumentModal.module.css";
 import { useGetAllUsersGroupsQuery, useUpdateUserByIdMutation } from "../../features/admin/adminApiSlice";
-import { useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
+import { useGetAllDocumentsQuery, useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
 
@@ -18,6 +18,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   const { show, documentData, onHide, handleUdateTable } = props;
   // const [editUserById] = useEditD();
   const [editDocument] = useUpdateDocumentByIdMutation();
+  const { data: fetchedDocuments, isLoading, isSuccess } = useGetAllDocumentsQuery();
   // const { data: fetchedUsersGroups, isLoading, isSuccess } = useGetAllUsersGroupsQuery();
 
   const [expirationDate, setExpirationDate] = useState("");
@@ -112,7 +113,24 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         <Form onSubmit={handleEditDocumentSubmit}>
           <div className={styles.inputsRow}>
             <MultiselectGroup handleUpdateUsersGrups={handleUpdateUsersGrups} />
-            <MultiselectRelatedDocs handleUpdateDocuments={handleUpdateDocuments} />
+            <MultiselectRelatedDocs
+              documents={fetchedDocuments ? fetchedDocuments : []}
+              handleUpdateDocuments={handleUpdateDocuments}
+            />
+          </div>
+
+          <div className={styles.inputsRow}>
+            {/* <Form.Select
+        onChange={(e: ChangeEvent<HTMLSelectElement>) => setParentDocId(e.target.value)}
+        aria-label="Выберите документы">
+        <option>Список документов</option>
+        {notSelectedDocuments &&
+          notSelectedDocuments.map((documents) => (
+            <option key={documents.id} value={documents.id}>
+              {documents.name}
+            </option>
+          ))}
+      </Form.Select> */}
           </div>
 
           <div className={styles.buttonsWrapper}>
