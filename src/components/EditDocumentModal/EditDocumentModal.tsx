@@ -3,6 +3,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditDocumentModal.module.css";
 import { useGetAllUsersGroupsQuery, useUpdateUserByIdMutation } from "../../features/admin/adminApiSlice";
 import { useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
+import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 
 interface EditDocumentModalProps {
   props?: any;
@@ -16,52 +17,49 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   const { show, documentData, onHide, handleUdateTable } = props;
   // const [editUserById] = useEditD();
   const [editDocument] = useUpdateDocumentByIdMutation();
-  const { data: fetchedUsersGroups, isLoading, isSuccess } = useGetAllUsersGroupsQuery();
+  // const { data: fetchedUsersGroups, isLoading, isSuccess } = useGetAllUsersGroupsQuery();
 
   const [expirationDate, setExpirationDate] = useState("");
   const [currientRelatedDocId, setCurrientRelatedDocId] = useState("");
-  const [relatedDocIdList, setRelatedDocIdList] = useState([]);
+  const [relatedDocIdList, setRelatedDocIdList] = useState<string[]>([]);
   const [parentDocId, setParentDocId] = useState("");
   const [comment, setComment] = useState("");
-  const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
-  const [selectedUsersGroups, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
+  // const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
+  // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
+  const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
+  const [status, setStatus] = useState("INPROGRESS");
 
-  const [currientRelatedUserGroupId, setCurrientRelatedUserGroupId] = useState(
-    documentData.userGroups ? documentData.userGroups[0] : 0,
-  );
-  const [relatedUserGroupIdList, setRelatedUserGroupIdList] = useState(
-    documentData.userGroups ? documentData.userGroups : [],
-  );
+  // useEffect(() => {
+  //   if (!isLoading && isSuccess) {
+  //     setNotSelectedUsersGroups(fetchedUsersGroups);
+  //   }
+  // }, [isLoading]);
 
-  useEffect(() => {
-    if (!isLoading && isSuccess) {
-      setNotSelectedUsersGroups(fetchedUsersGroups);
-    }
-  }, [isLoading]);
+  // useEffect(() => {
+  //   console.log(notSelectedUsersGroups);
+  // }, [notSelectedUsersGroups]);
 
-  useEffect(() => {
-    console.log(notSelectedUsersGroups);
-  }, [notSelectedUsersGroups]);
-
-  const handleEditUserSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleEditDocumentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       const udatedDocumentData = await editDocument({
         id: documentData.id,
+        status: status,
         relatedDocs: relatedDocIdList,
-        relatedUserGroupIds: relatedUserGroupIdList,
         parentDocId: parentDocId,
+        relatedUserGroupIds: usersGroupsIds,
         expirationDate: expirationDate,
-        comment: comment,
+        comment: documentData.comment,
       });
       console.log({
         id: documentData.id,
+        status: status,
         relatedDocs: relatedDocIdList,
-        relatedUserGroupIds: relatedUserGroupIdList,
         parentDocId: parentDocId,
+        relatedUserGroupIds: usersGroupsIds,
         expirationDate: expirationDate,
-        comment: comment,
+        comment: documentData.comment,
       });
       onHide();
       handleUdateTable();
@@ -80,21 +78,31 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   //   console.log(userGroup);
   // }, [userGroup]);
 
-  const handleSelectUsersGroup = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    notSelectedUsersGroups.forEach((item) => {
-      if (item.id === +e.target.value) {
-        selectedUsersGroups.push(item);
-      }
-    });
+  // const handleSelectUsersGroup = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   notSelectedUsersGroups.forEach((item) => {
+  //     if (item.id === +e.target.value) {
+  //       selectedUsersGroups.push(item);
+  //     }
+  //   });
 
-    setNotSelectedUsersGroups(
-      notSelectedUsersGroups.filter((item) => {
-        if (item.id !== +e.target.value) {
-          return item;
-        }
-      }),
-    );
+  //   setNotSelectedUsersGroups(
+  //     notSelectedUsersGroups.filter((item) => {
+  //       if (item.id !== +e.target.value) {
+  //         return item;
+  //       }
+  //     }),
+  //   );
+  // };
+
+  const handleUpdateUsersGrups = (groups: string[]) => {
+    console.log("handle");
+    setUsersGroupsIds(groups);
   };
+
+  useEffect(() => {
+    console.log("id юзеров");
+    console.log(usersGroupsIds);
+  }, [usersGroupsIds]);
 
   return (
     <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
@@ -102,23 +110,9 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         <Modal.Title id="contained-modal-title-vcenter">Редактирование пользователя</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleEditUserSubmit}>
+        <Form onSubmit={handleEditDocumentSubmit}>
           <div className={styles.inputsRow}>
-            <Form.Group className={styles.input} controlId="department">
-              <Form.Label>Группа</Form.Label>
-              <Form.Select
-                onChange={(e: ChangeEvent<HTMLSelectElement>) => handleSelectUsersGroup(e)}
-                aria-label="Выберите группу">
-                <option>Список групп</option>
-                {notSelectedUsersGroups &&
-                  notSelectedUsersGroups.map((group) => (
-                    <option key={group.id} value={group.id}>
-                      {group.name}
-                    </option>
-                  ))}
-              </Form.Select>
-              {selectedUsersGroups && selectedUsersGroups.map((group) => <div key={group.id}>{group.name}</div>)}
-            </Form.Group>
+            <MultiselectGroup handleUpdateUsersGrups={handleUpdateUsersGrups} />
           </div>
 
           <div className={styles.buttonsWrapper}>

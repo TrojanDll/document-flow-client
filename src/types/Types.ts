@@ -45,4 +45,5 @@ interface IDocumentEdit {
   userGroups?: string[];
   comment?: string;
   relatedUserGroupIds?: string[];
+  status?: string;
 }
