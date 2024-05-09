@@ -44,17 +44,15 @@ const DocumentsPage: FC = () => {
     }
   };
 
-  useEffect(() => {
-    getAllDocuments;
-  }, []);
-
   return (
     <div>
       <Sidebar />
       <ContentContainer>
         <PageTitle>Документы</PageTitle>
 
-        {modifiedDocuments && <DocumentsTable handleUdateTable={handleUdateTable} documents={modifiedDocuments} />}
+        {modifiedDocuments && (
+          <DocumentsTable handleUdateTable={() => console.log("q")} documents={modifiedDocuments} />
+        )}
       </ContentContainer>
     </div>
   );

@@ -15,7 +15,13 @@ const authSlice = createSlice({
       const { accessToken, refreshToken, role } = action.payload.data;
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
-      localStorage.setItem("role", role);
+      if (!localStorage.getItem("role")) {
+        localStorage.setItem("role", role);
+      }
+      console.log("Установка токенов");
+      console.log(accessToken);
+      console.log(refreshToken);
+      console.log(role);
       state.accessToken = accessToken;
       state.refreshToken = refreshToken;
     },
