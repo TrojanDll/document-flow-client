@@ -1,7 +1,8 @@
 import { FC } from "react";
 import styles from "./DocumentsTable.module.css";
 import { Table } from "react-bootstrap";
-import DocumentsTableItem, { DocumentsTableItemVariants } from "../DocumentsTableItem/DocumentsTableItem";
+import { DocumentsTableItemVariants } from "../DocumentsTableItem/DocumentsTableItem";
+import DocumentsTableItem from "../DocumentsTableItem/DocumentsTableItem";
 
 interface IDocumentsTableProps {
   documents: IDocument[];

@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from "./DocumentsTableItem.module.css";
 import { Button } from "react-bootstrap";
 import { useDeleteUserByIdMutation } from "../../features/admin/adminApiSlice";
@@ -20,6 +20,7 @@ interface DocumentsTableItemProps {
 
 const DocumentsTableItem: FC<DocumentsTableItemProps> = ({ document, variant, number, handleUdateTable }) => {
   // const [isUserChanged, setIsUserChanged] = useState(false);
+  const [fileUrl, setFileUrl] = useState("");
   const [modalEditDocumentShow, setModalEditDocumentShow] = useState(false);
 
   // const [getUserById] = useGetUserByIdMutation();
@@ -56,7 +57,8 @@ const DocumentsTableItem: FC<DocumentsTableItemProps> = ({ document, variant, nu
           <Button
             onClick={() => setModalEditDocumentShow(true)}
             className={styles.editButton}
-            variant="outline-secondary">
+            variant="outline-secondary"
+          >
             Редактировать
           </Button>
 
@@ -69,8 +71,12 @@ const DocumentsTableItem: FC<DocumentsTableItemProps> = ({ document, variant, nu
           <Button
             onClick={() => handleDeleteDocument(document.id)}
             className={styles.editButton}
-            variant="outline-danger">
+            variant="outline-danger"
+          >
             Удалить
+          </Button>
+          <Button className={styles.editButton} variant="outline-primary" as="a" href={document.url}>
+            Скачать
           </Button>
         </div>
       </td>

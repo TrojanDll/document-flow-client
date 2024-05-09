@@ -15,7 +15,7 @@ interface IGetUserById {
   id: number;
 }
 
-export const adminApiSlice = apiSlice.injectEndpoints({
+export const documentApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getUserById: builder.mutation({
       query: (data?: IGetUserById) => ({
@@ -43,7 +43,8 @@ export const adminApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetAllDocumentsQuery, useDeleteDocumentByIdMutation, useUpdateDocumentByIdMutation } = adminApiSlice;
+export const { useGetAllDocumentsQuery, useDeleteDocumentByIdMutation, useUpdateDocumentByIdMutation } =
+  documentApiSlice;
 
 // query: (credentials: Ilogin) => ({
 //   url: "/api/auth/login",
