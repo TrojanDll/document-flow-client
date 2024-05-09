@@ -89,7 +89,7 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({ handleUpdateUsersGrups })
   // };
 
   return (
-    <Form.Group className={styles.input} controlId="department">
+    <Form.Group controlId="department">
       <Form.Label>Группа</Form.Label>
       <Form.Select
         onChange={(e: ChangeEvent<HTMLSelectElement>) => handleSelectUsersGroup(e)}
@@ -102,19 +102,21 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({ handleUpdateUsersGrups })
             </option>
           ))}
       </Form.Select>
-      {selectedUsersGroups &&
-        selectedUsersGroups.map((group) => (
-          <Button
-            key={group.id}
-            variant="primary"
-            onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleUnselectUsersGroup(e)}
-            data-value={group.id}>
-            {group.name}
-            <Badge bg="secondary">
-              <img src={closeImg} alt="closeImg" />
-            </Badge>
-          </Button>
-        ))}
+      <div className={styles.selectedItems}>
+        {selectedUsersGroups &&
+          selectedUsersGroups.map((group) => (
+            <Button
+              key={group.id}
+              variant="primary"
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleUnselectUsersGroup(e)}
+              data-value={group.id}>
+              {group.name}
+              <Badge bg="secondary">
+                <img src={closeImg} alt="closeImg" />
+              </Badge>
+            </Button>
+          ))}
+      </div>
     </Form.Group>
   );
 };

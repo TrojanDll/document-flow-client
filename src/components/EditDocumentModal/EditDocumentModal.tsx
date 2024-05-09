@@ -4,6 +4,7 @@ import styles from "./EditDocumentModal.module.css";
 import { useGetAllUsersGroupsQuery, useUpdateUserByIdMutation } from "../../features/admin/adminApiSlice";
 import { useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
+import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
 
 interface EditDocumentModalProps {
   props?: any;
@@ -95,14 +96,12 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   // };
 
   const handleUpdateUsersGrups = (groups: string[]) => {
-    console.log("handle");
     setUsersGroupsIds(groups);
   };
 
-  useEffect(() => {
-    console.log("id юзеров");
-    console.log(usersGroupsIds);
-  }, [usersGroupsIds]);
+  const handleUpdateDocuments = (documents: string[]) => {
+    setRelatedDocIdList(documents);
+  };
 
   return (
     <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
@@ -113,6 +112,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         <Form onSubmit={handleEditDocumentSubmit}>
           <div className={styles.inputsRow}>
             <MultiselectGroup handleUpdateUsersGrups={handleUpdateUsersGrups} />
+            <MultiselectRelatedDocs handleUpdateDocuments={handleUpdateDocuments} />
           </div>
 
           <div className={styles.buttonsWrapper}>
