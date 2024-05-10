@@ -43,12 +43,7 @@ const ProfilePage: FC = () => {
             {isLoading ? (
               <img className={styles.spinner} src={spinner} alt="spinner" />
             ) : (
-              <Form.Control
-                value={fetchedCurrientUser?.lastName}
-                type="text"
-                placeholder="name@example.com"
-                disabled
-              />
+              <Form.Control value={fetchedCurrientUser?.lastName} type="text" placeholder="name@example.com" disabled />
             )}
           </Form.Group>
           <Form.Group className="mb-3">
@@ -69,12 +64,7 @@ const ProfilePage: FC = () => {
             {isLoading ? (
               <img className={styles.spinner} src={spinner} alt="spinner" />
             ) : (
-              <Form.Control
-                value={fetchedCurrientUser?.email}
-                type="text"
-                placeholder="name@example.com"
-                disabled
-              />
+              <Form.Control value={fetchedCurrientUser?.email} type="text" placeholder="name@example.com" disabled />
             )}
           </Form.Group>
           <Form.Group className="mb-3">
@@ -93,14 +83,9 @@ const ProfilePage: FC = () => {
           <Form.Group className="mb-3">
             <Form.Label>Должность</Form.Label>
             {isLoading ? (
-              <img className={styles.spinner} src={spinner} alt="spinner" />
+              <img className={styles.spinner} src={spinner} alt="spinnerdll" />
             ) : (
-              <Form.Control
-                value={fetchedCurrientUser?.post}
-                type="text"
-                placeholder="name@example.com"
-                disabled
-              />
+              <Form.Control value={fetchedCurrientUser?.post} type="text" placeholder="name@example.com" disabled />
             )}
           </Form.Group>
           <Form.Group className="mb-3">

@@ -56,7 +56,6 @@ export const documentApiSlice = apiSlice.injectEndpoints({
             "Content-Type": "multipart/form-data",
           },
           data: { file },
-
           formData: true,
         };
       },

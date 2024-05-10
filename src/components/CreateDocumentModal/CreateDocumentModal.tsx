@@ -181,6 +181,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
           <div className={styles.inputsRow}>
             <Form.Group controlId="department">
               <Form.Label>Статус</Form.Label>
+
               <Form.Select
                 value={status || ""}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => setStatus(e.target.value as EDocumentStatus)}
@@ -230,10 +231,6 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
             </Form.Group>
           </div>
         </Form>
-
-        {/* <div className={styles.descr}>
-          Добавить данные вы см
-        </div> */}
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={handleUploadFile}>Отправить</Button>
