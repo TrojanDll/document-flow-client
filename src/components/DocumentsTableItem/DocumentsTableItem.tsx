@@ -1,9 +1,7 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import styles from "./DocumentsTableItem.module.css";
 import { Button } from "react-bootstrap";
-import { useDeleteUserByIdMutation } from "../../features/admin/adminApiSlice";
-import EditUserModal from "../EditUserModal/EditUserModal";
-import { useDeleteDocumentByIdMutation, useGetAllDocumentsQuery } from "../../features/documents/documentsApiSlice";
+import { useDeleteDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
 import EditDocumentModal from "../EditDocumentModal/EditDocumentModal";
 import { IDocument } from "../../types/Types";
 
@@ -21,14 +19,14 @@ interface DocumentsTableItemProps {
 
 const DocumentsTableItem: FC<DocumentsTableItemProps> = ({ document, variant, number, handleUdateTable }) => {
   // const [isUserChanged, setIsUserChanged] = useState(false);
-  const [fileUrl, setFileUrl] = useState("");
+  // const [fileUrl, setFileUrl] = useState("");
   const [modalEditDocumentShow, setModalEditDocumentShow] = useState(false);
 
   // const [getUserById] = useGetUserByIdMutation();
   const [deleteDocumentById] = useDeleteDocumentByIdMutation();
   // console.log(isUserChanged);
 
-  let updatedDocument: any;
+  // let updatedDocument: any;
   // let receivedContent = null;
 
   // const handleEdit = async (userId: number) => {
