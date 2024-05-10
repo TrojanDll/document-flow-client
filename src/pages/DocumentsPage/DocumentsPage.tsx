@@ -4,9 +4,13 @@ import ContentContainer from "../../components/ContentContainer/ContentContainer
 import PageTitle from "../../components/PageTitle/PageTitle";
 import { useGetAllDocumentsQuery } from "../../features/documents/documentsApiSlice";
 import DocumentsTable from "../../components/DocumentsTable/DocumentsTable";
+import { Button } from "react-bootstrap";
+import style from "./DocumentsPage.module.css";
+import CreateDocumentModal from "../../components/CreateDocumentModal/CreateDocumentModal";
 
 const DocumentsPage: FC = () => {
   const { data: fetchedDocuments, refetch: getAllDocuments, isLoading, isSuccess } = useGetAllDocumentsQuery();
+  const [modalCreateDocumentShow, setModalCreateDocumentShow] = useState(false);
 
   const [modifiedDocuments, setModifiedDocuments] = useState<IDocument[]>([]);
 
@@ -53,6 +57,18 @@ const DocumentsPage: FC = () => {
       <Sidebar />
       <ContentContainer>
         <PageTitle>Документы</PageTitle>
+
+        <Button
+          className={style.createDocumentButton}
+          variant="primary"
+          onClick={() => setModalCreateDocumentShow(true)}>
+          Добавить документ
+        </Button>
+        <CreateDocumentModal
+          handleUdateTable={handleUdateTable}
+          show={modalCreateDocumentShow}
+          onHide={() => setModalCreateDocumentShow(false)}
+        />
 
         {modifiedDocuments && <DocumentsTable handleUdateTable={handleUdateTable} documents={modifiedDocuments} />}
       </ContentContainer>

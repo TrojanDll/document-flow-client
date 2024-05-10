@@ -46,11 +46,29 @@ export const documentApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
+    uploadDocument: builder.mutation<void, File>({
+      query: (file) => {
+        return {
+          url: "/api/docs/upload",
+          method: "POST",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          data: { file },
+
+          formData: true,
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetAllDocumentsQuery, useDeleteDocumentByIdMutation, useUpdateDocumentByIdMutation } =
-  documentApiSlice;
+export const {
+  useGetAllDocumentsQuery,
+  useDeleteDocumentByIdMutation,
+  useUpdateDocumentByIdMutation,
+  useUploadDocumentMutation,
+} = documentApiSlice;
 
 // query: (credentials: Ilogin) => ({
 //   url: "/api/auth/login",
