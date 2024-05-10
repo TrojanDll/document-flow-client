@@ -8,9 +8,15 @@ interface MultiselectGroupProps {
   handleUpdateUsersGrups: (arg: string[]) => void;
   currientDocumentInfo?: IDocument;
   usersGroups: IUserGroup[];
+  isDisabled?: boolean;
 }
 
-const MultiselectGroup: FC<MultiselectGroupProps> = ({ handleUpdateUsersGrups, currientDocumentInfo, usersGroups }) => {
+const MultiselectGroup: FC<MultiselectGroupProps> = ({
+  handleUpdateUsersGrups,
+  currientDocumentInfo,
+  usersGroups,
+  isDisabled,
+}) => {
   const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
   const [selectedUsersGroups, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
   const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
@@ -101,6 +107,7 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({ handleUpdateUsersGrups, c
     <Form.Group controlId="department">
       <Form.Label>Группа</Form.Label>
       <Form.Select
+        disabled={isDisabled}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => handleSelectUsersGroup(e)}
         aria-label="Выберите группу">
         <option>Список групп</option>

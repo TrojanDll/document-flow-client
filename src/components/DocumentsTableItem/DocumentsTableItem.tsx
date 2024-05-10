@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from "react";
 import styles from "./DocumentsTableItem.module.css";
-import { Button } from "react-bootstrap";
 import { useDeleteDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
 import EditDocumentModal from "../EditDocumentModal/EditDocumentModal";
 import { IDocument } from "../../types/Types";
