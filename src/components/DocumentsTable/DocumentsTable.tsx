@@ -3,6 +3,7 @@ import styles from "./DocumentsTable.module.css";
 import { Table } from "react-bootstrap";
 import { DocumentsTableItemVariants } from "../DocumentsTableItem/DocumentsTableItem";
 import DocumentsTableItem from "../DocumentsTableItem/DocumentsTableItem";
+import { IDocument } from "../../types/Types";
 
 interface IDocumentsTableProps {
   documents: IDocument[];

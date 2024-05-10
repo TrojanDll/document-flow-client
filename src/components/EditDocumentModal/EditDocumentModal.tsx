@@ -5,6 +5,7 @@ import { useGetAllUsersGroupsQuery, useUpdateUserByIdMutation } from "../../feat
 import { useGetAllDocumentsQuery, useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
+import { EDocumentStatus, IDocument } from "./../../types/Types";
 
 interface EditDocumentModalProps {
   props?: any;
@@ -31,7 +32,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   // const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
   // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
   const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
-  const [status, setStatus] = useState("INPROGRESS");
+  const [status, setStatus] = useState<EDocumentStatus>(documentData.status as EDocumentStatus);
 
   // useEffect(() => {
   //   if (!isLoading && isSuccess) {
@@ -49,7 +50,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
     try {
       const udatedDocumentData = await editDocument({
         id: documentData.id,
-        status: status,
+        status: status ? status : EDocumentStatus.APPROVED,
         relatedDocs: relatedDocIdList,
         parentDocId: parentDocId,
         relatedUserGroupIds: usersGroupsIds,
@@ -130,9 +131,18 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
           </div>
 
           <div className={styles.inputsRow}>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-              <Form.Label>Описание</Form.Label>
-              <Form.Control value={comment} onChange={(e) => setComment(e.target.value)} as="textarea" rows={3} />
+            <Form.Group controlId="department">
+              <Form.Label>Статус</Form.Label>
+              <Form.Select
+                value={status || ""}
+                onChange={(e: ChangeEvent<HTMLSelectElement>) => setStatus(e.target.value as EDocumentStatus)}
+                aria-label="Выберите документы">
+                <option>Статус</option>
+                <option value={EDocumentStatus.APPROVED}>Подтвержден</option>
+                <option value={EDocumentStatus.SEEN}>Просмотрен</option>
+                <option value={EDocumentStatus.INPROGRESS}>В работе</option>
+                <option value={EDocumentStatus.DECLINED}>Отклонен</option>
+              </Form.Select>
             </Form.Group>
           </div>
 
@@ -151,6 +161,13 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
                     </option>
                   ))}
               </Form.Select>
+            </Form.Group>
+          </div>
+
+          <div className={styles.inputsRow}>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+              <Form.Label>Описание</Form.Label>
+              <Form.Control value={comment} onChange={(e) => setComment(e.target.value)} as="textarea" rows={3} />
             </Form.Group>
           </div>
 

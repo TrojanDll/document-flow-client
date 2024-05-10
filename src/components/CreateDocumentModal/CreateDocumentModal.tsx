@@ -91,9 +91,13 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
             }
           />
         </Form.Group>
+
+        {/* <div className={styles.descr}>
+          Добавить данные вы см
+        </div> */}
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleUploadFile}>Добавить</Button>
+        <Button onClick={handleUploadFile}>Отправить</Button>
         <Button onClick={props.onHide} variant="secondary">
           Отмена
         </Button>

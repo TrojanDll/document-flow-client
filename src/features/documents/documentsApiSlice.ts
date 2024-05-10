@@ -1,4 +1,5 @@
 import { apiSlice } from "../../app/api/apiSlice";
+import { IDocument, IDocumentEdit } from "../../types/Types";
 
 export interface IUpdateUserById {
   userId: number;
@@ -37,7 +38,7 @@ export const documentApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: {
           id: documentData.id,
-          status: "INPROGRESS",
+          status: documentData.status,
           relatedDocIds: documentData.relatedDocs,
           parentDocId: documentData.parentDocId,
           relatedUserGroupIds: documentData.relatedUserGroupIds,

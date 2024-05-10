@@ -2,6 +2,7 @@ import { FC } from "react";
 import styles from "./TableUsers.module.css";
 import { Table } from "react-bootstrap";
 import TableUsersItem, { TableUsersItemVariants } from "../TableUsersItem/TableUsersItem";
+import { IUser } from "../../types/Types";
 
 interface ITableUsersProps {
   users: IUser[];

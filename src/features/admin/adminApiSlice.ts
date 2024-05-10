@@ -1,4 +1,5 @@
 import { apiSlice } from "../../app/api/apiSlice";
+import { IUser, IUserGroup } from "../../types/Types";
 
 export interface IUpdateUserById {
   userId: number;

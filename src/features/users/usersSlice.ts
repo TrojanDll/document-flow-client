@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { IUser } from "../../types/Types";
 
 interface IUsersState {
   data: IUser[];
@@ -9,18 +10,7 @@ const usersSlice = createSlice({
   initialState: <IUsersState>{},
   reducers: {
     addUser: (state, action) => {
-      const {
-        id,
-        active,
-        firstName,
-        lastName,
-        patronymic,
-        post,
-        role,
-        email,
-        userGroup,
-        department,
-      } = action.payload;
+      const { id, active, firstName, lastName, patronymic, post, role, email, userGroup, department } = action.payload;
       state.data.push({
         id,
         active,

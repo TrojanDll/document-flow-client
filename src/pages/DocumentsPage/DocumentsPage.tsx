@@ -7,6 +7,7 @@ import DocumentsTable from "../../components/DocumentsTable/DocumentsTable";
 import { Button } from "react-bootstrap";
 import style from "./DocumentsPage.module.css";
 import CreateDocumentModal from "../../components/CreateDocumentModal/CreateDocumentModal";
+import { IDocument } from "../../types/Types";
 
 const DocumentsPage: FC = () => {
   const { data: fetchedDocuments, refetch: getAllDocuments, isLoading, isSuccess } = useGetAllDocumentsQuery();

@@ -4,6 +4,7 @@ import styles from "./MultiselectGroup.module.css";
 import { useGetAllUsersGroupsQuery, useUpdateUserByIdMutation } from "../../features/admin/adminApiSlice";
 import { useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
 import closeImg from "./../../assets/img/icons/close.svg";
+import { IDocument, IUserGroup } from "../../types/Types";
 
 interface MultiselectGroupProps {
   handleUpdateUsersGrups: (arg: string[]) => void;

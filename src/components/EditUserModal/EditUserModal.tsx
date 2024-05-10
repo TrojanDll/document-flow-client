@@ -1,10 +1,8 @@
 import { ChangeEvent, FC, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditUserModal.module.css";
-import {
-  useGetAllUsersGroupsQuery,
-  useUpdateUserByIdMutation,
-} from "../../features/admin/adminApiSlice";
+import { useGetAllUsersGroupsQuery, useUpdateUserByIdMutation } from "../../features/admin/adminApiSlice";
+import { IUser } from "../../types/Types";
 
 interface EditUserModalProps {
   props?: any;
@@ -78,12 +76,7 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
   };
 
   return (
-    <Modal
-      {...props}
-      show={show}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered>
+    <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">Редактирование пользователя</Modal.Title>
       </Modal.Header>

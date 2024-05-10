@@ -5,6 +5,7 @@ import { useDeleteUserByIdMutation } from "../../features/admin/adminApiSlice";
 import EditUserModal from "../EditUserModal/EditUserModal";
 import { useDeleteDocumentByIdMutation, useGetAllDocumentsQuery } from "../../features/documents/documentsApiSlice";
 import EditDocumentModal from "../EditDocumentModal/EditDocumentModal";
+import { IDocument } from "../../types/Types";
 
 export enum DocumentsTableItemVariants {
   light = "light",
@@ -57,8 +58,7 @@ const DocumentsTableItem: FC<DocumentsTableItemProps> = ({ document, variant, nu
           <Button
             onClick={() => setModalEditDocumentShow(true)}
             className={styles.editButton}
-            variant="outline-secondary"
-          >
+            variant="outline-secondary">
             Редактировать
           </Button>
 
@@ -71,8 +71,7 @@ const DocumentsTableItem: FC<DocumentsTableItemProps> = ({ document, variant, nu
           <Button
             onClick={() => handleDeleteDocument(document.id)}
             className={styles.editButton}
-            variant="outline-danger"
-          >
+            variant="outline-danger">
             Удалить
           </Button>
           <Button className={styles.editButton} variant="outline-primary" as="a" href={document.url}>

@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import FilterDropdown from "../FilterDropdown/FilterDropdown";
 import styles from "./FilterModal.module.css";
+import { IUser } from "../../types/Types";
 
 interface FilterModalProps {
   props?: any;
@@ -13,22 +14,13 @@ interface FilterModalProps {
 const FilterModal: FC<FilterModalProps> = (props) => {
   const [groupFilterItems, setGroupFilterItems] = useState(["gropup1", "gropup2", "gropup3"]);
   const [postFilterItems, setPostFilterItems] = useState(["post1", "post2", "post3"]);
-  const [departmentFilterItems, setDepartmentFilterItems] = useState([
-    "department1",
-    "department2",
-    "department3",
-  ]);
+  const [departmentFilterItems, setDepartmentFilterItems] = useState(["department1", "department2", "department3"]);
 
   console.log(setGroupFilterItems, setPostFilterItems, setDepartmentFilterItems);
 
   const { show } = props;
   return (
-    <Modal
-      {...props}
-      show={show}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered>
+    <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">Фильтр пользователей</Modal.Title>
       </Modal.Header>

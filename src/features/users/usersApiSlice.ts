@@ -1,4 +1,5 @@
 import { apiSlice } from "../../app/api/apiSlice";
+import { IUser } from "../../types/Types";
 
 export const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

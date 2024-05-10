@@ -1,4 +1,4 @@
-interface IUser {
+export interface IUser {
   id: number;
   active?: boolean;
   firstName?: string;
@@ -15,13 +15,13 @@ interface IUser {
   };
 }
 
-interface IUserGroup {
+export interface IUserGroup {
   id: number;
   name: string;
   members: IUser[];
 }
 
-interface IDocument {
+export interface IDocument {
   id: string;
   name?: string;
   url?: string;
@@ -30,14 +30,14 @@ interface IDocument {
   createdDate?: string;
   expirationDate?: string;
   parentDocId?: string;
-  status?: string;
+  status?: EDocumentStatus;
   relatedDocs?: string[];
   userGroups?: string[];
   comment?: string;
   size?: number;
 }
 
-interface IDocumentEdit {
+export interface IDocumentEdit {
   id: string;
   expirationDate?: string;
   parentDocId?: string;
@@ -45,5 +45,12 @@ interface IDocumentEdit {
   userGroups?: string[];
   comment?: string;
   relatedUserGroupIds?: string[];
-  status?: string;
+  status?: EDocumentStatus;
+}
+
+export const enum EDocumentStatus {
+  APPROVED = "APPROVED",
+  DECLINED = "DECLINED",
+  SEEN = "SEEN",
+  INPROGRESS = "INPROGRESS",
 }
