@@ -8,7 +8,7 @@ import { IDocument, IUserGroup } from "../../types/Types";
 
 interface MultiselectGroupProps {
   handleUpdateUsersGrups: (arg: string[]) => void;
-  currientDocumentInfo: IDocument;
+  currientDocumentInfo?: IDocument;
   usersGroups: IUserGroup[];
 }
 
@@ -21,7 +21,7 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({ handleUpdateUsersGrups, c
     let baseSelectedGroups: IUserGroup[] = [];
     setNotSelectedUsersGroups(
       usersGroups.filter((group) => {
-        const currientDocumentUsersGroups = currientDocumentInfo.userGroups;
+        const currientDocumentUsersGroups = currientDocumentInfo ? currientDocumentInfo.userGroups : [];
         if (currientDocumentUsersGroups?.indexOf(group.id.toString()) === -1) {
           return group;
         } else {

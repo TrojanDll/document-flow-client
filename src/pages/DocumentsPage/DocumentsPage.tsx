@@ -65,11 +65,16 @@ const DocumentsPage: FC = () => {
           onClick={() => setModalCreateDocumentShow(true)}>
           Добавить документ
         </Button>
-        <CreateDocumentModal
-          handleUdateTable={handleUdateTable}
-          show={modalCreateDocumentShow}
-          onHide={() => setModalCreateDocumentShow(false)}
-        />
+        {fetchedDocuments ? (
+          <CreateDocumentModal
+            fetchedDocuments={fetchedDocuments}
+            handleUdateTable={handleUdateTable}
+            show={modalCreateDocumentShow}
+            onHide={() => setModalCreateDocumentShow(false)}
+          />
+        ) : (
+          ""
+        )}
 
         {modifiedDocuments && <DocumentsTable handleUdateTable={handleUdateTable} documents={modifiedDocuments} />}
       </ContentContainer>

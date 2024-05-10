@@ -8,7 +8,7 @@ import { IDocument } from "../../types/Types";
 
 interface MultiselectGroupProps {
   handleUpdateDocuments: (arg: string[]) => void;
-  currientDocumentInfo: IDocument;
+  currientDocumentInfo?: IDocument;
   documents: IDocument[];
 }
 
@@ -25,7 +25,7 @@ const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({
     let baseSelectedDocs: IDocument[] = [];
     setNotSelectedDocuments(
       documents.filter((document) => {
-        const currientDocumentRelatedDocs = currientDocumentInfo.relatedDocs;
+        const currientDocumentRelatedDocs = currientDocumentInfo ? currientDocumentInfo.relatedDocs : [];
         if (currientDocumentRelatedDocs?.indexOf(document.id) === -1) {
           return document;
         } else {
