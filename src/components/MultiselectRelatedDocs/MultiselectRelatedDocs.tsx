@@ -8,12 +8,14 @@ interface MultiselectGroupProps {
   handleUpdateDocuments: (arg: string[]) => void;
   currientDocumentInfo?: IDocument;
   documents: IDocument[];
+  isDisabled?: boolean;
 }
 
 const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({
   handleUpdateDocuments,
   currientDocumentInfo,
   documents,
+  isDisabled,
 }) => {
   const [notSelectedDocuments, setNotSelectedDocuments] = useState<IDocument[]>([]);
   const [selectedDocuments, setSelectedDocuments] = useState<IDocument[]>([]);
@@ -106,6 +108,7 @@ const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({
     <Form.Group controlId="department">
       <Form.Label>Связанные документы</Form.Label>
       <Form.Select
+        disabled={isDisabled}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => handleSelectDocuments(e)}
         aria-label="Выберите документы">
         <option>Список документов</option>

@@ -63,7 +63,7 @@ const AdminPage = () => {
             <InputGroup.Text>
               <img src={searchImg} alt="searchImg" />
             </InputGroup.Text>
-            <Form.Control placeholder="Поиск..." aria-label="Username" />
+            <Form.Control placeholder="Поиск... (В разработке)" aria-label="Username" />
           </InputGroup>
 
           {/* <Button variant="outline-primary" onClick={() => setModalFilterShow(true)}>
@@ -77,12 +77,12 @@ const AdminPage = () => {
           </Button>
           <CreateGroupModal show={modalCreateGroupShow} onHide={() => setModalCreateGroupShow(false)} />
 
-          <Form className={styles.addGroupWrapper}>
+          {/* <Form className={styles.addGroupWrapper}>
             <Form.Control type="text" placeholder="Новая группа документов" />
             <Button variant="secondary" type="submit">
               Добавить
             </Button>
-          </Form>
+          </Form> */}
 
           <Button variant="success" onClick={() => setModalCreateUserShow(true)}>
             Добавить пользователя

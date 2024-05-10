@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditDocumentModal.module.css";
 import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
@@ -6,6 +6,7 @@ import { useGetAllDocumentsQuery, useUpdateDocumentByIdMutation } from "../../fe
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
 import { EDocumentStatus, IDocument } from "./../../types/Types";
+import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
 
 interface EditDocumentModalProps {
   props?: any;
@@ -21,6 +22,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   const [editDocument] = useUpdateDocumentByIdMutation();
   const { data: fetchedDocuments } = useGetAllDocumentsQuery();
   const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
+  const { data: currientUser, isSuccess: isSuccessCurrientUser } = useGetCurrientUserQuery();
 
   // const { data: fetchedUsersGroups, isLoading, isSuccess } = useGetAllUsersGroupsQuery();
 
@@ -36,6 +38,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
   const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
   const [status, setStatus] = useState<EDocumentStatus>(documentData.status as EDocumentStatus);
+  const [isDisabled, setIsDisabled] = useState(true);
 
   // useEffect(() => {
   //   if (!isLoading && isSuccess) {
@@ -46,6 +49,15 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   // useEffect(() => {
   //   console.log(notSelectedUsersGroups);
   // }, [notSelectedUsersGroups]);
+
+  useEffect(() => {
+    if (isSuccessCurrientUser && currientUser && currientUser.email) {
+      console.log(currientUser?.email.toString());
+      console.log(documentData.owner);
+      console.log(currientUser?.email.toString() !== documentData.owner);
+      setIsDisabled(currientUser?.email.toString() !== documentData.owner);
+    }
+  }, [isSuccessCurrientUser]);
 
   const handleEditDocumentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -127,6 +139,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         <Form onSubmit={handleEditDocumentSubmit}>
           <div className={styles.inputsRow}>
             <MultiselectGroup
+              isDisabled={isDisabled}
               currientDocumentInfo={documentData}
               usersGroups={fetchedUsersGroups ? fetchedUsersGroups : []}
               handleUpdateUsersGrups={handleUpdateUsersGrups}
@@ -135,6 +148,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
 
           <div className={styles.inputsRow}>
             <MultiselectRelatedDocs
+              isDisabled={isDisabled}
               currientDocumentInfo={documentData}
               documents={fetchedDocuments ? fetchedDocuments : []}
               handleUpdateDocuments={handleUpdateDocuments}
