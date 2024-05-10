@@ -1,8 +1,6 @@
 import { ChangeEvent, FC, useEffect, useState } from "react";
-import { Badge, Button, Form, Modal } from "react-bootstrap";
+import { Badge, Button, Form } from "react-bootstrap";
 import styles from "./MultiselectRelatedDocs.module.css";
-import { useGetAllUsersGroupsQuery, useUpdateUserByIdMutation } from "../../features/admin/adminApiSlice";
-import { useGetAllDocumentsQuery, useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
 import closeImg from "./../../assets/img/icons/close.svg";
 import { IDocument } from "../../types/Types";
 

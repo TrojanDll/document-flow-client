@@ -22,7 +22,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
   const { show, onHide, handleUdateTable, fetchedDocuments } = props;
   // Понять как получить текущий документ
 
-  const [documentData, setDocumentData] = useState<IDocument>();
+  // const [documentData, setDocumentData] = useState<IDocument>();
   const [file, setFile] = useState<File | null>(null);
   const [editDocument] = useUpdateDocumentByIdMutation();
   const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
@@ -31,7 +31,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
 
   const [expirationDate, setExpirationDate] = useState("");
   const [selectedExpirationDate, setSelectedExpirationDate] = useState("");
-  const [currientRelatedDocId, setCurrientRelatedDocId] = useState("");
+  // const [currientRelatedDocId, setCurrientRelatedDocId] = useState("");
   const [relatedDocIdList, setRelatedDocIdList] = useState<string[]>([]);
   const [parentDocId, setParentDocId] = useState("");
   const [comment, setComment] = useState("");
@@ -203,7 +203,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
                 aria-label="Выберите документы">
                 <option>Список документов</option>
                 {fetchedDocuments &&
-                  fetchedDocuments.map((document, i) => (
+                  fetchedDocuments.map((document) => (
                     <option key={document.id} value={document.parentDocId}>
                       {document.name}
                     </option>

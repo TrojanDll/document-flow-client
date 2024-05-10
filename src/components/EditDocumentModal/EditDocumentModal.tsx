@@ -1,7 +1,7 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditDocumentModal.module.css";
-import { useGetAllUsersGroupsQuery, useUpdateUserByIdMutation } from "../../features/admin/adminApiSlice";
+import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 import { useGetAllDocumentsQuery, useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
@@ -19,7 +19,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   const { show, documentData, onHide, handleUdateTable } = props;
   // const [editUserById] = useEditD();
   const [editDocument] = useUpdateDocumentByIdMutation();
-  const { data: fetchedDocuments, isLoading, isSuccess } = useGetAllDocumentsQuery();
+  const { data: fetchedDocuments } = useGetAllDocumentsQuery();
   const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
 
   // const { data: fetchedUsersGroups, isLoading, isSuccess } = useGetAllUsersGroupsQuery();
@@ -28,7 +28,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   const [selectedExpirationDate, setSelectedExpirationDate] = useState(
     documentData.expirationDate?.slice(0, documentData.expirationDate.indexOf("T")),
   );
-  const [currientRelatedDocId, setCurrientRelatedDocId] = useState("");
+  // const [currientRelatedDocId, setCurrientRelatedDocId] = useState("");
   const [relatedDocIdList, setRelatedDocIdList] = useState<string[]>([]);
   const [parentDocId, setParentDocId] = useState(documentData.parentDocId);
   const [comment, setComment] = useState(documentData.comment);
@@ -166,7 +166,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
                 aria-label="Выберите документы">
                 <option>Список документов</option>
                 {fetchedDocuments &&
-                  fetchedDocuments.map((document, i) => (
+                  fetchedDocuments.map((document) => (
                     <option key={document.id} value={document.parentDocId}>
                       {document.name}
                     </option>
