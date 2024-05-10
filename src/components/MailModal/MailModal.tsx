@@ -1,7 +1,5 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Button, Modal } from "react-bootstrap";
-import styles from "./MailModal.module.css";
-import { IUser } from "../../types/Types";
 
 interface MailModalProps {
   props?: any;

@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from "react";
 import styles from "./TableUsersItem.module.css";
-import { Button } from "react-bootstrap";
 import { useDeleteUserByIdMutation } from "../../features/admin/adminApiSlice";
 import EditUserModal from "../EditUserModal/EditUserModal";
 import { IUser } from "../../types/Types";
