@@ -11,6 +11,7 @@ import CreateUserModal from "../../components/CreateUserModal/CreateUserModal";
 import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
 import CreateGroupModal from "../../components/CreateGroupModal/CreateGroupModal";
 import { IUser } from "../../types/Types";
+import FilterModal from "../../components/FilterModal/FilterModal";
 
 const AdminPage = () => {
   // const [modalFilterShow, setModalFilterShow] = useState(false);
@@ -63,26 +64,26 @@ const AdminPage = () => {
             <InputGroup.Text>
               <img src={searchImg} alt="searchImg" />
             </InputGroup.Text>
-            <Form.Control placeholder="Поиск..." aria-label="Username" />
+            <Form.Control placeholder="Поиск... (В разработке)" aria-label="Username" />
           </InputGroup>
 
           {/* <Button variant="outline-primary" onClick={() => setModalFilterShow(true)}>
             Фильтры
           </Button>
 
-          <FilterModal user show={modalFilterShow} onHide={() => setModalFilterShow(false)} /> */}
+          <FilterModal user={fetchedUsers} show={modalFilterShow} onHide={() => setModalFilterShow(false)} /> */}
 
           <Button variant="secondary" onClick={() => setModalCreateGroupShow(true)}>
             Настроить группы пользователей
           </Button>
           <CreateGroupModal show={modalCreateGroupShow} onHide={() => setModalCreateGroupShow(false)} />
 
-          <Form className={styles.addGroupWrapper}>
+          {/* <Form className={styles.addGroupWrapper}>
             <Form.Control type="text" placeholder="Новая группа документов" />
             <Button variant="secondary" type="submit">
               Добавить
             </Button>
-          </Form>
+          </Form> */}
 
           <Button variant="success" onClick={() => setModalCreateUserShow(true)}>
             Добавить пользователя
