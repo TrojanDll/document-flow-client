@@ -11,6 +11,7 @@ import CreateUserModal from "../../components/CreateUserModal/CreateUserModal";
 import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
 import CreateGroupModal from "../../components/CreateGroupModal/CreateGroupModal";
 import { IUser } from "../../types/Types";
+import FilterModal from "../../components/FilterModal/FilterModal";
 
 const AdminPage = () => {
   // const [modalFilterShow, setModalFilterShow] = useState(false);
@@ -70,7 +71,7 @@ const AdminPage = () => {
             Фильтры
           </Button>
 
-          <FilterModal user show={modalFilterShow} onHide={() => setModalFilterShow(false)} /> */}
+          <FilterModal user={fetchedUsers} show={modalFilterShow} onHide={() => setModalFilterShow(false)} /> */}
 
           <Button variant="secondary" onClick={() => setModalCreateGroupShow(true)}>
             Настроить группы пользователей
