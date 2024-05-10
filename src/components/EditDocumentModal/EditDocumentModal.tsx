@@ -24,7 +24,10 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
 
   // const { data: fetchedUsersGroups, isLoading, isSuccess } = useGetAllUsersGroupsQuery();
 
-  const [expirationDate, setExpirationDate] = useState("");
+  const [expirationDate, setExpirationDate] = useState(documentData.expirationDate);
+  const [selectedExpirationDate, setSelectedExpirationDate] = useState(
+    documentData.expirationDate?.slice(0, documentData.expirationDate.indexOf("T")),
+  );
   const [currientRelatedDocId, setCurrientRelatedDocId] = useState("");
   const [relatedDocIdList, setRelatedDocIdList] = useState<string[]>([]);
   const [parentDocId, setParentDocId] = useState(documentData.parentDocId);
@@ -107,6 +110,14 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
     setRelatedDocIdList(documents);
   };
 
+  const handleDate = (e: ChangeEvent<HTMLInputElement>) => {
+    const date = new Date(e.target.value).toISOString();
+    console.log(date);
+
+    setSelectedExpirationDate(e.target.value);
+    setExpirationDate(date);
+  };
+
   return (
     <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
@@ -155,13 +166,24 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
                 aria-label="Выберите документы">
                 <option>Список документов</option>
                 {fetchedDocuments &&
-                  fetchedDocuments.map((document) => (
-                    <option key={document.parentDocId} value={document.parentDocId}>
+                  fetchedDocuments.map((document, i) => (
+                    <option key={document.id} value={document.parentDocId}>
                       {document.name}
                     </option>
                   ))}
               </Form.Select>
             </Form.Group>
+          </div>
+
+          <div className={styles.inputsRow}>
+            <Form.Label htmlFor="inputPassword5">Дата завершения</Form.Label>
+            <Form.Control
+              value={selectedExpirationDate}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => handleDate(e)}
+              type="date"
+              id="inputPassword5"
+              aria-describedby="passwordHelpBlock"
+            />
           </div>
 
           <div className={styles.inputsRow}>
