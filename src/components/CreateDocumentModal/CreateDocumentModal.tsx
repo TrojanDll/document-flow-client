@@ -50,7 +50,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
   const [comment, setComment] = useState("");
   // const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
   // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
-  const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
+  // const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
   const [status, setStatus] = useState<EDocumentStatus>(EDocumentStatus.APPROVED);
   const { data: currUser } = useGetCurrientUserQuery();
 
@@ -149,9 +149,9 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
     }
   };
 
-  const handleUpdateUsersGrups = (groups: string[]) => {
-    setUsersGroupsIds(groups);
-  };
+  // const handleUpdateUsersGrups = (groups: string[]) => {
+  //   setUsersGroupsIds(groups);
+  // };
 
   const handleUpdateDocuments = (documents: string[]) => {
     setRelatedDocIdList(documents);
