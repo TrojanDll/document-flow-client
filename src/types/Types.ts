@@ -61,3 +61,10 @@ export const enum EDocumentStatus {
   SEEN = "SEEN",
   INPROGRESS = "INPROGRESS",
 }
+
+export interface IEmailBody {
+  email: string;
+  docId: string;
+  header: string;
+  body: string;
+}
