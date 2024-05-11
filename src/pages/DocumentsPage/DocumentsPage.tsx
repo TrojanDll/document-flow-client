@@ -36,6 +36,7 @@ const DocumentsPage: FC = () => {
   useEffect(() => {
     if (!isLoading && isSuccess) {
       sortDocumentsByField(fetchedDocuments, "name");
+      setModifiedDocuments(fetchedDocuments);
     }
   }, [isLoading]);
 
@@ -43,9 +44,10 @@ const DocumentsPage: FC = () => {
 
   const handleUdateTable = async () => {
     const resp = await getAllDocuments();
-    if (resp.isSuccess) {
+    if (resp.isSuccess && fetchedDocuments) {
       refetchedDocuments = resp.data;
-      sortDocumentsByField(refetchedDocuments, "name");
+      // sortDocumentsByField(refetchedDocuments, "name");
+      setModifiedDocuments(fetchedDocuments);
     }
   };
 
