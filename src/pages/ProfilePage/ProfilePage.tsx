@@ -7,9 +7,15 @@ import { Form } from "react-bootstrap";
 // import searchImg from "./../../assets/img/icons/search.svg";
 import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
 import spinner from "./../../assets/img/icons/spinner.svg";
+import { useGetDocumentsByMyGroupQuery } from "../../features/documents/documentsApiSlice";
+import DocumentsTable from "../../components/DocumentsTable/DocumentsTable";
 
 const ProfilePage: FC = () => {
   const { data: fetchedCurrientUser, isLoading } = useGetCurrientUserQuery();
+  const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
+
+  const handleUdateTable = async () => {};
+
   return (
     <div>
       <Sidebar />
@@ -102,6 +108,8 @@ const ProfilePage: FC = () => {
             )}
           </Form.Group>
         </Form>
+
+        {fetchedDocuments && <DocumentsTable handleUdateTable={handleUdateTable} documents={fetchedDocuments} />}
       </ContentContainer>
     </div>
   );
