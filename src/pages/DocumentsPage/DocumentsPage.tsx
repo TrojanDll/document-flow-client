@@ -40,12 +40,12 @@ const DocumentsPage: FC = () => {
     }
   }, [isLoading]);
 
-  let refetchedDocuments: IDocument[];
+  // let refetchedDocuments: IDocument[];
 
   const handleUdateTable = async () => {
     const resp = await getAllDocuments();
     if (resp.isSuccess && fetchedDocuments) {
-      refetchedDocuments = resp.data;
+      // refetchedDocuments = resp.data;
       // sortDocumentsByField(refetchedDocuments, "name");
       setModifiedDocuments(fetchedDocuments);
     }
