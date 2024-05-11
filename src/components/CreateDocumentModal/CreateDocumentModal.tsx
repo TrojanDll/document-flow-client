@@ -8,6 +8,7 @@ import { EDocumentStatus, IDocument, IUserGroup } from "../../types/Types";
 import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
+import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
 
 interface CreateDocumentModalProps {
   props?: any;
@@ -50,6 +51,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
   // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
   const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
   const [status, setStatus] = useState<EDocumentStatus>(EDocumentStatus.APPROVED);
+  const { data: currUser } = useGetCurrientUserQuery();
 
   useEffect(() => {
     console.log(file);
@@ -114,13 +116,17 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
 
   const handleEditDocumentSubmit = async (documentData: IDocument) => {
     if (documentData) {
+      let currUserGroup;
+      if (currUser) {
+        currUserGroup = [currUser.userGroup.toString()];
+      }
       try {
         const udatedDocumentData = await editDocument({
           id: documentData.id,
           status: status ? status : EDocumentStatus.APPROVED,
           relatedDocs: relatedDocIdList,
           parentDocId: parentDocId,
-          relatedUserGroupIds: usersGroupsIds,
+          relatedUserGroupIds: currUserGroup,
           expirationDate: expirationDate,
           comment: comment,
         });
@@ -129,7 +135,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
           status: status,
           relatedDocs: relatedDocIdList,
           parentDocId: parentDocId,
-          relatedUserGroupIds: usersGroupsIds,
+          relatedUserGroupIds: currUserGroup,
           expirationDate: expirationDate,
           comment: comment,
         });
@@ -175,12 +181,12 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
         </Form.Group>
 
         <Form>
-          <div className={styles.inputsRow}>
+          {/* <div className={styles.inputsRow}>
             <MultiselectGroup
               usersGroups={fetchedUsersGroups ? fetchedUsersGroups : []}
               handleUpdateUsersGrups={handleUpdateUsersGrups}
             />
-          </div>
+          </div> */}
 
           <div className={styles.inputsRow}>
             <MultiselectRelatedDocs
