@@ -4,10 +4,9 @@ import styles from "./CreateDocumentModal.module.css";
 import axios, { AxiosResponse } from "axios";
 import { BASE_URL } from "../../app/api/apiSlice";
 import { useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
-import { EDocumentStatus, IDocument, IUserGroup } from "../../types/Types";
-import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
-import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
+import { EDocumentStatus, IDocument } from "../../types/Types";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
+import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
 
 interface CreateDocumentModalProps {
   props?: any;
@@ -25,7 +24,8 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
   // const [documentData, setDocumentData] = useState<IDocument>();
   const [file, setFile] = useState<File | null>(null);
   const [editDocument] = useUpdateDocumentByIdMutation();
-  const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
+  // const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
+  const { data: currientUser } = useGetCurrientUserQuery();
   // const fetchedUsersGroups: IUserGroup[] = [
   //   {
   //     id: 1,
@@ -48,8 +48,10 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
   const [comment, setComment] = useState("");
   // const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
   // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
-  const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
+  // const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
   const [status, setStatus] = useState<EDocumentStatus>(EDocumentStatus.APPROVED);
+
+  // const role = localStorage.getItem("role");
 
   useEffect(() => {
     console.log(file);
@@ -114,13 +116,17 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
 
   const handleEditDocumentSubmit = async (documentData: IDocument) => {
     if (documentData) {
+      let currientUserGroupList;
+      if (currientUser) {
+        currientUserGroupList = [currientUser?.id.toString()];
+      }
       try {
         const udatedDocumentData = await editDocument({
           id: documentData.id,
           status: status ? status : EDocumentStatus.APPROVED,
           relatedDocs: relatedDocIdList,
           parentDocId: parentDocId,
-          relatedUserGroupIds: usersGroupsIds,
+          relatedUserGroupIds: currientUserGroupList,
           expirationDate: expirationDate,
           comment: comment,
         });
@@ -129,7 +135,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
           status: status,
           relatedDocs: relatedDocIdList,
           parentDocId: parentDocId,
-          relatedUserGroupIds: usersGroupsIds,
+          relatedUserGroupIds: currientUserGroupList,
           expirationDate: expirationDate,
           comment: comment,
         });
@@ -142,9 +148,9 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
     }
   };
 
-  const handleUpdateUsersGrups = (groups: string[]) => {
-    setUsersGroupsIds(groups);
-  };
+  // const handleUpdateUsersGrups = (groups: string[]) => {
+  //   setUsersGroupsIds(groups);
+  // };
 
   const handleUpdateDocuments = (documents: string[]) => {
     setRelatedDocIdList(documents);
@@ -175,12 +181,16 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
         </Form.Group>
 
         <Form>
-          <div className={styles.inputsRow}>
-            <MultiselectGroup
-              usersGroups={fetchedUsersGroups ? fetchedUsersGroups : []}
-              handleUpdateUsersGrups={handleUpdateUsersGrups}
-            />
-          </div>
+          {/* <div className={styles.inputsRow}>
+            {role === "ADMIN" ? (
+              <MultiselectGroup
+                usersGroups={fetchedUsersGroups ? fetchedUsersGroups : []}
+                handleUpdateUsersGrups={handleUpdateUsersGrups}
+              />
+            ) : (
+              ""
+            )}
+          </div> */}
 
           <div className={styles.inputsRow}>
             <MultiselectRelatedDocs

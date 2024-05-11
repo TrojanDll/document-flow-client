@@ -1,12 +1,9 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditDocumentModal.module.css";
-import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 import { useGetAllDocumentsQuery, useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
-import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
-import { EDocumentStatus, IDocument, IUserGroup } from "./../../types/Types";
-import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
+import { EDocumentStatus, IDocument } from "./../../types/Types";
 
 interface EditDocumentModalProps {
   props?: any;
@@ -21,7 +18,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   // const [editUserById] = useEditD();
   const [editDocument] = useUpdateDocumentByIdMutation();
   const { data: fetchedDocuments } = useGetAllDocumentsQuery();
-  const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
+  // const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
   // const fetchedUsersGroups: IUserGroup[] = [
   //   {
   //     id: 1,
@@ -33,7 +30,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   //     ],
   //   },
   // ];
-  const { data: currientUser, isSuccess: isSuccessCurrientUser } = useGetCurrientUserQuery();
+  // const { data: currientUser, isSuccess: isSuccessCurrientUser } = useGetCurrientUserQuery();
 
   // const { data: fetchedUsersGroups, isLoading, isSuccess } = useGetAllUsersGroupsQuery();
 
@@ -47,9 +44,9 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   const [comment, setComment] = useState(documentData.comment);
   // const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
   // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
-  const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
+  // const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
   const [status, setStatus] = useState<EDocumentStatus>(documentData.status as EDocumentStatus);
-  const [isDisabled, setIsDisabled] = useState(true);
+  // const [isDisabled, setIsDisabled] = useState(true);
 
   // useEffect(() => {
   //   if (!isLoading && isSuccess) {
@@ -61,14 +58,14 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   //   console.log(notSelectedUsersGroups);
   // }, [notSelectedUsersGroups]);
 
-  useEffect(() => {
-    if (isSuccessCurrientUser && currientUser && currientUser.email) {
-      console.log(currientUser?.email.toString());
-      console.log(documentData.owner);
-      console.log(currientUser?.email.toString() !== documentData.owner);
-      setIsDisabled(currientUser?.email.toString() !== documentData.owner);
-    }
-  }, [isSuccessCurrientUser]);
+  // useEffect(() => {
+  //   if (isSuccessCurrientUser && currientUser && currientUser.email) {
+  //     console.log(currientUser?.email.toString());
+  //     console.log(documentData.owner);
+  //     console.log(currientUser?.email.toString() !== documentData.owner);
+  //     setIsDisabled(currientUser?.email.toString() !== documentData.owner);
+  //   }
+  // }, [isSuccessCurrientUser]);
 
   const handleEditDocumentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -79,7 +76,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         status: status ? status : EDocumentStatus.APPROVED,
         relatedDocs: relatedDocIdList,
         parentDocId: parentDocId,
-        relatedUserGroupIds: usersGroupsIds,
+        // relatedUserGroupIds: usersGroupsIds,
         expirationDate: expirationDate,
         comment: comment,
       });
@@ -88,7 +85,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         status: status,
         relatedDocs: relatedDocIdList,
         parentDocId: parentDocId,
-        relatedUserGroupIds: usersGroupsIds,
+        // relatedUserGroupIds: usersGroupsIds,
         expirationDate: expirationDate,
         comment: comment,
       });
@@ -125,9 +122,9 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   //   );
   // };
 
-  const handleUpdateUsersGrups = (groups: string[]) => {
-    setUsersGroupsIds(groups);
-  };
+  // const handleUpdateUsersGrups = (groups: string[]) => {
+  //   setUsersGroupsIds(groups);
+  // };
 
   const handleUpdateDocuments = (documents: string[]) => {
     setRelatedDocIdList(documents);
@@ -144,17 +141,17 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   return (
     <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Редактирование пользователя</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">Редактирование документа</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleEditDocumentSubmit}>
           <div className={styles.inputsRow}>
-            <MultiselectGroup
+            {/* <MultiselectGroup
               // isDisabled={isDisabled}
               currientDocumentInfo={documentData}
               usersGroups={fetchedUsersGroups ? fetchedUsersGroups : []}
               handleUpdateUsersGrups={handleUpdateUsersGrups}
-            />
+            /> */}
           </div>
 
           <div className={styles.inputsRow}>
