@@ -6,7 +6,7 @@ import { BASE_URL } from "../../app/api/apiSlice";
 import { useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
 import { EDocumentStatus, IDocument } from "../../types/Types";
 import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
-import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
+// import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
 import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
 
@@ -27,6 +27,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
   const [file, setFile] = useState<File | null>(null);
   const [editDocument] = useUpdateDocumentByIdMutation();
   const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
+  console.log(fetchedUsersGroups);
   // const fetchedUsersGroups: IUserGroup[] = [
   //   {
   //     id: 1,
@@ -118,7 +119,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
     if (documentData) {
       let currUserGroup;
       if (currUser) {
-        currUserGroup = [currUser.userGroup.toString()];
+        currUserGroup = [currUser.userGroup ? currUser.userGroup.toString() : ""];
       }
       try {
         const udatedDocumentData = await editDocument({
