@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import styles from "./Sidebar.module.css";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -10,8 +10,10 @@ import gearImg from "./../../assets/img/icons/gear.svg";
 import { Button } from "react-bootstrap";
 import { logOut } from "../../features/auth/authSlice";
 import { useDispatch } from "react-redux";
+import MailModal from "../MailModal/MailModal";
 
 const Sidebar: FC = () => {
+  const [modalShow, setModalShow] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -40,10 +42,11 @@ const Sidebar: FC = () => {
           <div className={styles.linkText}>Задачи</div>
         </Link>
 
-        <Link to="/profile" className={styles.linkWrapper}>
+        <button onClick={() => setModalShow(true)} className={styles.linkWrapper}>
           <img src={mailImg} alt="peopleImg" className={styles.linkImg} />
           <div className={styles.linkText}>Отправка</div>
-        </Link>
+        </button>
+        <MailModal show={modalShow} onHide={() => setModalShow(false)} />
       </div>
 
       <div className={styles.bottomLinks}>

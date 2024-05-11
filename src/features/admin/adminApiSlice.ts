@@ -20,7 +20,6 @@ export const adminApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getUsers: builder.query({
       query: () => "/api/admin/users",
-      keepUnusedDataFor: 5,
     }),
     getUserById: builder.mutation({
       query: (data?: IGetUserById) => ({

@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import ContentContainer from "../../components/ContentContainer/ContentContainer";
 import PageTitle from "../../components/PageTitle/PageTitle";
-import { useGetAllDocumentsQuery } from "../../features/documents/documentsApiSlice";
+import { useGetAllDocumentsQuery, useGetDocumentsByMyGroupQuery } from "../../features/documents/documentsApiSlice";
 import DocumentsTable from "../../components/DocumentsTable/DocumentsTable";
 import { Button } from "react-bootstrap";
 import style from "./DocumentsPage.module.css";
@@ -10,7 +10,7 @@ import CreateDocumentModal from "../../components/CreateDocumentModal/CreateDocu
 import { IDocument } from "../../types/Types";
 
 const DocumentsPage: FC = () => {
-  const { data: fetchedDocuments, refetch: getAllDocuments, isLoading, isSuccess } = useGetAllDocumentsQuery();
+  const { data: fetchedDocuments, refetch: getAllDocuments, isLoading, isSuccess } = useGetDocumentsByMyGroupQuery();
   const [modalCreateDocumentShow, setModalCreateDocumentShow] = useState(false);
 
   const [modifiedDocuments, setModifiedDocuments] = useState<IDocument[]>([]);

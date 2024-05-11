@@ -60,6 +60,9 @@ export const documentApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    getDocumentsByMyGroup: builder.query<IDocument[], void>({
+      query: () => "/api/docs/by-group",
+    }),
   }),
 });
 
@@ -68,6 +71,7 @@ export const {
   useDeleteDocumentByIdMutation,
   useUpdateDocumentByIdMutation,
   useUploadDocumentMutation,
+  useGetDocumentsByMyGroupQuery,
 } = documentApiSlice;
 
 // query: (credentials: Ilogin) => ({

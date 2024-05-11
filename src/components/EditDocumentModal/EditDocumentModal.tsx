@@ -5,7 +5,7 @@ import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 import { useGetAllDocumentsQuery, useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
-import { EDocumentStatus, IDocument } from "./../../types/Types";
+import { EDocumentStatus, IDocument, IUserGroup } from "./../../types/Types";
 import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
 
 interface EditDocumentModalProps {
@@ -22,6 +22,17 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   const [editDocument] = useUpdateDocumentByIdMutation();
   const { data: fetchedDocuments } = useGetAllDocumentsQuery();
   const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
+  // const fetchedUsersGroups: IUserGroup[] = [
+  //   {
+  //     id: 1,
+  //     name: "sdv",
+  //     members: [
+  //       {
+  //         id: 1,
+  //       },
+  //     ],
+  //   },
+  // ];
   const { data: currientUser, isSuccess: isSuccessCurrientUser } = useGetCurrientUserQuery();
 
   // const { data: fetchedUsersGroups, isLoading, isSuccess } = useGetAllUsersGroupsQuery();
@@ -139,7 +150,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         <Form onSubmit={handleEditDocumentSubmit}>
           <div className={styles.inputsRow}>
             <MultiselectGroup
-              isDisabled={isDisabled}
+              // isDisabled={isDisabled}
               currientDocumentInfo={documentData}
               usersGroups={fetchedUsersGroups ? fetchedUsersGroups : []}
               handleUpdateUsersGrups={handleUpdateUsersGrups}
@@ -148,7 +159,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
 
           <div className={styles.inputsRow}>
             <MultiselectRelatedDocs
-              isDisabled={isDisabled}
+              // isDisabled={isDisabled}
               currientDocumentInfo={documentData}
               documents={fetchedDocuments ? fetchedDocuments : []}
               handleUpdateDocuments={handleUpdateDocuments}
