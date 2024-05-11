@@ -5,7 +5,7 @@ import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 import { useGetAllDocumentsQuery, useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
-import { EDocumentStatus, IDocument, IUserGroup } from "./../../types/Types";
+import { EDocumentStatus, IDocument } from "./../../types/Types";
 import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
 
 interface EditDocumentModalProps {
@@ -49,7 +49,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
   const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
   const [status, setStatus] = useState<EDocumentStatus>(documentData.status as EDocumentStatus);
-  const [isDisabled, setIsDisabled] = useState(true);
+  // const [isDisabled, setIsDisabled] = useState(true);
 
   // useEffect(() => {
   //   if (!isLoading && isSuccess) {
@@ -66,7 +66,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
       console.log(currientUser?.email.toString());
       console.log(documentData.owner);
       console.log(currientUser?.email.toString() !== documentData.owner);
-      setIsDisabled(currientUser?.email.toString() !== documentData.owner);
+      // setIsDisabled(currientUser?.email.toString() !== documentData.owner);
     }
   }, [isSuccessCurrientUser]);
 
