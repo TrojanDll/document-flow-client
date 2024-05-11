@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import ContentContainer from "../../components/ContentContainer/ContentContainer";
 import PageTitle from "../../components/PageTitle/PageTitle";
-import { useGetDocumentsByMyGroupQuery } from "../../features/documents/documentsApiSlice";
+import { useGetAllDocumentsQuery, useGetDocumentsByMyGroupQuery } from "../../features/documents/documentsApiSlice";
 import DocumentsTable from "../../components/DocumentsTable/DocumentsTable";
 import { Button } from "react-bootstrap";
 import style from "./DocumentsPage.module.css";

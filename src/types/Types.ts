@@ -48,16 +48,16 @@ export interface IDocumentEdit {
   status?: EDocumentStatus;
 }
 
-export const enum EDocumentStatus {
-  APPROVED = "APPROVED",
-  DECLINED = "DECLINED",
-  SEEN = "SEEN",
-  INPROGRESS = "INPROGRESS",
-}
-
 export interface IEmailBody {
   email: string;
   docId: string;
   header: string;
   body: string;
+}
+
+export const enum EDocumentStatus {
+  APPROVED = "APPROVED",
+  DECLINED = "DECLINED",
+  SEEN = "SEEN",
+  INPROGRESS = "INPROGRESS",
 }
