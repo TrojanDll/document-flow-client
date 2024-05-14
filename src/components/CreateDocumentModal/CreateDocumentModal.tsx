@@ -4,11 +4,12 @@ import styles from "./CreateDocumentModal.module.css";
 import axios, { AxiosResponse } from "axios";
 import { BASE_URL } from "../../app/api/apiSlice";
 import { useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
-import { EDocumentStatus, IDocument } from "../../types/Types";
+import { IDocument } from "../../types/Types";
 import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 // import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
+import { EDocumentStatus } from "../../types/Enums";
 
 interface CreateDocumentModalProps {
   props?: any;

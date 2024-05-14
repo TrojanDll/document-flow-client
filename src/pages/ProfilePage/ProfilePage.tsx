@@ -31,82 +31,92 @@ const ProfilePage: FC = () => {
         </div> */}
 
         <Form>
-          <Form.Group className="mb-3">
-            <Form.Label>Имя</Form.Label>
-            {isLoading ? (
-              <img className={styles.spinner} src={spinner} alt="spinner" />
-            ) : (
-              <Form.Control
-                value={fetchedCurrientUser?.firstName}
-                type="text"
-                placeholder="name@example.com"
-                disabled
-              />
-            )}
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Фамилия</Form.Label>
-            {isLoading ? (
-              <img className={styles.spinner} src={spinner} alt="spinner" />
-            ) : (
-              <Form.Control value={fetchedCurrientUser?.lastName} type="text" placeholder="name@example.com" disabled />
-            )}
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Отчество</Form.Label>
-            {isLoading ? (
-              <img className={styles.spinner} src={spinner} alt="spinner" />
-            ) : (
-              <Form.Control
-                value={fetchedCurrientUser?.patronymic}
-                type="text"
-                placeholder="name@example.com"
-                disabled
-              />
-            )}
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Email</Form.Label>
-            {isLoading ? (
-              <img className={styles.spinner} src={spinner} alt="spinner" />
-            ) : (
-              <Form.Control value={fetchedCurrientUser?.email} type="text" placeholder="name@example.com" disabled />
-            )}
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Отдел</Form.Label>
-            {isLoading ? (
-              <img className={styles.spinner} src={spinner} alt="spinner" />
-            ) : (
-              <Form.Control
-                value={fetchedCurrientUser?.department}
-                type="text"
-                placeholder="name@example.com"
-                disabled
-              />
-            )}
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Должность</Form.Label>
-            {isLoading ? (
-              <img className={styles.spinner} src={spinner} alt="spinnerdll" />
-            ) : (
-              <Form.Control value={fetchedCurrientUser?.post} type="text" placeholder="name@example.com" disabled />
-            )}
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Группа</Form.Label>
-            {isLoading ? (
-              <img className={styles.spinner} src={spinner} alt="spinner" />
-            ) : (
-              <Form.Control
-                value={fetchedCurrientUser?.groupResponseDTO?.name}
-                type="text"
-                placeholder="name@example.com"
-                disabled
-              />
-            )}
-          </Form.Group>
+          <div className={styles.inputsRow}>
+            <Form.Group className={styles.input}>
+              <Form.Label>Имя</Form.Label>
+              {isLoading ? (
+                <img className={styles.spinner} src={spinner} alt="spinner" />
+              ) : (
+                <Form.Control
+                  value={fetchedCurrientUser?.firstName}
+                  type="text"
+                  placeholder="name@example.com"
+                  disabled
+                />
+              )}
+            </Form.Group>
+            <Form.Group className={styles.input}>
+              <Form.Label>Фамилия</Form.Label>
+              {isLoading ? (
+                <img className={styles.spinner} src={spinner} alt="spinner" />
+              ) : (
+                <Form.Control
+                  value={fetchedCurrientUser?.lastName}
+                  type="text"
+                  placeholder="name@example.com"
+                  disabled
+                />
+              )}
+            </Form.Group>
+            <Form.Group className={styles.input}>
+              <Form.Label>Отчество</Form.Label>
+              {isLoading ? (
+                <img className={styles.spinner} src={spinner} alt="spinner" />
+              ) : (
+                <Form.Control
+                  value={fetchedCurrientUser?.patronymic}
+                  type="text"
+                  placeholder="name@example.com"
+                  disabled
+                />
+              )}
+            </Form.Group>
+          </div>
+
+          <div className={styles.inputsRow}>
+            <Form.Group className={styles.input}>
+              <Form.Label>Email</Form.Label>
+              {isLoading ? (
+                <img className={styles.spinner} src={spinner} alt="spinner" />
+              ) : (
+                <Form.Control value={fetchedCurrientUser?.email} type="text" placeholder="name@example.com" disabled />
+              )}
+            </Form.Group>
+            <Form.Group className={styles.input}>
+              <Form.Label>Отдел</Form.Label>
+              {isLoading ? (
+                <img className={styles.spinner} src={spinner} alt="spinner" />
+              ) : (
+                <Form.Control
+                  value={fetchedCurrientUser?.department}
+                  type="text"
+                  placeholder="name@example.com"
+                  disabled
+                />
+              )}
+            </Form.Group>
+            <Form.Group className={styles.input}>
+              <Form.Label>Должность</Form.Label>
+              {isLoading ? (
+                <img className={styles.spinner} src={spinner} alt="spinnerdll" />
+              ) : (
+                <Form.Control value={fetchedCurrientUser?.post} type="text" placeholder="name@example.com" disabled />
+              )}
+            </Form.Group>
+            <Form.Group className={styles.input}>
+              <Form.Label>Группа</Form.Label>
+              {isLoading ? (
+                <img className={styles.spinner} src={spinner} alt="spinner" />
+              ) : (
+                <Form.Control
+                  value={fetchedCurrientUser?.groupResponseDTO?.name}
+                  type="text"
+                  placeholder="name@example.com"
+                  disabled
+                />
+              )}
+            </Form.Group>
+          </div>
         </Form>
 
         {fetchedDocuments && <DocumentsTable handleUdateTable={handleUdateTable} documents={fetchedDocuments} />}

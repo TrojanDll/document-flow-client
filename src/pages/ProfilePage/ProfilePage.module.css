@@ -3,3 +3,14 @@
   width: 40px;
   height: 40px;
 }
+
+.inputsRow {
+  display: flex;
+  width: 100%;
+  column-gap: 20px;
+}
+
+.input {
+  margin-bottom: 12px;
+  width: 100%;
+}

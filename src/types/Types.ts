@@ -1,3 +1,5 @@
+import { EDocumentStatus } from "./Enums";
+
 export interface IUser {
   id: number;
   active?: boolean;
@@ -13,6 +15,7 @@ export interface IUser {
     id: number;
     name: string;
   };
+
 }
 
 export interface IUserGroup {
@@ -55,12 +58,7 @@ export interface IEmailBody {
   body: string;
 }
 
-export const enum EDocumentStatus {
-  APPROVED = "APPROVED",
-  DECLINED = "DECLINED",
-  SEEN = "SEEN",
-  INPROGRESS = "INPROGRESS",
-}
+
 
 export interface IEmailBody {
   email: string;
@@ -68,3 +66,4 @@ export interface IEmailBody {
   header: string;
   body: string;
 }
+
