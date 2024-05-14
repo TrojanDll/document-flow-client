@@ -4,6 +4,8 @@ import styles from "./EditDocumentModal.module.css";
 import { useGetAllDocumentsQuery, useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
 import { EDocumentStatus, IDocument } from "./../../types/Types";
+import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
+import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 
 interface EditDocumentModalProps {
   props?: any;
@@ -18,7 +20,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   // const [editUserById] = useEditD();
   const [editDocument] = useUpdateDocumentByIdMutation();
   const { data: fetchedDocuments } = useGetAllDocumentsQuery();
-  // const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
+  const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
   // const fetchedUsersGroups: IUserGroup[] = [
   //   {
   //     id: 1,
@@ -44,7 +46,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   const [comment, setComment] = useState(documentData.comment);
   // const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
   // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
-  // const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
+  const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
   const [status, setStatus] = useState<EDocumentStatus>(documentData.status as EDocumentStatus);
   // const [isDisabled, setIsDisabled] = useState(true);
 
@@ -71,27 +73,31 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
     e.preventDefault();
 
     try {
-      const udatedDocumentData = await editDocument({
+      editDocument({
         id: documentData.id,
         status: status ? status : EDocumentStatus.APPROVED,
-        relatedDocs: relatedDocIdList,
+        relatedDocIds: relatedDocIdList,
         parentDocId: parentDocId,
-        // relatedUserGroupIds: usersGroupsIds,
+        relatedUserGroupIds: usersGroupsIds,
         expirationDate: expirationDate,
         comment: comment,
+      }).then(udatedDocumentData => {
+        onHide();
+        handleUdateTable();
+        console.log("Ответ от сервера при обновленнии документов: ");
+        console.log(udatedDocumentData);
       });
+      console.log("Запрос на сервер на обновоение документов: ");
       console.log({
         id: documentData.id,
         status: status,
-        relatedDocs: relatedDocIdList,
+        relatedDocIds: relatedDocIdList,
         parentDocId: parentDocId,
         // relatedUserGroupIds: usersGroupsIds,
         expirationDate: expirationDate,
         comment: comment,
       });
-      onHide();
-      handleUdateTable();
-      console.log(udatedDocumentData);
+      
     } catch (err) {
       console.log(err);
     }
@@ -122,9 +128,9 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   //   );
   // };
 
-  // const handleUpdateUsersGrups = (groups: string[]) => {
-  //   setUsersGroupsIds(groups);
-  // };
+  const handleUpdateUsersGrups = (groups: string[]) => {
+    setUsersGroupsIds(groups);
+  };
 
   const handleUpdateDocuments = (documents: string[]) => {
     setRelatedDocIdList(documents);
@@ -146,12 +152,12 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
       <Modal.Body>
         <Form onSubmit={handleEditDocumentSubmit}>
           <div className={styles.inputsRow}>
-            {/* <MultiselectGroup
+            <MultiselectGroup
               // isDisabled={isDisabled}
               currientDocumentInfo={documentData}
               usersGroups={fetchedUsersGroups ? fetchedUsersGroups : []}
               handleUpdateUsersGrups={handleUpdateUsersGrups}
-            /> */}
+            />
           </div>
 
           <div className={styles.inputsRow}>
@@ -190,7 +196,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
                 {fetchedDocuments &&
                   fetchedDocuments.map((document) => (
                     <option key={document.id} value={document.parentDocId}>
-                      {document.name}
+                      {document.fileName}
                     </option>
                   ))}
               </Form.Select>

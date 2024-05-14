@@ -85,7 +85,7 @@ const MailModal: FC<MailModalProps> = (props) => {
               {fetchedDocuments
                 ? fetchedDocuments.map((document) => (
                     <option key={document.id} value={document.id}>
-                      {document.name}
+                      {document.fileName}
                     </option>
                   ))
                 : ""}

@@ -4,11 +4,12 @@ import styles from "./CreateDocumentModal.module.css";
 import axios, { AxiosResponse } from "axios";
 import { BASE_URL } from "../../app/api/apiSlice";
 import { useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
-import { EDocumentStatus, IDocument } from "../../types/Types";
+import { EDocumentStatus, IDocument, IUserGroup } from "../../types/Types";
 import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 // import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
 import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
+import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 
 interface CreateDocumentModalProps {
   props?: any;
@@ -25,9 +26,9 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
 
   // const [documentData, setDocumentData] = useState<IDocument>();
   const [file, setFile] = useState<File | null>(null);
-  const [editDocument] = useUpdateDocumentByIdMutation();
+  const [editCreateDocument] = useUpdateDocumentByIdMutation();
   const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
-  console.log(fetchedUsersGroups);
+  // console.log(fetchedUsersGroups);
   // const fetchedUsersGroups: IUserGroup[] = [
   //   {
   //     id: 1,
@@ -48,13 +49,14 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
   const [relatedDocIdList, setRelatedDocIdList] = useState<string[]>([]);
   const [parentDocId, setParentDocId] = useState("");
   const [comment, setComment] = useState("");
-  // const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
-  // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
-  // const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
+  const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
+  const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
+  const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
   const [status, setStatus] = useState<EDocumentStatus>(EDocumentStatus.APPROVED);
   const { data: currUser } = useGetCurrientUserQuery();
 
   useEffect(() => {
+    console.log("Выбран файл: ");
     console.log(file);
   }, [file]);
 
@@ -117,41 +119,41 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
 
   const handleEditDocumentSubmit = async (documentData: IDocument) => {
     if (documentData) {
-      let currUserGroup;
-      if (currUser) {
-        currUserGroup = [currUser.userGroup ? currUser.userGroup.toString() : ""];
-      }
       try {
-        const udatedDocumentData = await editDocument({
+        editCreateDocument({
           id: documentData.id,
           status: status ? status : EDocumentStatus.APPROVED,
-          relatedDocs: relatedDocIdList,
+          relatedDocIds: relatedDocIdList,
           parentDocId: parentDocId,
-          relatedUserGroupIds: currUserGroup,
+          relatedUserGroupIds: usersGroupsIds,
           expirationDate: expirationDate,
           comment: comment,
+        }).then((udatedDocumentData) => {
+          onHide();
+          handleUdateTable();
+          console.log("Ответ от сервера на обновление документа из CreateDocumentModal: ");
+          console.log(udatedDocumentData);
         });
+        console.log("Запрос на обновление документа из CreateDocumentModal: ");
+
         console.log({
           id: documentData.id,
           status: status,
-          relatedDocs: relatedDocIdList,
+          relatedDocIds: relatedDocIdList,
           parentDocId: parentDocId,
-          relatedUserGroupIds: currUserGroup,
+          relatedUserGroupIds: usersGroupsIds,
           expirationDate: expirationDate,
           comment: comment,
         });
-        onHide();
-        handleUdateTable();
-        console.log(udatedDocumentData);
       } catch (err) {
         console.log(err);
       }
     }
   };
 
-  // const handleUpdateUsersGrups = (groups: string[]) => {
-  //   setUsersGroupsIds(groups);
-  // };
+  const handleUpdateUsersGrups = (groups: string[]) => {
+    setUsersGroupsIds(groups);
+  };
 
   const handleUpdateDocuments = (documents: string[]) => {
     setRelatedDocIdList(documents);
@@ -182,12 +184,12 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
         </Form.Group>
 
         <Form>
-          {/* <div className={styles.inputsRow}>
+          <div className={styles.inputsRow}>
             <MultiselectGroup
               usersGroups={fetchedUsersGroups ? fetchedUsersGroups : []}
               handleUpdateUsersGrups={handleUpdateUsersGrups}
             />
-          </div> */}
+          </div>
 
           <div className={styles.inputsRow}>
             <MultiselectRelatedDocs
@@ -203,7 +205,8 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
               <Form.Select
                 value={status || ""}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => setStatus(e.target.value as EDocumentStatus)}
-                aria-label="Выберите документы">
+                aria-label="Выберите документы"
+              >
                 <option>Статус</option>
                 <option value={EDocumentStatus.APPROVED}>Подтвержден</option>
                 <option value={EDocumentStatus.SEEN}>Просмотрен</option>
@@ -219,12 +222,13 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
               <Form.Select
                 value={parentDocId}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => setParentDocId(e.target.value)}
-                aria-label="Выберите документы">
+                aria-label="Выберите документы"
+              >
                 <option>Список документов</option>
                 {fetchedDocuments &&
                   fetchedDocuments.map((document) => (
                     <option key={document.id} value={document.parentDocId}>
-                      {document.name}
+                      {document.fileName}
                     </option>
                   ))}
               </Form.Select>

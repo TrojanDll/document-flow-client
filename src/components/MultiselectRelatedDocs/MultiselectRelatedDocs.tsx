@@ -21,19 +21,60 @@ const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({
   const [selectedDocuments, setSelectedDocuments] = useState<IDocument[]>([]);
   const [documentsIds, setDocumentsIds] = useState<string[]>([]);
 
+  // useEffect(() => {
+  //   let baseSelectedDocs: IDocument[] = [];
+  //   setNotSelectedDocuments(
+  //     documents.filter((document) => {
+  //       const currientDocumentRelatedDocs = currientDocumentInfo ? currientDocumentInfo.relatedDocIds : [];
+  //       console.log("currientDocumentRelatedDocs");
+  //       console.log(currientDocumentRelatedDocs);
+  //       if (currientDocumentRelatedDocs?.indexOf(document.id) === -1) {
+  //         return document;
+  //       } else {
+  //         baseSelectedDocs.push(document);
+  //       }
+  //     })
+  //   );
+  //   setSelectedDocuments(baseSelectedDocs);
+  // }, []);
+
   useEffect(() => {
     let baseSelectedDocs: IDocument[] = [];
+
+    console.log("currientDocumentInfo");
+    console.log(currientDocumentInfo);
+
     setNotSelectedDocuments(
       documents.filter((document) => {
-        const currientDocumentRelatedDocs = currientDocumentInfo ? currientDocumentInfo.relatedDocs : [];
-        if (currientDocumentRelatedDocs?.indexOf(document.id) === -1) {
-          return document;
-        } else {
-          baseSelectedDocs.push(document);
+        console.log("currientDocumentInfo?.relatedDocs");
+        console.log(currientDocumentInfo?.relatedDocs);
+
+        if (currientDocumentInfo && currientDocumentInfo.relatedDocs) {
+          if (currientDocumentInfo.relatedDocs[0] !== "") {
+            currientDocumentInfo?.relatedDocs?.forEach((relatedDocIdItem) => {
+              console.log(document.relatedDocs?.indexOf(relatedDocIdItem));
+              console.log(document);
+              if (
+                document.relatedDocs?.indexOf(relatedDocIdItem) === -1 &&
+                document.relatedDocs?.indexOf(currientDocumentInfo.id) == -1
+              ) {
+                // console.log(``)
+                return document;
+              } else {
+                baseSelectedDocs.push(document);
+              }
+            });
+          } else {
+            return document;
+          }
         }
-      }),
+
+        // console.log(document);
+      })
     );
     setSelectedDocuments(baseSelectedDocs);
+    console.log("baseSelectedDocs");
+    console.log(baseSelectedDocs);
   }, []);
 
   // useEffect(() => {
@@ -47,6 +88,7 @@ const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({
 
   useEffect(() => {
     setDocumentsIds(selectedDocuments.map((item) => item.id));
+    console.log("Выбраные связанные документы в компоненте MultiselectRelatedDocs");
     console.log(selectedDocuments);
   }, [selectedDocuments]);
 
@@ -66,7 +108,7 @@ const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({
         if (item.id !== e.target.value) {
           return item;
         }
-      }),
+      })
     );
   };
 
@@ -83,7 +125,7 @@ const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({
         if (item.id !== selectedId) {
           return item;
         }
-      }),
+      })
     );
   };
 
@@ -110,12 +152,13 @@ const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({
       <Form.Select
         disabled={isDisabled}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => handleSelectDocuments(e)}
-        aria-label="Выберите документы">
+        aria-label="Выберите документы"
+      >
         <option>Список документов</option>
         {notSelectedDocuments &&
           notSelectedDocuments.map((documents) => (
             <option key={documents.id} value={documents.id}>
-              {documents.name}
+              {documents.fileName}
             </option>
           ))}
       </Form.Select>
@@ -126,8 +169,9 @@ const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({
               key={documents.id}
               variant="outline-secondary"
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleUnselectDocuments(e)}
-              data-value={documents.id}>
-              {documents.name}
+              data-value={documents.id}
+            >
+              {documents.fileName}
               <Badge bg="light">
                 <img src={closeImg} alt="closeImg" />
               </Badge>

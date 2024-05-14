@@ -37,13 +37,7 @@ export const documentApiSlice = apiSlice.injectEndpoints({
         url: "/api/docs/set-doc-properties",
         method: "PUT",
         body: {
-          id: documentData.id,
-          status: documentData.status,
-          relatedDocIds: documentData.relatedDocs,
-          parentDocId: documentData.parentDocId,
-          relatedUserGroupIds: documentData.relatedUserGroupIds,
-          expirationDate: documentData.expirationDate,
-          comment: documentData.comment,
+          ...documentData
         },
       }),
     }),

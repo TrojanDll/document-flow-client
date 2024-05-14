@@ -23,7 +23,7 @@ export interface IUserGroup {
 
 export interface IDocument {
   id: string;
-  name?: string;
+  fileName?: string;
   url?: string;
   type?: string;
   owner?: string;
@@ -31,6 +31,7 @@ export interface IDocument {
   expirationDate?: string;
   parentDocId?: string;
   status?: EDocumentStatus;
+  relatedDocIds?: string[];
   relatedDocs?: string[];
   userGroups?: string[];
   comment?: string;
@@ -41,8 +42,7 @@ export interface IDocumentEdit {
   id: string;
   expirationDate?: string;
   parentDocId?: string;
-  relatedDocs?: string[];
-  userGroups?: string[];
+  relatedDocIds?: string[];
   comment?: string;
   relatedUserGroupIds?: string[];
   status?: EDocumentStatus;

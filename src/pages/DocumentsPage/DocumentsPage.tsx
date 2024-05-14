@@ -8,12 +8,16 @@ import { Button } from "react-bootstrap";
 import style from "./DocumentsPage.module.css";
 import CreateDocumentModal from "../../components/CreateDocumentModal/CreateDocumentModal";
 import { IDocument } from "../../types/Types";
+import { useDispatch } from "react-redux";
+import { documentApiSlice } from "../../features/documents/documentsApiSlice";
 
 const DocumentsPage: FC = () => {
   const { data: fetchedDocuments, refetch: getAllDocuments, isLoading, isSuccess } = useGetDocumentsByMyGroupQuery();
   const [modalCreateDocumentShow, setModalCreateDocumentShow] = useState(false);
 
   const [modifiedDocuments, setModifiedDocuments] = useState<IDocument[]>([]);
+
+  const dispatch = useDispatch();
 
   function sortByField<T>(arr: T[], field: keyof T): T[] {
     return arr.slice().sort((a, b) => {
@@ -24,36 +28,26 @@ const DocumentsPage: FC = () => {
   }
 
   async function sortDocumentsByField(listToSort: IDocument[], field: keyof IDocument) {
-    // if (!isLoading) {
     const sortedDocuments: IDocument[] = await sortByField<IDocument>(listToSort, field);
-    // console.log(sortedUsers);
-    setModifiedDocuments(sortedDocuments);
-    // }
-  }
 
-  // const filterUsers = () => {};
+    setModifiedDocuments(sortedDocuments);
+  }
 
   useEffect(() => {
     if (!isLoading && isSuccess) {
-      sortDocumentsByField(fetchedDocuments, "name");
-      setModifiedDocuments(fetchedDocuments);
+      sortDocumentsByField(fetchedDocuments, "fileName");
     }
-  }, [isLoading]);
-
-  // let refetchedDocuments: IDocument[];
-
-  const handleUdateTable = async () => {
-    const resp = await getAllDocuments();
-    if (resp.isSuccess && fetchedDocuments) {
-      // refetchedDocuments = resp.data;
-      // sortDocumentsByField(refetchedDocuments, "name");
-      setModifiedDocuments(fetchedDocuments);
-    }
-  };
+  }, [fetchedDocuments]);
 
   useEffect(() => {
-    getAllDocuments;
-  }, []);
+    console.log("Полученные измененные документы в компоненте DocumentsPage: ");
+    console.log(modifiedDocuments);
+  }, [modifiedDocuments]);
+
+  const handleUdateTable = async () => {
+    dispatch(documentApiSlice.util.resetApiState());
+    getAllDocuments();
+  };
 
   return (
     <div>
@@ -64,7 +58,8 @@ const DocumentsPage: FC = () => {
         <Button
           className={style.createDocumentButton}
           variant="primary"
-          onClick={() => setModalCreateDocumentShow(true)}>
+          onClick={() => setModalCreateDocumentShow(true)}
+        >
           Добавить документ
         </Button>
         {fetchedDocuments ? (
@@ -78,7 +73,7 @@ const DocumentsPage: FC = () => {
           ""
         )}
 
-        {modifiedDocuments && <DocumentsTable handleUdateTable={handleUdateTable} documents={modifiedDocuments} />}
+        {!isLoading ? <DocumentsTable handleUdateTable={handleUdateTable} documents={modifiedDocuments} /> : ""}
       </ContentContainer>
     </div>
   );

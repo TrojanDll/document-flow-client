@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import styles from "./DocumentsTableItem.module.css";
 import { useDeleteDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
 import EditDocumentModal from "../EditDocumentModal/EditDocumentModal";
-import { IDocument } from "../../types/Types";
+import { EDocumentStatus, IDocument } from "../../types/Types";
 import DeleteModal from "../DeleteModal/DeleteModal";
 
 export enum DocumentsTableItemVariants {
@@ -50,14 +50,32 @@ const DocumentsTableItem: FC<DocumentsTableItemProps> = ({ document, variant, nu
       handleUdateTable();
     }
   };
+
+  const statusComparison = (status: EDocumentStatus | undefined) => {
+    switch (status) {
+      case EDocumentStatus.APPROVED:
+        return ("Подтвержден");
+        break;
+      case EDocumentStatus.DECLINED:
+        return ("Отклонен");
+        break;
+      case EDocumentStatus.INPROGRESS:
+        return ("В работе");
+        break;
+      case EDocumentStatus.SEEN:
+        return ("Просмотрен");
+        break;
+    }
+  }
+
   return (
     <tr className={styles[variant]}>
       <td>{number}</td>
-      <td>{document.name}</td>
+      <td>{document.fileName}</td>
       <td>{document.owner}</td>
       <td>{document.createdDate?.slice(0, document.createdDate?.indexOf("T"))}</td>
       <td>{document.expirationDate?.slice(0, document.expirationDate?.indexOf("T"))}</td>
-      <td>{document.status}</td>
+      <td>{statusComparison(document.status)}</td>
       <td>{document.comment}</td>
       <td>
         <div className={styles.editButtonWrapper}>
@@ -99,7 +117,7 @@ const DocumentsTableItem: FC<DocumentsTableItemProps> = ({ document, variant, nu
             </svg>
           </button>
           <DeleteModal
-            text={`Вы уверены, что хотите удалить документ ${document.name}?`}
+            text={`Вы уверены, что хотите удалить документ ${document.fileName}?`}
             onHide={() => setHandleHideDeleteModal(false)}
             show={handleHideDeleteModal}
             isDelete={setIsDelete}

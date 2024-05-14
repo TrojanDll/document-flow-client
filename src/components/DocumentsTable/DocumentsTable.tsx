@@ -11,6 +11,7 @@ interface IDocumentsTableProps {
 }
 
 const DocumentsTable: FC<IDocumentsTableProps> = ({ documents, handleUdateTable }) => {
+  console.log("Документы, которые получил компонент DocumentsTable: ");
   console.log(documents);
   return (
     <Table bordered className={styles.table}>
