@@ -39,42 +39,85 @@ const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({
   // }, []);
 
   useEffect(() => {
-    let baseSelectedDocs: IDocument[] = [];
-
     console.log("currientDocumentInfo");
     console.log(currientDocumentInfo);
 
-    setNotSelectedDocuments(
-      documents.filter((document) => {
-        console.log("currientDocumentInfo?.relatedDocs");
-        console.log(currientDocumentInfo?.relatedDocs);
+    // async function sortNotSelected() {
+    //   const resp = await setNotSelectedDocuments(
+    //     documents.filter((document) => {
+    //       console.log("currientDocumentInfo?.relatedDocs");
+    //       console.log(currientDocumentInfo?.relatedDocs);
 
-        if (currientDocumentInfo && currientDocumentInfo.relatedDocs) {
-          if (currientDocumentInfo.relatedDocs[0] !== "") {
-            currientDocumentInfo?.relatedDocs?.forEach((relatedDocIdItem) => {
-              console.log(document.relatedDocs?.indexOf(relatedDocIdItem));
-              console.log(document);
-              if (
-                document.relatedDocs?.indexOf(relatedDocIdItem) === -1 &&
-                document.relatedDocs?.indexOf(currientDocumentInfo.id) == -1
-              ) {
-                // console.log(``)
-                return document;
-              } else {
-                baseSelectedDocs.push(document);
-              }
-            });
-          } else {
-            return document;
+    //       if (currientDocumentInfo && currientDocumentInfo.relatedDocs) {
+    //         if (currientDocumentInfo.relatedDocs[0] !== "") {
+    //           currientDocumentInfo?.relatedDocs?.forEach((relatedDocIdItem) => {
+    //             console.log(document.relatedDocs?.indexOf(relatedDocIdItem));
+    //             console.log(document);
+    //             if (
+    //               document.relatedDocs?.indexOf(relatedDocIdItem) === -1 &&
+    //               document.relatedDocs?.indexOf(currientDocumentInfo.id) == -1
+    //             ) {
+    //               // console.log(``)
+    //               return document;
+    //             } else {
+    //               baseSelectedDocs.push(document);
+    //             }
+    //           });
+    //         } else {
+    //           return document;
+    //         }
+    //       }
+
+    //       // console.log(document);
+    //     })
+    //   );
+    //   setSelectedDocuments(baseSelectedDocs);
+    //   console.log("baseSelectedDocs");
+    //   console.log(baseSelectedDocs);
+    // }
+    // sortNotSelected();
+
+    // async function sortNotSelected() {
+    //   const resp = await setNotSelectedDocuments(
+    //     documents.filter((document) => {
+
+    //       let documentToWrite: IDocument[] = [];
+
+    //       currientDocumentInfo?.relatedDocs?.forEach((currientRelatedDocId) => {
+    //         if (document.id === currientRelatedDocId) {
+    //           baseSelectedDocs.push(document);
+    //         } else {
+    //           documentToWrite.push(document);
+    //         }
+    //       });
+    //       if (documentToWrite.length > 0) {
+    //         return
+    //       }
+    //     })
+    //   );
+    //   setSelectedDocuments(baseSelectedDocs);
+    // }
+    // sortNotSelected();
+
+    let baseSelectedDocs: IDocument[] = [];
+    let baseNotSelectedDocs: IDocument[] = [];
+
+    if (currientDocumentInfo) {
+      documents.forEach((document) => {
+        currientDocumentInfo?.relatedDocs?.forEach((currientRelatedDocId) => {
+          if (document.id === currientRelatedDocId && document.id !== currientDocumentInfo.id) {
+            baseSelectedDocs.push(document);
+          } else if (document.id !== currientDocumentInfo.id) {
+            baseNotSelectedDocs.push(document);
           }
-        }
+        });
+      });
+    } else {
+      baseNotSelectedDocs = documents;
+    }
 
-        // console.log(document);
-      })
-    );
+    setNotSelectedDocuments(baseNotSelectedDocs);
     setSelectedDocuments(baseSelectedDocs);
-    console.log("baseSelectedDocs");
-    console.log(baseSelectedDocs);
   }, []);
 
   // useEffect(() => {

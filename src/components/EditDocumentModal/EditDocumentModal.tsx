@@ -38,7 +38,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
 
   const [expirationDate, setExpirationDate] = useState(documentData.expirationDate);
   const [selectedExpirationDate, setSelectedExpirationDate] = useState(
-    documentData.expirationDate?.slice(0, documentData.expirationDate.indexOf("T")),
+    documentData.expirationDate?.slice(0, documentData.expirationDate.indexOf("T"))
   );
   // const [currientRelatedDocId, setCurrientRelatedDocId] = useState("");
   const [relatedDocIdList, setRelatedDocIdList] = useState<string[]>([]);
@@ -81,7 +81,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         relatedUserGroupIds: usersGroupsIds,
         expirationDate: expirationDate,
         comment: comment,
-      }).then(udatedDocumentData => {
+      }).then((udatedDocumentData) => {
         onHide();
         handleUdateTable();
         console.log("Ответ от сервера при обновленнии документов: ");
@@ -97,7 +97,6 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         expirationDate: expirationDate,
         comment: comment,
       });
-      
     } catch (err) {
       console.log(err);
     }
@@ -175,7 +174,8 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
               <Form.Select
                 value={status || ""}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => setStatus(e.target.value as EDocumentStatus)}
-                aria-label="Выберите документы">
+                aria-label="Выберите документы"
+              >
                 <option>Статус</option>
                 <option value={EDocumentStatus.APPROVED}>Подтвержден</option>
                 <option value={EDocumentStatus.SEEN}>Просмотрен</option>
@@ -191,11 +191,12 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
               <Form.Select
                 value={parentDocId}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => setParentDocId(e.target.value)}
-                aria-label="Выберите документы">
+                aria-label="Выберите документы"
+              >
                 <option>Список документов</option>
                 {fetchedDocuments &&
                   fetchedDocuments.map((document) => (
-                    <option key={document.id} value={document.parentDocId}>
+                    <option key={document.id} value={document.id}>
                       {document.fileName}
                     </option>
                   ))}

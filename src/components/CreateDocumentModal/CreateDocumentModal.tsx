@@ -4,11 +4,10 @@ import styles from "./CreateDocumentModal.module.css";
 import axios, { AxiosResponse } from "axios";
 import { BASE_URL } from "../../app/api/apiSlice";
 import { useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
-import { EDocumentStatus, IDocument, IUserGroup } from "../../types/Types";
+import { EDocumentStatus, IDocument } from "../../types/Types";
 import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 // import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
-import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 
 interface CreateDocumentModalProps {
@@ -49,11 +48,11 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
   const [relatedDocIdList, setRelatedDocIdList] = useState<string[]>([]);
   const [parentDocId, setParentDocId] = useState("");
   const [comment, setComment] = useState("");
-  const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
-  const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
+  // const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
+  // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
   const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
   const [status, setStatus] = useState<EDocumentStatus>(EDocumentStatus.APPROVED);
-  const { data: currUser } = useGetCurrientUserQuery();
+  // const { data: currUser } = useGetCurrientUserQuery();
 
   useEffect(() => {
     console.log("Выбран файл: ");
