@@ -1,4 +1,4 @@
-export const enum TaskStatus {
+export const enum ETaskStatus {
   NOTSEEN = "NOTSEEN",
   INPROGRESS = "INPROGRESS",
   POSTPONED = "POSTPONED",

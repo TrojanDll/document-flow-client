@@ -1,4 +1,4 @@
-import { EDocumentStatus } from "./Enums";
+import { EDocumentStatus, ETaskStatus } from "./Enums";
 
 export interface IUser {
   id: number;
@@ -57,10 +57,23 @@ export interface IEmailBody {
   body: string;
 }
 
-export interface IEmailBody {
-  email: string;
-  docId: string;
+export interface ITaskResponse {
+  id: number;
   header: string;
-  body: string;
+  description?: string;
+  creator: string;
+  status: ETaskStatus;
+  creationDate: string;
+  deadline?: string;
+  doc?: IDocument;
 }
 
+export interface ITaskRequest {
+  header: string;
+  description?: string;
+  status: ETaskStatus;
+  creationDate: string;
+  deadline?: string;
+  docId?: string;
+  userEmails: string[];
+}
