@@ -15,7 +15,6 @@ export interface IUser {
     id: number;
     name: string;
   };
-
 }
 
 export interface IUserGroup {
@@ -57,8 +56,6 @@ export interface IEmailBody {
   header: string;
   body: string;
 }
-
-
 
 export interface IEmailBody {
   email: string;

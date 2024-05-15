@@ -7,6 +7,7 @@ import Layout from "./features/Layout";
 import RequireAuth from "./features/RequireAuth";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import AdminRoleRequired from "./features/AdminRoleRequired";
+import TasksPage from "./pages/TasksPage/TasksPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           </Route>
           <Route path="documents" element={<DocumentsPage />} />
           <Route path="profile" element={<ProfilePage />} />
+          <Route path="tasks" element={<TasksPage />} />
         </Route>
       </Route>
     </Routes>
