@@ -1,0 +1,8 @@
+.table {
+  margin-top: 20px;
+}
+
+.tableHead th {
+  background-color: var(--dark-bg-300);
+  padding-left: 16px;
+}
