@@ -20,7 +20,7 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
   let result = await baseQuery(args, api, extraOptions);
   console.log(args, api);
 
-  if (result?.error?.status === 401) {
+  if (result?.error?.status === 401 || result?.error?.status === 400) {
     console.log("sending refresh token");
     const refreshToken = localStorage.getItem("refreshToken");
 
@@ -40,7 +40,7 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
             accessToken: receivedAccessToken,
             refreshToken: receivedRefreshToken,
           },
-        }),
+        })
       );
       result = await baseQuery(args, api, extraOptions);
     }

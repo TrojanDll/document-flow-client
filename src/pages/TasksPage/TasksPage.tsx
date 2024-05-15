@@ -9,11 +9,11 @@ import { Button } from "react-bootstrap";
 import CreateTaskModal from "../../components/CreateTaskModal/CreateTaskModal";
 
 const TasksPage: FC = () => {
-  const { data: tasks } = useGetCurrientUserTasksQuery();
+  const { data: tasks, refetch: getCurrientUserTasks } = useGetCurrientUserTasksQuery();
   const [modalCreateTaskShow, setModalCreateTaskShow] = useState(false);
 
   const handleUdateTable = () => {
-    console.log("");
+    getCurrientUserTasks();
   };
   return (
     <div className={styles.layout}>
