@@ -9,12 +9,15 @@ export interface IUser {
   post?: string;
   role?: string;
   email?: string;
-  userGroup?: number | undefined;
+  userGroup?: number[] | undefined;
   department?: string | undefined;
-  groupResponseDTO?: {
-    id: number;
-    name: string;
-  };
+  groupResponseDTOs?: IGroupResponseDTOs[];
+  groupIds?: number[];
+}
+
+export interface IGroupResponseDTOs {
+  id: number;
+  name: string;
 }
 
 export interface IUserGroup {

@@ -47,7 +47,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   const [comment, setComment] = useState(documentData.comment);
   // const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
   // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
-  const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
+  const [usersGroupsIds, setUsersGroupsIds] = useState<number[]>([]);
   const [status, setStatus] = useState<EDocumentStatus>(documentData.status as EDocumentStatus);
   // const [isDisabled, setIsDisabled] = useState(true);
 
@@ -74,12 +74,13 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
     e.preventDefault();
 
     try {
+      const stringifiedUsersGroupsIds = await usersGroupsIds.map((item) => item.toString());
       editDocument({
         id: documentData.id,
         status: status ? status : EDocumentStatus.APPROVED,
         relatedDocIds: relatedDocIdList,
         parentDocId: parentDocId,
-        relatedUserGroupIds: usersGroupsIds,
+        relatedUserGroupIds: stringifiedUsersGroupsIds,
         expirationDate: expirationDate,
         comment: comment,
       }).then((udatedDocumentData) => {
@@ -94,7 +95,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         status: status,
         relatedDocIds: relatedDocIdList,
         parentDocId: parentDocId,
-        // relatedUserGroupIds: usersGroupsIds,
+        relatedUserGroupIds: stringifiedUsersGroupsIds,
         expirationDate: expirationDate,
         comment: comment,
       });
@@ -128,7 +129,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   //   );
   // };
 
-  const handleUpdateUsersGrups = (groups: string[]) => {
+  const handleUpdateUsersGroups = (groups: number[]) => {
     setUsersGroupsIds(groups);
   };
 
@@ -156,7 +157,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
               // isDisabled={isDisabled}
               currientDocumentInfo={documentData}
               usersGroups={fetchedUsersGroups ? fetchedUsersGroups : []}
-              handleUpdateUsersGrups={handleUpdateUsersGrups}
+              handleUpdateUsersGroups={handleUpdateUsersGroups}
             />
           </div>
 

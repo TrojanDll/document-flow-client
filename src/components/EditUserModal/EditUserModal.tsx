@@ -3,6 +3,8 @@ import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditUserModal.module.css";
 import { useGetAllUsersGroupsQuery, useUpdateUserByIdMutation } from "../../features/admin/adminApiSlice";
 import { IUser } from "../../types/Types";
+import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
+import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
 
 interface EditUserModalProps {
   props?: any;
@@ -15,14 +17,15 @@ interface EditUserModalProps {
 const EditUserModal: FC<EditUserModalProps> = (props) => {
   const { show, userData, onHide, handleUdateTable } = props;
   const [editUserById] = useUpdateUserByIdMutation();
-  const { data: allUsersGroups } = useGetAllUsersGroupsQuery();
+  const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
   const [firstName, setFirstName] = useState(userData.firstName);
   const [lastName, setLastName] = useState(userData.lastName);
   const [patronymic, setPatronymic] = useState(userData.patronymic);
   const [department, setDepartment] = useState(userData.department);
   const [post, setPost] = useState(userData.post);
   const [email, setEmail] = useState(userData.email);
-  const [userGroup, setUserGroup] = useState(userData.groupResponseDTO?.id);
+  const [userGroupIds, setUserGroupIds] = useState(userData.groupResponseDTOs?.map((item) => item.id));
+  const { data: currientUserInfo } = useGetCurrientUserQuery();
 
   const handleEditUserSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,7 +39,7 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
         department,
         post,
         email,
-        userGroup,
+        groupIds: userGroupIds,
       });
       console.log({
         userId: userData.id,
@@ -46,7 +49,7 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
         department,
         post,
         email,
-        userGroup,
+        groupIds: userGroupIds,
       });
       onHide();
       handleUdateTable();
@@ -71,10 +74,9 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
   //   console.log(userGroup);
   // }, [userGroup]);
 
-  const handleUserGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setUserGroup(+e.target.value);
+  const handleUpdateUsersGroups = (groupIds: number[]) => {
+    setUserGroupIds(groupIds);
   };
-
   return (
     <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
@@ -131,22 +133,15 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
           </div>
 
           <div className={styles.inputsRow}>
-            <Form.Group className={styles.input} controlId="department">
-              <Form.Label>Группа</Form.Label>
-              <Form.Select
-                value={userGroup}
-                onChange={(e: ChangeEvent<HTMLSelectElement>) => handleUserGroupChange(e)}
-                aria-label="Выберите группу">
-                <option>Список групп</option>
-                {allUsersGroups
-                  ? allUsersGroups.map((group) => (
-                      <option key={group.id} value={group.id}>
-                        {group.name}
-                      </option>
-                    ))
-                  : ""}
-              </Form.Select>
-            </Form.Group>
+            {fetchedUsersGroups ? (
+              <MultiselectGroup
+                currientUserInfo={currientUserInfo}
+                usersGroups={fetchedUsersGroups}
+                handleUpdateUsersGroups={handleUpdateUsersGroups}
+              />
+            ) : (
+              ""
+            )}
 
             <Form.Group className={styles.input} controlId="email">
               <Form.Label>Электронная почта</Form.Label>

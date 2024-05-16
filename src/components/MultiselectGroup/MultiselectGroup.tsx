@@ -2,37 +2,56 @@ import { ChangeEvent, FC, useEffect, useState } from "react";
 import { Badge, Button, Form } from "react-bootstrap";
 import styles from "./MultiselectGroup.module.css";
 import closeImg from "./../../assets/img/icons/close.svg";
-import { IDocument, IUserGroup } from "../../types/Types";
+import { IDocument, IUser, IUserGroup } from "../../types/Types";
 
 interface MultiselectGroupProps {
-  handleUpdateUsersGrups: (arg: string[]) => void;
+  // Отправляет наверх id группы
+  handleUpdateUsersGroups: (arg: number[]) => void;
   currientDocumentInfo?: IDocument;
+  currientUserInfo?: IUser;
   usersGroups: IUserGroup[];
   isDisabled?: boolean;
 }
 
 const MultiselectGroup: FC<MultiselectGroupProps> = ({
-  handleUpdateUsersGrups,
+  handleUpdateUsersGroups,
   currientDocumentInfo,
+  currientUserInfo,
   usersGroups,
   isDisabled,
 }) => {
   const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
   const [selectedUsersGroups, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
-  const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
+  const [usersGroupsIds, setUsersGroupsIds] = useState<number[]>([]);
 
   useEffect(() => {
     let baseSelectedGroups: IUserGroup[] = [];
-    setNotSelectedUsersGroups(
-      usersGroups.filter((group) => {
-        const currientDocumentUsersGroups = currientDocumentInfo ? currientDocumentInfo.userGroups : [];
-        if (currientDocumentUsersGroups?.indexOf(group.id.toString()) === -1) {
-          return group;
-        } else {
-          baseSelectedGroups.push(group);
-        }
-      }),
-    );
+    if (currientDocumentInfo) {
+      setNotSelectedUsersGroups(
+        usersGroups.filter((group) => {
+          const currientDocumentUsersGroups = currientDocumentInfo.userGroups;
+          if (currientDocumentUsersGroups?.indexOf(group.id.toString()) === -1) {
+            return group;
+          } else {
+            baseSelectedGroups.push(group);
+          }
+        })
+      );
+    } else if (currientUserInfo) {
+      setNotSelectedUsersGroups(
+        usersGroups.filter((group) => {
+          const currientUserGroups = currientUserInfo.groupResponseDTOs?.map((item) => item.id);
+          if (currientUserGroups?.indexOf(group.id) === -1) {
+            return group;
+          } else {
+            baseSelectedGroups.push(group);
+          }
+        })
+      );
+    } else {
+      setNotSelectedUsersGroups(usersGroups);
+    }
+
     setSelectedUsersGroups(baseSelectedGroups);
   }, []);
 
@@ -46,11 +65,11 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
   // }, [userGroup]);
 
   useEffect(() => {
-    setUsersGroupsIds(selectedUsersGroups.map((item) => item.id.toString()));
+    setUsersGroupsIds(selectedUsersGroups.map((item) => item.id));
   }, [selectedUsersGroups]);
 
   useEffect(() => {
-    handleUpdateUsersGrups(usersGroupsIds);
+    handleUpdateUsersGroups(usersGroupsIds);
   }, [usersGroupsIds]);
 
   const handleSelectUsersGroup = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -65,7 +84,7 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
         if (item.id !== +e.target.value) {
           return item;
         }
-      }),
+      })
     );
   };
 
@@ -82,7 +101,7 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
         if (item.id !== selectedId) {
           return item;
         }
-      }),
+      })
     );
   };
 
@@ -109,7 +128,8 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
       <Form.Select
         disabled={isDisabled}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => handleSelectUsersGroup(e)}
-        aria-label="Выберите группу">
+        aria-label="Выберите группу"
+      >
         <option>Список групп</option>
         {notSelectedUsersGroups &&
           notSelectedUsersGroups.map((group) => (
@@ -125,7 +145,8 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
               key={group.id}
               variant="outline-secondary"
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleUnselectUsersGroup(e)}
-              data-value={group.id}>
+              data-value={group.id}
+            >
               {group.name}
               <Badge bg="light">
                 <img src={closeImg} alt="closeImg" />

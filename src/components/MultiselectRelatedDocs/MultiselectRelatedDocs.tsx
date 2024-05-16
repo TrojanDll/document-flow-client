@@ -4,14 +4,14 @@ import styles from "./MultiselectRelatedDocs.module.css";
 import closeImg from "./../../assets/img/icons/close.svg";
 import { IDocument } from "../../types/Types";
 
-interface MultiselectGroupProps {
+interface MultiselectRelatedDocsProps {
   handleUpdateDocuments: (arg: string[]) => void;
   currientDocumentInfo?: IDocument;
   documents: IDocument[];
   isDisabled?: boolean;
 }
 
-const MultiselectRelatedDocs: FC<MultiselectGroupProps> = ({
+const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
   handleUpdateDocuments,
   currientDocumentInfo,
   documents,

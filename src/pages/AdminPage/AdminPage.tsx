@@ -17,7 +17,7 @@ const AdminPage = () => {
   const [modalCreateUserShow, setModalCreateUserShow] = useState(false);
   const [modalCreateGroupShow, setModalCreateGroupShow] = useState(false);
   // const [usersList, setUsersList] = useState<IUser[]>([]);
-  const { data: fetchedUsers, isLoading, refetch: getUsers } = useGetUsersQuery({});
+  const { data: fetchedUsers, isLoading, refetch: getUsers } = useGetUsersQuery();
   const [modifiedUsers, setModifiedUsers] = useState<IUser[]>([]);
 
   function sortByField<T>(arr: T[], field: keyof T): T[] {
@@ -39,7 +39,7 @@ const AdminPage = () => {
   // const filterUsers = () => {};
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && fetchedUsers) {
       sortUsersByField(fetchedUsers, "firstName");
     }
   }, [isLoading]);
@@ -47,9 +47,12 @@ const AdminPage = () => {
   let refetchedUsers: IUser[];
 
   const handleUdateTable = async () => {
-    const resp = await getUsers();
-    refetchedUsers = resp.data;
-    sortUsersByField(refetchedUsers, "firstName");
+    getUsers().then((resp) => {
+      if (resp.data) {
+        refetchedUsers = resp.data;
+        sortUsersByField(refetchedUsers, "firstName");
+      }
+    });
   };
 
   return (

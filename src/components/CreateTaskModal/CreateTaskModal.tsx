@@ -14,7 +14,7 @@ interface CreateTaskModalProps {
 }
 
 const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
-  const { show, handleUdateTable } = props;
+  const { show, handleUdateTable, onHide } = props;
 
   const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
   const { data: fetchedUsers } = useGetUsersQuery();
@@ -30,6 +30,8 @@ const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
   const handleSubmitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const deadlineIso = new Date(deadlineRawFormat).toISOString();
+    const currientDate = new Date().toISOString();
+    console.log(currientDate);
 
     try {
       createTask({
@@ -39,21 +41,39 @@ const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
         deadline: deadlineIso,
         docId: docId,
         userEmails: userEmails,
-        creationDate: new Date().toISOString(),
+        creationDate: currientDate,
       }).then((resp) => {
         console.log(resp);
         handleUdateTable();
+        console.log("Запрос на создание таски: ");
+        console.log({
+          header: header,
+          description: description,
+          status: status,
+          deadline: deadlineIso,
+          docId: docId,
+          userEmails: userEmails,
+          creationDate: currientDate,
+        });
+        onHide();
       });
     } catch {}
   };
 
   const handleRefuseButton = () => {
-    console.log("");
+    onHide();
+    setHeader("");
+    setDescription("");
+    setStatus(ETaskStatus.NOTSEEN);
+    setDeadlineRawFormat("");
+    setDocId("");
+    setUserEmails([]);
   };
 
   const handleUpdateUsers = (userEmails: string[]) => {
     setUserEmails(userEmails);
   };
+
   return (
     <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
@@ -128,7 +148,9 @@ const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleRefuseButton}>Отмена</Button>
+        <Button variant="secondary" onClick={handleRefuseButton}>
+          Отмена
+        </Button>
       </Modal.Footer>
     </Modal>
   );

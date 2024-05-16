@@ -51,7 +51,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
   const [comment, setComment] = useState("");
   // const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
   // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
-  const [usersGroupsIds, setUsersGroupsIds] = useState<string[]>([]);
+  const [usersGroupsIds, setUsersGroupsIds] = useState<number[]>([]);
   const [status, setStatus] = useState<EDocumentStatus>(EDocumentStatus.APPROVED);
   // const { data: currUser } = useGetCurrientUserQuery();
 
@@ -125,7 +125,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
           status: status ? status : EDocumentStatus.APPROVED,
           relatedDocIds: relatedDocIdList,
           parentDocId: parentDocId,
-          relatedUserGroupIds: usersGroupsIds,
+          relatedUserGroupIds: usersGroupsIds.map((item) => item.toString()),
           expirationDate: expirationDate,
           comment: comment,
         }).then((udatedDocumentData) => {
@@ -151,7 +151,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
     }
   };
 
-  const handleUpdateUsersGrups = (groups: string[]) => {
+  const handleUpdateUsersGroups = (groups: number[]) => {
     setUsersGroupsIds(groups);
   };
 
@@ -187,7 +187,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
           <div className={styles.inputsRow}>
             <MultiselectGroup
               usersGroups={fetchedUsersGroups ? fetchedUsersGroups : []}
-              handleUpdateUsersGrups={handleUpdateUsersGrups}
+              handleUpdateUsersGroups={handleUpdateUsersGroups}
             />
           </div>
 

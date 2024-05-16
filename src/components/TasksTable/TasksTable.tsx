@@ -22,6 +22,7 @@ const TasksTable: FC<TasksTableProps> = ({ tasks, handleUdateTable }) => {
           <th>Дата создания</th>
           <th>Дедлайн</th>
           <th>Связаный документ</th>
+          <th></th>
         </tr>
       </thead>
 
