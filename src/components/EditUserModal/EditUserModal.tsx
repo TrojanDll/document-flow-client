@@ -24,8 +24,8 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
   const [department, setDepartment] = useState(userData.department);
   const [post, setPost] = useState(userData.post);
   const [email, setEmail] = useState(userData.email);
+  const [password, setPassword] = useState("");
   const [userGroupIds, setUserGroupIds] = useState(userData.groupResponseDTOs?.map((item) => item.id));
-  const { data: currientUserInfo } = useGetCurrientUserQuery();
 
   const handleEditUserSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,6 +40,7 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
         post,
         email,
         groupIds: userGroupIds,
+        password,
       });
       console.log({
         userId: userData.id,
@@ -75,6 +76,8 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
   // }, [userGroup]);
 
   const handleUpdateUsersGroups = (groupIds: number[]) => {
+    console.log("groupIds");
+    console.log(groupIds);
     setUserGroupIds(groupIds);
   };
   return (
@@ -132,17 +135,17 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
             </Form.Group>
           </div>
 
-          <div className={styles.inputsRow}>
-            {fetchedUsersGroups ? (
-              <MultiselectGroup
-                currientUserInfo={currientUserInfo}
-                usersGroups={fetchedUsersGroups}
-                handleUpdateUsersGroups={handleUpdateUsersGroups}
-              />
-            ) : (
-              ""
-            )}
+          {fetchedUsersGroups ? (
+            <MultiselectGroup
+              editableUserInfo={userData}
+              usersGroups={fetchedUsersGroups}
+              handleUpdateUsersGroups={handleUpdateUsersGroups}
+            />
+          ) : (
+            ""
+          )}
 
+          <div className={styles.inputsRow}>
             <Form.Group className={styles.input} controlId="email">
               <Form.Label>Электронная почта</Form.Label>
               <Form.Control
@@ -150,6 +153,17 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                 type="email"
                 placeholder="Email"
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className={styles.input} controlId="password">
+              <Form.Label>Пароль</Form.Label>
+              <Form.Control
+                value={password}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                type="password"
+                placeholder="Пароль"
                 required
               />
             </Form.Group>

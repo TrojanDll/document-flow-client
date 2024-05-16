@@ -37,3 +37,7 @@
 .editSvg:hover {
   fill: #ffc107;
 }
+
+.groupItem {
+  display: block;
+}

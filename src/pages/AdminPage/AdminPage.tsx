@@ -41,6 +41,8 @@ const AdminPage = () => {
   useEffect(() => {
     if (!isLoading && fetchedUsers) {
       sortUsersByField(fetchedUsers, "firstName");
+      console.log("fetchedUsers");
+      console.log(fetchedUsers);
     }
   }, [isLoading]);
 

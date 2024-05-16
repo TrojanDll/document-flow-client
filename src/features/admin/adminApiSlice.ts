@@ -30,14 +30,15 @@ export const adminApiSlice = apiSlice.injectEndpoints({
       query: (userData: IUser) => ({
         url: `/api/admin/users/${userData.id}`,
         method: "PUT",
-        body: {
+        body: <IUser>{
           firstName: userData.firstName,
           lastName: userData.lastName,
           patronymic: userData.patronymic,
           email: userData.email,
           post: userData.post,
           department: userData.department,
-          groupId: userData.userGroup,
+          groupIds: userData.groupIds,
+          password: userData.password,
         },
       }),
     }),

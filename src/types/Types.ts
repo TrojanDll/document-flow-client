@@ -9,10 +9,11 @@ export interface IUser {
   post?: string;
   role?: string;
   email?: string;
-  userGroup?: number[] | undefined;
   department?: string | undefined;
+  userGroup?: number[] | undefined;
   groupResponseDTOs?: IGroupResponseDTOs[];
   groupIds?: number[];
+  password?: string;
 }
 
 export interface IGroupResponseDTOs {

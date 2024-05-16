@@ -8,7 +8,7 @@ interface MultiselectGroupProps {
   // Отправляет наверх id группы
   handleUpdateUsersGroups: (arg: number[]) => void;
   currientDocumentInfo?: IDocument;
-  currientUserInfo?: IUser;
+  editableUserInfo?: IUser;
   usersGroups: IUserGroup[];
   isDisabled?: boolean;
 }
@@ -16,7 +16,7 @@ interface MultiselectGroupProps {
 const MultiselectGroup: FC<MultiselectGroupProps> = ({
   handleUpdateUsersGroups,
   currientDocumentInfo,
-  currientUserInfo,
+  editableUserInfo,
   usersGroups,
   isDisabled,
 }) => {
@@ -37,10 +37,14 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
           }
         })
       );
-    } else if (currientUserInfo) {
+    } else if (editableUserInfo) {
+      console.log("usersGroups");
+      console.log(usersGroups);
       setNotSelectedUsersGroups(
         usersGroups.filter((group) => {
-          const currientUserGroups = currientUserInfo.groupResponseDTOs?.map((item) => item.id);
+          const currientUserGroups = editableUserInfo?.groupResponseDTOs?.map((item) => item.id);
+          console.log("currientUserGroups");
+          console.log(currientUserGroups);
           if (currientUserGroups?.indexOf(group.id) === -1) {
             return group;
           } else {

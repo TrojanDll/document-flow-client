@@ -70,16 +70,9 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handle
       </td>
       <td>{post}</td>
       <td>
-        {
-          updatedUser
-            ? updatedUser.data.groupResponseDTOs
-              ? updatedUser.data.groupResponseDTOs
-              : "Группа не задана"
-            : ""
-          // : groupResponseDTOs?.name
-          // ? groupResponseDTO.name
-          // : "Группа не задана"
-        }
+        {groupResponseDTOs
+          ? groupResponseDTOs?.map((item) => <span className={styles.groupItem}>{item.name}</span>)
+          : "Группа не задана"}
       </td>
       <td className={styles.editButtonСell}>
         <div className={styles.editButtonWrapper}>
