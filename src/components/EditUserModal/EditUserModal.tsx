@@ -24,14 +24,14 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
   const [department, setDepartment] = useState(userData.department);
   const [post, setPost] = useState(userData.post);
   const [email, setEmail] = useState(userData.email);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState(userData.password);
   const [userGroupIds, setUserGroupIds] = useState(userData.groupResponseDTOs?.map((item) => item.id));
 
   const handleEditUserSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const udatedUserData = await editUserById({
+      const requestData: IUser = {
         id: userData.id,
         firstName,
         lastName,
@@ -40,21 +40,18 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
         post,
         email,
         groupIds: userGroupIds,
-        password,
+      };
+
+      if (password ? password.length > 0 : false) {
+        requestData.password = password;
+      }
+
+      editUserById(requestData).then((udatedUserData) => {
+        console.log(requestData);
+        onHide();
+        handleUdateTable();
+        console.log(udatedUserData);
       });
-      console.log({
-        userId: userData.id,
-        firstName,
-        lastName,
-        patronymic,
-        department,
-        post,
-        email,
-        groupIds: userGroupIds,
-      });
-      onHide();
-      handleUdateTable();
-      console.log(udatedUserData);
     } catch (err) {
       console.log(err);
     }
@@ -69,11 +66,6 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
     setPost("");
     setEmail("");
   };
-
-  // let fetchedUsersGroups;
-  // useEffect(() => {
-  //   console.log(userGroup);
-  // }, [userGroup]);
 
   const handleUpdateUsersGroups = (groupIds: number[]) => {
     console.log("groupIds");
