@@ -50,7 +50,9 @@ const DocumentsTableItem: FC<DocumentsTableItemProps> = ({ document, variant, nu
   }, [isDelete]);
 
   useEffect(() => {
-    if (isSuccessCurrientUser && currientUser && currientUser.email) {
+    if (localStorage.getItem("role") === "ADMIN") {
+      setIsCurrientUserOwner(true);
+    } else if (isSuccessCurrientUser && currientUser && currientUser.email) {
       setIsCurrientUserOwner(currientUser?.email === document.owner);
     }
   }, [isSuccessCurrientUser]);
