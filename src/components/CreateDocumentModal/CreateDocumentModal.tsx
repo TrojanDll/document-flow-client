@@ -5,7 +5,6 @@ import axios, { AxiosResponse } from "axios";
 import { BASE_URL } from "../../app/api/apiSlice";
 import { useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
 import { IDocument } from "../../types/Types";
-import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 // import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
@@ -27,7 +26,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
   // const [documentData, setDocumentData] = useState<IDocument>();
   const [file, setFile] = useState<File | null>(null);
   const [editCreateDocument] = useUpdateDocumentByIdMutation();
-  const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
+  // const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
 
   // console.log(fetchedUsersGroups);
   // const fetchedUsersGroups: IUserGroup[] = [

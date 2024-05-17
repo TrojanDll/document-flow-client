@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditDocumentModal.module.css";
 import {
@@ -8,7 +8,6 @@ import {
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
 import { IDocument } from "./../../types/Types";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
-import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 import { EDocumentStatus } from "../../types/Enums";
 
 interface EditDocumentModalProps {

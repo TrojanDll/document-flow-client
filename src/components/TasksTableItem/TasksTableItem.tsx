@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import styles from "./TasksTableItem.module.css";
 import { ITaskResponse } from "../../types/Types";
-import { Button } from "react-bootstrap";
 import { useDeleteTaskByIdMutation } from "../../features/tasks/tasksApiSlice";
 import DeleteModal from "../DeleteModal/DeleteModal";
 import EditTaskModal from "../EditTaskModal/EditTaskModal";

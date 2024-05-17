@@ -2,8 +2,6 @@ import { FC, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./CreateUserModal.module.css";
 import { useRegisterMutation } from "../../features/auth/authApiSlice";
-import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
-import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 
 interface CreateUserModalProps {
   props?: any;
@@ -13,7 +11,7 @@ interface CreateUserModalProps {
 }
 
 const CreateUserModal: FC<CreateUserModalProps> = (props) => {
-  const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
+  // const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
 
   const { show } = props;
   const [register] = useRegisterMutation();
@@ -24,7 +22,7 @@ const CreateUserModal: FC<CreateUserModalProps> = (props) => {
   const [post, setPost] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userGroupIds, setUserGroupIds] = useState<number[]>([]);
+  // const [userGroupIds, setUserGroupIds] = useState<number[]>([]);
 
   const handleRegistrationSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -58,9 +56,9 @@ const CreateUserModal: FC<CreateUserModalProps> = (props) => {
     setPassword("");
   };
 
-  const handleUpdateUsersGroups = (groupIds: number[]) => {
-    setUserGroupIds(groupIds);
-  };
+  // const handleUpdateUsersGroups = (groupIds: number[]) => {
+  //   setUserGroupIds(groupIds);
+  // };
 
   return (
     <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
@@ -128,11 +126,7 @@ const CreateUserModal: FC<CreateUserModalProps> = (props) => {
             </Form.Group>
           </div>
 
-          {fetchedUsersGroups ? (
-            <MultiselectGroup usersGroups={fetchedUsersGroups} handleUpdateUsersGroups={handleUpdateUsersGroups} />
-          ) : (
-            ""
-          )}
+          {/* {fetchedUsersGroups ? <MultiselectGroup handleUpdateUsersGroups={handleUpdateUsersGroups} /> : ""} */}
 
           <div className={styles.inputsRow}>
             <Form.Group className={styles.input} controlId="email">

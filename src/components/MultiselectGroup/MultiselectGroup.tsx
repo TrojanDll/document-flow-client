@@ -4,7 +4,7 @@ import styles from "./MultiselectGroup.module.css";
 import closeImg from "./../../assets/img/icons/close.svg";
 import { IDocument, IUser, IUserGroup } from "../../types/Types";
 import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
-import { useGetCurrientGroupMembersQuery, useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
+import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
 
 interface MultiselectGroupProps {
   // Отправляет наверх id группы

@@ -1,10 +1,9 @@
-import { ChangeEvent, FC, useState } from "react";
+import { FC, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditUserModal.module.css";
-import { useGetAllUsersGroupsQuery, useUpdateUserByIdMutation } from "../../features/admin/adminApiSlice";
+import { useUpdateUserByIdMutation } from "../../features/admin/adminApiSlice";
 import { IUser } from "../../types/Types";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
-import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
 
 interface EditUserModalProps {
   props?: any;
@@ -17,7 +16,7 @@ interface EditUserModalProps {
 const EditUserModal: FC<EditUserModalProps> = (props) => {
   const { show, userData, onHide, handleUdateTable } = props;
   const [editUserById] = useUpdateUserByIdMutation();
-  const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
+  // const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
   const [firstName, setFirstName] = useState(userData.firstName);
   const [lastName, setLastName] = useState(userData.lastName);
   const [patronymic, setPatronymic] = useState(userData.patronymic);
