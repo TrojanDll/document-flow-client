@@ -8,6 +8,7 @@ import { useUpdateTaskByIdMutation } from "../../features/tasks/tasksApiSlice";
 import { ITaskRequestToEdit, ITaskResponse } from "../../types/Types";
 
 import styles from "./EditTaskModal.module.css";
+import { useGetCurrientGroupMembersQuery } from "../../features/users/usersApiSlice";
 
 interface EditTaskModalProps {
   props?: any;
@@ -21,7 +22,7 @@ const EditTaskModal: FC<EditTaskModalProps> = (props) => {
   const { show, handleUdateTable, onHide, editingTask } = props;
 
   const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
-  const { data: fetchedUsers } = useGetUsersQuery();
+  const { data: fetchedUsers } = useGetCurrientGroupMembersQuery();
   const [editTask] = useUpdateTaskByIdMutation();
 
   const [header, setHeader] = useState<string>(editingTask.header);
@@ -53,7 +54,7 @@ const EditTaskModal: FC<EditTaskModalProps> = (props) => {
         creationDate: currientDate,
       };
 
-      editTask(dataToEdit).then((resp) => {
+      editTask(dataToEdit).then((resp: any) => {
         console.log(resp);
         handleUdateTable();
         console.log("Запрос на редактирование таски: ");

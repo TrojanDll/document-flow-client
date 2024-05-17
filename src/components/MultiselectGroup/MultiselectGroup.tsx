@@ -3,13 +3,14 @@ import { Badge, Button, Form } from "react-bootstrap";
 import styles from "./MultiselectGroup.module.css";
 import closeImg from "./../../assets/img/icons/close.svg";
 import { IDocument, IUser, IUserGroup } from "../../types/Types";
+import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
+import { useGetCurrientGroupMembersQuery, useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
 
 interface MultiselectGroupProps {
   // Отправляет наверх id группы
   handleUpdateUsersGroups: (arg: number[]) => void;
   currientDocumentInfo?: IDocument;
   editableUserInfo?: IUser;
-  usersGroups: IUserGroup[];
   isDisabled?: boolean;
 }
 
@@ -17,14 +18,35 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
   handleUpdateUsersGroups,
   currientDocumentInfo,
   editableUserInfo,
-  usersGroups,
   isDisabled,
 }) => {
   const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
   const [selectedUsersGroups, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
   const [usersGroupsIds, setUsersGroupsIds] = useState<number[]>([]);
+  const { data: fetchedUsersGroups, isLoading, isSuccess } = useGetAllUsersGroupsQuery();
+  const {
+    data: fetchedCurrientUser,
+    isLoading: isCurrientUserLoading,
+    isSuccess: isCurrientUserSuccess,
+  } = useGetCurrientUserQuery();
+
+  const [usersGroups, setUsersGroups] = useState<IUserGroup[]>([]);
 
   useEffect(() => {
+    if (!isLoading && isSuccess) {
+      setUsersGroups(fetchedUsersGroups);
+    } else if (!isCurrientUserLoading && isCurrientUserSuccess) {
+      if (fetchedCurrientUser.groupResponseDTOs) {
+        setUsersGroups(
+          fetchedCurrientUser.groupResponseDTOs?.map((group) => ({ id: group.id, name: group.name, members: [] }))
+        );
+      }
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    console.log("usersGroups");
+    console.log(usersGroups);
     let baseSelectedGroups: IUserGroup[] = [];
     if (currientDocumentInfo) {
       setNotSelectedUsersGroups(
@@ -38,8 +60,6 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
         })
       );
     } else if (editableUserInfo) {
-      console.log("usersGroups");
-      console.log(usersGroups);
       setNotSelectedUsersGroups(
         usersGroups.filter((group) => {
           const currientUserGroups = editableUserInfo?.groupResponseDTOs?.map((item) => item.id);
@@ -57,7 +77,7 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
     }
 
     setSelectedUsersGroups(baseSelectedGroups);
-  }, []);
+  }, [usersGroups]);
 
   // useEffect(() => {
   //   console.log(notSelectedUsersGroups);
@@ -94,6 +114,9 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
 
   const handleUnselectUsersGroup = (e: React.MouseEvent<HTMLButtonElement>) => {
     const selectedId = e.currentTarget.dataset.value ? +e.currentTarget.dataset.value : 0;
+
+    // if (selectedId !== fetchedCurrientUser.)
+
     selectedUsersGroups.forEach((item) => {
       if (item.id === selectedId) {
         setNotSelectedUsersGroups([...notSelectedUsersGroups, item]);

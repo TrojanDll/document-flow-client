@@ -1,7 +1,10 @@
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditDocumentModal.module.css";
-import { useGetAllDocumentsQuery, useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
+import {
+  useGetDocumentsByMyGroupQuery,
+  useUpdateDocumentByIdMutation,
+} from "../../features/documents/documentsApiSlice";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
 import { IDocument } from "./../../types/Types";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
@@ -14,14 +17,14 @@ interface EditDocumentModalProps {
   show?: boolean;
   handleUdateTable: () => void;
   documentData: IDocument;
+  isCurrientUserOwner?: boolean;
 }
 
 const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
-  const { show, documentData, onHide, handleUdateTable } = props;
+  const { show, documentData, onHide, handleUdateTable, isCurrientUserOwner } = props;
   // const [editUserById] = useEditD();
   const [editDocument] = useUpdateDocumentByIdMutation();
-  const { data: fetchedDocuments } = useGetAllDocumentsQuery();
-  const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
+  const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
   // const fetchedUsersGroups: IUserGroup[] = [
   //   {
   //     id: 1,
@@ -33,7 +36,6 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   //     ],
   //   },
   // ];
-  // const { data: currientUser, isSuccess: isSuccessCurrientUser } = useGetCurrientUserQuery();
 
   // const { data: fetchedUsersGroups, isLoading, isSuccess } = useGetAllUsersGroupsQuery();
 
@@ -49,7 +51,6 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
   const [usersGroupsIds, setUsersGroupsIds] = useState<number[]>([]);
   const [status, setStatus] = useState<EDocumentStatus>(documentData.status as EDocumentStatus);
-  // const [isDisabled, setIsDisabled] = useState(true);
 
   // useEffect(() => {
   //   if (!isLoading && isSuccess) {
@@ -60,15 +61,6 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   // useEffect(() => {
   //   console.log(notSelectedUsersGroups);
   // }, [notSelectedUsersGroups]);
-
-  // useEffect(() => {
-  //   if (isSuccessCurrientUser && currientUser && currientUser.email) {
-  //     console.log(currientUser?.email.toString());
-  //     console.log(documentData.owner);
-  //     console.log(currientUser?.email.toString() !== documentData.owner);
-  //     setIsDisabled(currientUser?.email.toString() !== documentData.owner);
-  //   }
-  // }, [isSuccessCurrientUser]);
 
   const handleEditDocumentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -154,16 +146,16 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         <Form onSubmit={handleEditDocumentSubmit}>
           <div className={styles.inputsRow}>
             <MultiselectGroup
-              // isDisabled={isDisabled}
+              isDisabled={!isCurrientUserOwner}
               currientDocumentInfo={documentData}
-              usersGroups={fetchedUsersGroups ? fetchedUsersGroups : []}
               handleUpdateUsersGroups={handleUpdateUsersGroups}
             />
           </div>
 
           <div className={styles.inputsRow}>
             <MultiselectRelatedDocs
-              // isDisabled={isDisabled}
+              isDisabled={!isCurrientUserOwner}
+              isCurrientUserOwner={isCurrientUserOwner}
               currientDocumentInfo={documentData}
               documents={fetchedDocuments ? fetchedDocuments : []}
               handleUpdateDocuments={handleUpdateDocuments}
@@ -174,6 +166,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
             <Form.Group controlId="department">
               <Form.Label>Статус</Form.Label>
               <Form.Select
+                disabled={!isCurrientUserOwner}
                 value={status || ""}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => setStatus(e.target.value as EDocumentStatus)}
                 aria-label="Выберите документы"
@@ -191,6 +184,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
             <Form.Group controlId="department">
               <Form.Label>Родительский документ</Form.Label>
               <Form.Select
+                disabled={!isCurrientUserOwner}
                 value={parentDocId}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => setParentDocId(e.target.value)}
                 aria-label="Выберите документы"
@@ -209,6 +203,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
           <div className={styles.inputsRow}>
             <Form.Label htmlFor="inputPassword5">Дата завершения</Form.Label>
             <Form.Control
+              disabled={!isCurrientUserOwner}
               value={selectedExpirationDate}
               onChange={(e: ChangeEvent<HTMLInputElement>) => handleDate(e)}
               type="date"
@@ -220,19 +215,29 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
           <div className={styles.inputsRow}>
             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
               <Form.Label>Описание</Form.Label>
-              <Form.Control value={comment} onChange={(e) => setComment(e.target.value)} as="textarea" rows={3} />
+              <Form.Control
+                disabled={!isCurrientUserOwner}
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                as="textarea"
+                rows={3}
+              />
             </Form.Group>
           </div>
 
-          <div className={styles.buttonsWrapper}>
-            <Button className={styles.loginButton} variant="primary" type="submit">
-              Сохранить
-            </Button>
-          </div>
+          {isCurrientUserOwner ? (
+            <div className={styles.buttonsWrapper}>
+              <Button className={styles.loginButton} variant="primary" type="submit">
+                Сохранить
+              </Button>
+            </div>
+          ) : (
+            ""
+          )}
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleRefuseButton}>Отмена</Button>
+        <Button onClick={handleRefuseButton}>{isCurrientUserOwner ? "Отмена" : "Закрыть"} </Button>
       </Modal.Footer>
     </Modal>
   );

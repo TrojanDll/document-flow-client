@@ -127,15 +127,7 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
             </Form.Group>
           </div>
 
-          {fetchedUsersGroups ? (
-            <MultiselectGroup
-              editableUserInfo={userData}
-              usersGroups={fetchedUsersGroups}
-              handleUpdateUsersGroups={handleUpdateUsersGroups}
-            />
-          ) : (
-            ""
-          )}
+          <MultiselectGroup editableUserInfo={userData} handleUpdateUsersGroups={handleUpdateUsersGroups} />
 
           <div className={styles.inputsRow}>
             <Form.Group className={styles.input} controlId="email">

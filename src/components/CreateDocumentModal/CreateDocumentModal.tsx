@@ -28,6 +28,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
   const [file, setFile] = useState<File | null>(null);
   const [editCreateDocument] = useUpdateDocumentByIdMutation();
   const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
+
   // console.log(fetchedUsersGroups);
   // const fetchedUsersGroups: IUserGroup[] = [
   //   {
@@ -185,10 +186,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
 
         <Form>
           <div className={styles.inputsRow}>
-            <MultiselectGroup
-              usersGroups={fetchedUsersGroups ? fetchedUsersGroups : []}
-              handleUpdateUsersGroups={handleUpdateUsersGroups}
-            />
+            <MultiselectGroup handleUpdateUsersGroups={handleUpdateUsersGroups} />
           </div>
 
           <div className={styles.inputsRow}>

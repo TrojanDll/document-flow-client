@@ -9,6 +9,7 @@ interface MultiselectRelatedDocsProps {
   currientDocumentInfo?: IDocument;
   documents: IDocument[];
   isDisabled?: boolean;
+  isCurrientUserOwner?: boolean;
 }
 
 const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
@@ -99,20 +100,25 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
   };
 
   const handleUnselectDocuments = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const selectedId = e.currentTarget.dataset.value;
-    selectedDocuments.forEach((item) => {
-      if (item.id === selectedId) {
-        setNotSelectedDocuments([...notSelectedDocuments, item]);
-      }
-    });
-
-    setSelectedDocuments(
-      selectedDocuments.filter((item) => {
-        if (item.id !== selectedId) {
-          return item;
+    console.log(e.currentTarget.dataset.value);
+    if (e.currentTarget.dataset.value === "closeBtn") {
+      console.log("closeBtn");
+    } else {
+      const selectedId = e.currentTarget.dataset.value;
+      selectedDocuments.forEach((item) => {
+        if (item.id === selectedId) {
+          setNotSelectedDocuments([...notSelectedDocuments, item]);
         }
-      })
-    );
+      });
+
+      setSelectedDocuments(
+        selectedDocuments.filter((item) => {
+          if (item.id !== selectedId) {
+            return item;
+          }
+        })
+      );
+    }
   };
 
   // const handleUnSelectRelatedDocument = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -158,7 +164,7 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
               data-value={documents.id}
             >
               {documents.fileName}
-              <Badge bg="light">
+              <Badge data-type="closeBtn" bg="light">
                 <img src={closeImg} alt="closeImg" />
               </Badge>
             </Button>

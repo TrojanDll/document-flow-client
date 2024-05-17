@@ -10,6 +10,8 @@ interface TasksTableProps {
 }
 
 const TasksTable: FC<TasksTableProps> = ({ tasks, handleUdateTable }) => {
+  console.log("tasks");
+  console.log(tasks);
   return (
     <Table bordered className={styles.table}>
       <thead className={styles.tableHead}>

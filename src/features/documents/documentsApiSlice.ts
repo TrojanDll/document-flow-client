@@ -18,11 +18,6 @@ interface IGetUserById {
 
 export const documentApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getUserById: builder.mutation({
-      query: (data?: IGetUserById) => ({
-        url: `/api/users/${data?.id}`,
-      }),
-    }),
     getAllDocuments: builder.query<IDocument[], void>({
       query: () => "/api/admin/docs/all",
     }),

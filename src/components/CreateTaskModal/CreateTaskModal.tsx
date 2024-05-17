@@ -5,6 +5,7 @@ import { useGetDocumentsByMyGroupQuery } from "../../features/documents/document
 import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
 import MultiselectUsers from "../MultiselectUsers/MultiselectUsers";
 import { useCreateTaskMutation } from "../../features/tasks/tasksApiSlice";
+import { useGetCurrientGroupMembersQuery } from "../../features/users/usersApiSlice";
 
 interface CreateTaskModalProps {
   props?: any;
@@ -17,7 +18,7 @@ const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
   const { show, handleUdateTable, onHide } = props;
 
   const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
-  const { data: fetchedUsers } = useGetUsersQuery();
+  const { data: fetchedUsers } = useGetCurrientGroupMembersQuery();
   const [createTask] = useCreateTaskMutation();
 
   const [header, setHeader] = useState<string>("");
@@ -42,7 +43,7 @@ const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
         docId: docId,
         userEmails: userEmails,
         creationDate: currientDate,
-      }).then((resp) => {
+      }).then((resp: any) => {
         console.log(resp);
         handleUdateTable();
         console.log("Запрос на создание таски: ");
