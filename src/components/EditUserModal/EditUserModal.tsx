@@ -156,7 +156,6 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                 type="password"
                 placeholder="Пароль"
-                required
               />
             </Form.Group>
           </div>

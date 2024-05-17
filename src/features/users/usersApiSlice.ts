@@ -12,7 +12,10 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     getCurrientUser: builder.query<IUser, void>({
       query: () => "/api/users/current",
     }),
+    getCurrientGroupMembers: builder.query<IUser[], void>({
+      query: () => "/api/users/current-group-members",
+    }),
   }),
 });
 
-export const { useGetUsersMutation, useGetCurrientUserQuery } = usersApiSlice;
+export const { useGetUsersMutation, useGetCurrientUserQuery, useGetCurrientGroupMembersQuery } = usersApiSlice;

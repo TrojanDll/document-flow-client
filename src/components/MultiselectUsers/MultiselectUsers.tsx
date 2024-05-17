@@ -107,7 +107,10 @@ const MultiselectUsers: FC<MultiselectUsersProps> = ({ isDisabled, users, handle
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleUnselectUsersGroup(e)}
               data-value={user.id}
             >
-              {user.firstName} {user.patronymic} - {user.email}
+              {user.firstName} {user.patronymic} -{" "}
+              {user.groupResponseDTOs?.map((group) => (
+                <span className={styles.userGroupItem}>{group.name}; </span>
+              ))}
               <Badge className={styles.badge} bg="light">
                 <img src={closeImg} alt="closeImg" />
               </Badge>
