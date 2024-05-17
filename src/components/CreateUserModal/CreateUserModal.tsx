@@ -65,11 +65,10 @@ const CreateUserModal: FC<CreateUserModalProps> = (props) => {
   return (
     <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Modal heading</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">Добавление пользователя</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleRegistrationSubmit}>
-          <div className={styles.title}>Добавление пользователя</div>
           <div className={styles.inputsRow}>
             <Form.Group className={`mt-3 ${styles.nameInput}`} controlId="firstName">
               <Form.Label>Имя</Form.Label>

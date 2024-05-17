@@ -1,5 +1,5 @@
 import { apiSlice } from "../../app/api/apiSlice";
-import { ITaskRequest, ITaskResponse } from "../../types/Types";
+import { ITaskRequest, ITaskRequestToEdit, ITaskResponse } from "../../types/Types";
 
 export const tasksApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -27,7 +27,21 @@ export const tasksApiSlice = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    updateTaskById: builder.mutation<void, ITaskRequestToEdit>({
+      query: (dataToEdit: ITaskRequestToEdit) => ({
+        url: "/api/tasks/update-task",
+        method: "PUT",
+        body: <ITaskRequestToEdit>{
+          ...dataToEdit,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetCurrientUserTasksQuery, useCreateTaskMutation, useDeleteTaskByIdMutation } = tasksApiSlice;
+export const {
+  useGetCurrientUserTasksQuery,
+  useCreateTaskMutation,
+  useDeleteTaskByIdMutation,
+  useUpdateTaskByIdMutation,
+} = tasksApiSlice;

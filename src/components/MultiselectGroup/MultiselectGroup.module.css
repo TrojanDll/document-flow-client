@@ -1,5 +1,6 @@
 .selectedItems {
   margin-top: 12px;
   display: flex;
-  column-gap: 12px;
+  flex-wrap: wrap;
+  gap: 12px;
 }

@@ -42,63 +42,6 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
     console.log("currientDocumentInfo");
     console.log(currientDocumentInfo);
 
-    // async function sortNotSelected() {
-    //   const resp = await setNotSelectedDocuments(
-    //     documents.filter((document) => {
-    //       console.log("currientDocumentInfo?.relatedDocs");
-    //       console.log(currientDocumentInfo?.relatedDocs);
-
-    //       if (currientDocumentInfo && currientDocumentInfo.relatedDocs) {
-    //         if (currientDocumentInfo.relatedDocs[0] !== "") {
-    //           currientDocumentInfo?.relatedDocs?.forEach((relatedDocIdItem) => {
-    //             console.log(document.relatedDocs?.indexOf(relatedDocIdItem));
-    //             console.log(document);
-    //             if (
-    //               document.relatedDocs?.indexOf(relatedDocIdItem) === -1 &&
-    //               document.relatedDocs?.indexOf(currientDocumentInfo.id) == -1
-    //             ) {
-    //               // console.log(``)
-    //               return document;
-    //             } else {
-    //               baseSelectedDocs.push(document);
-    //             }
-    //           });
-    //         } else {
-    //           return document;
-    //         }
-    //       }
-
-    //       // console.log(document);
-    //     })
-    //   );
-    //   setSelectedDocuments(baseSelectedDocs);
-    //   console.log("baseSelectedDocs");
-    //   console.log(baseSelectedDocs);
-    // }
-    // sortNotSelected();
-
-    // async function sortNotSelected() {
-    //   const resp = await setNotSelectedDocuments(
-    //     documents.filter((document) => {
-
-    //       let documentToWrite: IDocument[] = [];
-
-    //       currientDocumentInfo?.relatedDocs?.forEach((currientRelatedDocId) => {
-    //         if (document.id === currientRelatedDocId) {
-    //           baseSelectedDocs.push(document);
-    //         } else {
-    //           documentToWrite.push(document);
-    //         }
-    //       });
-    //       if (documentToWrite.length > 0) {
-    //         return
-    //       }
-    //     })
-    //   );
-    //   setSelectedDocuments(baseSelectedDocs);
-    // }
-    // sortNotSelected();
-
     let baseSelectedDocs: IDocument[] = [];
     let baseNotSelectedDocs: IDocument[] = [];
 

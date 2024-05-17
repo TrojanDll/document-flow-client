@@ -70,6 +70,7 @@ export interface ITaskResponse {
   creationDate: string;
   deadline?: string;
   doc?: IDocument;
+  users?: IUser[];
 }
 
 export interface ITaskRequest {
@@ -80,4 +81,8 @@ export interface ITaskRequest {
   deadline?: string;
   docId?: string;
   userEmails: string[];
+}
+
+export interface ITaskRequestToEdit extends ITaskRequest {
+  id: number;
 }

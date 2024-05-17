@@ -7,13 +7,39 @@ import { IUser } from "../../types/Types";
 interface MultiselectUsersProps {
   handleUpdateUsers: (arg: string[]) => void;
   isDisabled?: boolean;
+  fetchedUsersList?: IUser[];
   users: IUser[];
 }
 
-const MultiselectUsers: FC<MultiselectUsersProps> = ({ isDisabled, users, handleUpdateUsers }) => {
+const MultiselectUsers: FC<MultiselectUsersProps> = ({ isDisabled, users, handleUpdateUsers, fetchedUsersList }) => {
   const [notSelectedUsers, setNotSelectedUsers] = useState<IUser[]>(users);
   const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
   const [userEmails, setUserEmails] = useState<string[]>([]);
+
+  useEffect(() => {
+    console.log("fetchedUsersList");
+    console.log(fetchedUsersList);
+
+    let baseSelectedUsers: IUser[] = [];
+    let baseNotSelectedUsers: IUser[] = [];
+
+    if (fetchedUsersList) {
+      let fetchedUsersEmails = fetchedUsersList?.map((item) => item.email);
+
+      users.forEach((user) => {
+        if (fetchedUsersEmails.indexOf(user.email) === -1) {
+          baseNotSelectedUsers.push(user);
+        } else {
+          baseSelectedUsers.push(user);
+        }
+      });
+    } else {
+      baseNotSelectedUsers = users;
+    }
+
+    setNotSelectedUsers(baseNotSelectedUsers);
+    setSelectedUsers(baseSelectedUsers);
+  }, []);
 
   useEffect(() => {
     setUserEmails(selectedUsers.map((item) => (item.email ? item.email : "")));
