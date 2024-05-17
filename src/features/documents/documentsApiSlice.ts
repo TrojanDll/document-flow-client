@@ -12,10 +12,6 @@ export interface IUpdateUserById {
   userGroup?: number;
 }
 
-interface IGetUserById {
-  id: number;
-}
-
 export const documentApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllDocuments: builder.query<IDocument[], void>({
