@@ -35,6 +35,7 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
   useEffect(() => {
     if (!isLoading && isSuccess) {
       setUsersGroups(fetchedUsersGroups);
+      return;
     } else if (!isCurrientUserLoading && isCurrientUserSuccess) {
       if (fetchedCurrientUser.groupResponseDTOs) {
         setUsersGroups(

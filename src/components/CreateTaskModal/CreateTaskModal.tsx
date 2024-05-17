@@ -18,7 +18,8 @@ const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
   const { show, handleUdateTable, onHide } = props;
 
   const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
-  const { data: fetchedUsers } = useGetCurrientGroupMembersQuery();
+  const { data: fetchedUsers } = useGetUsersQuery();
+  const { data: currientGroupMembers } = useGetCurrientGroupMembersQuery();
   const [createTask] = useCreateTaskMutation();
 
   const [header, setHeader] = useState<string>("");
@@ -143,7 +144,13 @@ const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
             </Form.Select>
           </Form.Group>
 
-          {fetchedUsers ? <MultiselectUsers handleUpdateUsers={handleUpdateUsers} users={fetchedUsers} /> : ""}
+          {fetchedUsers ? (
+            <MultiselectUsers handleUpdateUsers={handleUpdateUsers} users={fetchedUsers} />
+          ) : currientGroupMembers ? (
+            <MultiselectUsers handleUpdateUsers={handleUpdateUsers} users={currientGroupMembers} />
+          ) : (
+            ""
+          )}
 
           <Button type="submit">Создать</Button>
         </Form>
