@@ -6,7 +6,7 @@ interface PageTitleProps {
 }
 
 const PageTitle: FC<PageTitleProps> = ({ children }) => {
-  return <div className={styles.title}>{children}</div>;
+  return <h1 className={styles.title}>{children}</h1>;
 };
 
 export default PageTitle;

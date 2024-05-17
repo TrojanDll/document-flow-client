@@ -1,3 +1,7 @@
+.profileInfo {
+  margin-top: 20px;
+}
+
 .spinner {
   display: block;
   width: 40px;
@@ -13,4 +17,15 @@
 .input {
   margin-bottom: 12px;
   width: 100%;
+}
+.userGroups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tableTitle {
+  margin-top: 20px;
+  font-size: 22px;
+  font-weight: 500;
 }

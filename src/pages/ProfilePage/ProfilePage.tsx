@@ -1,20 +1,42 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import ContentContainer from "../../components/ContentContainer/ContentContainer";
 import PageTitle from "../../components/PageTitle/PageTitle";
 import styles from "./ProfilePage.module.css";
-import { Form } from "react-bootstrap";
+import { Badge, Button, Form } from "react-bootstrap";
 // import searchImg from "./../../assets/img/icons/search.svg";
 import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
 import spinner from "./../../assets/img/icons/spinner.svg";
 import { useGetDocumentsByMyGroupQuery } from "../../features/documents/documentsApiSlice";
 import DocumentsTable from "../../components/DocumentsTable/DocumentsTable";
+import { IDocument } from "../../types/Types";
 
 const ProfilePage: FC = () => {
   const { data: fetchedCurrientUser, isLoading } = useGetCurrientUserQuery();
-  const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
+  const {
+    data: fetchedDocuments,
+    isLoading: isDocumentsLoading,
+    isSuccess,
+    refetch: getDocumentsByMyGroup,
+  } = useGetDocumentsByMyGroupQuery();
 
-  const handleUdateTable = async () => {};
+  const [documentsToDisplay, setDocumentsToDisplay] = useState<IDocument[]>([]);
+
+  useEffect(() => {
+    if (!isDocumentsLoading && isSuccess) {
+      setDocumentsToDisplay(
+        fetchedDocuments.filter((fetchedDocument) => {
+          if (fetchedDocument.owner === fetchedCurrientUser?.email) {
+            return fetchedDocument;
+          }
+        })
+      );
+    }
+  }, [isDocumentsLoading]);
+
+  const handleUdateTable = async () => {
+    getDocumentsByMyGroup();
+  };
 
   return (
     <div>
@@ -30,7 +52,7 @@ const ProfilePage: FC = () => {
           </InputGroup>
         </div> */}
 
-        <Form>
+        <Form className={styles.profileInfo}>
           <div className={styles.inputsRow}>
             <Form.Group className={styles.input}>
               <Form.Label>Имя</Form.Label>
@@ -108,18 +130,21 @@ const ProfilePage: FC = () => {
               {isLoading ? (
                 <img className={styles.spinner} src={spinner} alt="spinner" />
               ) : (
-                <Form.Control
-                  value={fetchedCurrientUser?.groupResponseDTO?.name}
-                  type="text"
-                  placeholder="name@example.com"
-                  disabled
-                />
+                fetchedCurrientUser?.groupResponseDTOs?.map((group) => (
+                  <div className={styles.userGroups}>
+                    <Button disabled variant="secondary">
+                      {group.name}
+                    </Button>
+                  </div>
+                ))
               )}
             </Form.Group>
           </div>
         </Form>
 
-        {fetchedDocuments && <DocumentsTable handleUdateTable={handleUdateTable} documents={fetchedDocuments} />}
+        <h2 className={styles.tableTitle}>Загруженные вами документы</h2>
+
+        {documentsToDisplay && <DocumentsTable handleUdateTable={handleUdateTable} documents={documentsToDisplay} />}
       </ContentContainer>
     </div>
   );

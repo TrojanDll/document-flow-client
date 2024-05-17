@@ -182,6 +182,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
               setFile(e.target.files ? e.target.files[0] : e.target.files)
             }
           />
+          <Form.Floating>Размер файла не должен превышать 10мб</Form.Floating>
         </Form.Group>
 
         <Form>
