@@ -6,6 +6,7 @@ import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
 import MultiselectUsers from "../MultiselectUsers/MultiselectUsers";
 import { useCreateTaskMutation } from "../../features/tasks/tasksApiSlice";
 import { useGetCurrientGroupMembersQuery } from "../../features/users/usersApiSlice";
+import { ITaskRequest } from "../../types/Types";
 
 interface CreateTaskModalProps {
   props?: any;
@@ -24,7 +25,6 @@ const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
 
   const [header, setHeader] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [status, setStatus] = useState<ETaskStatus>(ETaskStatus.NOTSEEN);
   const [deadlineRawFormat, setDeadlineRawFormat] = useState<string>("");
   const [docId, setDocId] = useState<string>("");
   const [userEmails, setUserEmails] = useState<string[]>([]);
@@ -36,27 +36,21 @@ const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
     console.log(currientDate);
 
     try {
-      createTask({
+      const dataToCreateTask: ITaskRequest = {
         header: header,
         description: description,
-        status: status,
+        status: ETaskStatus.NOTSEEN,
         deadline: deadlineIso,
         docId: docId,
         userEmails: userEmails,
         creationDate: currientDate,
-      }).then((resp: any) => {
+      };
+
+      createTask(dataToCreateTask).then((resp: any) => {
         console.log(resp);
         handleUdateTable();
         console.log("Запрос на создание таски: ");
-        console.log({
-          header: header,
-          description: description,
-          status: status,
-          deadline: deadlineIso,
-          docId: docId,
-          userEmails: userEmails,
-          creationDate: currientDate,
-        });
+        console.log(dataToCreateTask);
         onHide();
       });
     } catch {}
@@ -66,7 +60,6 @@ const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
     onHide();
     setHeader("");
     setDescription("");
-    setStatus(ETaskStatus.NOTSEEN);
     setDeadlineRawFormat("");
     setDocId("");
     setUserEmails([]);
@@ -102,21 +95,6 @@ const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
               rows={3}
               placeholder="Введите Описание"
             />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Статус</Form.Label>
-            <Form.Select
-              aria-label="Статус"
-              onChange={(e: ChangeEvent<HTMLSelectElement>) => setStatus(e.target.value as ETaskStatus)}
-            >
-              <option>Выберите статус</option>
-              <option value={ETaskStatus.NOTSEEN}>Не просмотрено</option>
-              <option value={ETaskStatus.INPROGRESS}>Выполняется</option>
-              <option value={ETaskStatus.POSTPONED}>Отложено</option>
-              <option value={ETaskStatus.DONE}>Выполнено</option>
-              <option value={ETaskStatus.ABANDONED}>Заброшено</option>
-            </Form.Select>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicEmail">
