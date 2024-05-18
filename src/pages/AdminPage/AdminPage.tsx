@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import ContentContainer from "../../components/ContentContainer/ContentContainer";
 import styles from "./AdminPage.module.css";
@@ -11,14 +11,16 @@ import CreateUserModal from "../../components/CreateUserModal/CreateUserModal";
 import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
 import CreateGroupModal from "../../components/CreateGroupModal/CreateGroupModal";
 import { IUser } from "../../types/Types";
+import FilterModal from "../../components/FilterModal/FilterModal";
 
 const AdminPage = () => {
-  // const [modalFilterShow, setModalFilterShow] = useState(false);
+  const [modalFilterShow, setModalFilterShow] = useState(false);
   const [modalCreateUserShow, setModalCreateUserShow] = useState(false);
   const [modalCreateGroupShow, setModalCreateGroupShow] = useState(false);
   // const [usersList, setUsersList] = useState<IUser[]>([]);
   const { data: fetchedUsers, isLoading, refetch: getUsers } = useGetUsersQuery();
   const [modifiedUsers, setModifiedUsers] = useState<IUser[]>([]);
+  const [searchedUsers, setSearchedUsers] = useState<IUser[]>([]);
 
   function sortByField<T>(arr: T[], field: keyof T): T[] {
     return arr.slice().sort((a, b) => {
@@ -36,7 +38,18 @@ const AdminPage = () => {
     // }
   }
 
-  // const filterUsers = () => {};
+  const handleSearchUsersByName = (textToSearch: string) => {
+    setSearchedUsers(
+      modifiedUsers.filter((user) => {
+        if (user.firstName && user.lastName && user.patronymic) {
+          const fullname = user.firstName + user.lastName + user.patronymic;
+          if (fullname.indexOf(textToSearch) !== -1) {
+            return user;
+          }
+        }
+      })
+    );
+  };
 
   useEffect(() => {
     if (!isLoading && fetchedUsers) {
@@ -45,6 +58,10 @@ const AdminPage = () => {
       console.log(fetchedUsers);
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    setSearchedUsers(modifiedUsers);
+  }, [modifiedUsers]);
 
   let refetchedUsers: IUser[];
 
@@ -68,14 +85,22 @@ const AdminPage = () => {
             <InputGroup.Text>
               <img src={searchImg} alt="searchImg" />
             </InputGroup.Text>
-            <Form.Control placeholder="Поиск... (В разработке)" aria-label="Username" />
+            <Form.Control
+              onChange={(e: ChangeEvent<HTMLInputElement>) => handleSearchUsersByName(e.target.value)}
+              placeholder="Поиск"
+              aria-label="Username"
+            />
           </InputGroup>
 
-          {/* <Button variant="outline-primary" onClick={() => setModalFilterShow(true)}>
+          <Button variant="outline-primary" onClick={() => setModalFilterShow(true)}>
             Фильтры
           </Button>
 
-          <FilterModal user={fetchedUsers} show={modalFilterShow} onHide={() => setModalFilterShow(false)} /> */}
+          {fetchedUsers ? (
+            <FilterModal users={fetchedUsers} show={modalFilterShow} onHide={() => setModalFilterShow(false)} />
+          ) : (
+            ""
+          )}
 
           <Button variant="secondary" onClick={() => setModalCreateGroupShow(true)}>
             Настроить группы пользователей
@@ -98,7 +123,7 @@ const AdminPage = () => {
             onHide={() => setModalCreateUserShow(false)}
           />
         </div>
-        {modifiedUsers && <TableUsers handleUdateTable={handleUdateTable} users={modifiedUsers} />}
+        {searchedUsers && <TableUsers handleUdateTable={handleUdateTable} users={searchedUsers} />}
       </ContentContainer>
     </div>
   );

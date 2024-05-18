@@ -1,8 +1,9 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import FilterDropdown from "../FilterDropdown/FilterDropdown";
 import styles from "./FilterModal.module.css";
-import { IUser } from "../../types/Types";
+import { IUser, IUserGroup } from "../../types/Types";
+import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 
 interface FilterModalProps {
   props?: any;
@@ -12,13 +13,24 @@ interface FilterModalProps {
 }
 
 const FilterModal: FC<FilterModalProps> = (props) => {
-  const [groupFilterItems, setGroupFilterItems] = useState(["gropup1", "gropup2", "gropup3"]);
-  const [postFilterItems, setPostFilterItems] = useState(["post1", "post2", "post3"]);
-  const [departmentFilterItems, setDepartmentFilterItems] = useState(["department1", "department2", "department3"]);
+  const { show, users } = props;
 
-  console.log(setGroupFilterItems, setPostFilterItems, setDepartmentFilterItems);
+  const { data: fetchedGroups, isLoading: isGroupsLoading, isSuccess: isGroupsSuccess } = useGetAllUsersGroupsQuery();
 
-  const { show } = props;
+  const [groupFilterItems, setGroupFilterItems] = useState<IUserGroup[]>([]);
+  const [postFilterItems, setPostFilterItems] = useState<string[]>(
+    users ? users.map((user) => (user.post ? user.post : "")) : [""]
+  );
+  const [departmentFilterItems, setDepartmentFilterItems] = useState<string[]>(
+    users ? users.map((user) => (user.department ? user.department : "")) : [""]
+  );
+
+  useEffect(() => {
+    if (!isGroupsLoading && isGroupsSuccess) {
+      setGroupFilterItems(fetchedGroups);
+    }
+  }, [isGroupsLoading]);
+
   return (
     <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
@@ -27,13 +39,16 @@ const FilterModal: FC<FilterModalProps> = (props) => {
       <Modal.Body>
         <div className={styles.filtersWrapper}>
           <div className={styles.dropdownWrapper}>
-            <FilterDropdown options={groupFilterItems} placeholderText="Группа" />
+            <FilterDropdown
+              options={groupFilterItems ? groupFilterItems.map((group) => group.name) : [""]}
+              placeholderText="Группа"
+            />
           </div>
           <div className={styles.dropdownWrapper}>
-            <FilterDropdown options={postFilterItems} placeholderText="Должность" />
+            <FilterDropdown options={postFilterItems ? postFilterItems : [""]} placeholderText="Должность" />
           </div>
           <div className={styles.dropdownWrapper}>
-            <FilterDropdown options={departmentFilterItems} placeholderText="Отдел" />
+            <FilterDropdown options={departmentFilterItems ? departmentFilterItems : [""]} placeholderText="Отдел" />
           </div>
         </div>
       </Modal.Body>
