@@ -139,7 +139,9 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   return (
     <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Редактирование документа</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">
+          {isCurrientUserOwner ? "Редактирование" : "Просмотр"} документа {documentData.fileName}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleEditDocumentSubmit}>

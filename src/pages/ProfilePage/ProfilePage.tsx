@@ -131,7 +131,7 @@ const ProfilePage: FC = () => {
                 <img className={styles.spinner} src={spinner} alt="spinner" />
               ) : (
                 fetchedCurrientUser?.groupResponseDTOs?.map((group) => (
-                  <div className={styles.userGroups}>
+                  <div key={group.id} className={styles.userGroups}>
                     <Button disabled variant="secondary">
                       {group.name}
                     </Button>
