@@ -42,8 +42,8 @@ const AdminPage = () => {
     setSearchedUsers(
       modifiedUsers.filter((user) => {
         if (user.firstName && user.lastName && user.patronymic) {
-          const fullname = user.firstName + user.lastName + user.patronymic;
-          if (fullname.indexOf(textToSearch) !== -1) {
+          const fullname = (user.firstName + " " + user.lastName + " " + user.patronymic).toLocaleLowerCase();
+          if (fullname.indexOf(textToSearch.toLowerCase()) !== -1) {
             return user;
           }
         }
