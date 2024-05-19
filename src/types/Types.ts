@@ -86,3 +86,19 @@ export interface ITaskRequest {
 export interface ITaskRequestToEdit extends ITaskRequest {
   id: number;
 }
+
+export interface IDocumentChangeRequest {
+  documentId: string;
+  header: string;
+  message: string;
+  changedDate: string;
+}
+
+export interface IDocumentChangeResponse {
+  id: string;
+  documentId: string;
+  header: string;
+  message: string;
+  changedDate: string;
+  createdBy: string;
+}

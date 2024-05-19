@@ -1,0 +1,19 @@
+.historyItem {
+  margin-top: 12px;
+}
+
+.buttonSvg {
+  width: 24px;
+  height: 24px;
+  fill: #6c757d;
+  transition: all 0.3s;
+}
+
+.deleteSvg:hover {
+  fill: #dc3545;
+}
+
+.firstRow {
+  display: flex;
+  justify-content: space-between;
+}

@@ -44,3 +44,7 @@
 .editSvg:hover {
   fill: #ffc107;
 }
+
+.historySvg:hover {
+  fill: #6edff6;
+}

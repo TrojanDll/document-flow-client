@@ -1,5 +1,5 @@
 import { apiSlice } from "../../app/api/apiSlice";
-import { IDocument, IDocumentEdit } from "../../types/Types";
+import { IDocument, IDocumentChangeRequest, IDocumentChangeResponse, IDocumentEdit } from "../../types/Types";
 
 export interface IUpdateUserById {
   userId: number;
@@ -55,6 +55,30 @@ export const documentApiSlice = apiSlice.injectEndpoints({
     getDocumentsByMyGroup: builder.query<IDocument[], void>({
       query: () => "/api/docs/by-group",
     }),
+    createDocumentChange: builder.mutation<IDocumentChangeResponse, IDocumentChangeRequest>({
+      query: (documentData: IDocumentChangeRequest) => ({
+        url: "/api/doc-changes/new",
+        method: "POST",
+        body: <IDocumentChangeRequest>{
+          documentId: documentData.documentId,
+          header: documentData.header,
+          message: documentData.message,
+          changedDate: documentData.changedDate,
+        },
+      }),
+    }),
+    getDocumentChangesByDocumentID: builder.query<IDocumentChangeResponse[], string>({
+      query: (docId: string) => ({
+        url: `/api/doc-changes/doc/${docId}`,
+        method: "GET",
+      }),
+    }),
+    deleteDocumentChangeByChangeID: builder.mutation<IDocumentChangeResponse[], string>({
+      query: (changeId: string) => ({
+        url: `/api/doc-changes/${changeId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -64,6 +88,9 @@ export const {
   useUpdateDocumentByIdMutation,
   useUploadDocumentMutation,
   useGetDocumentsByMyGroupQuery,
+  useCreateDocumentChangeMutation,
+  useGetDocumentChangesByDocumentIDQuery,
+  useDeleteDocumentChangeByChangeIDMutation,
 } = documentApiSlice;
 
 // query: (credentials: Ilogin) => ({
