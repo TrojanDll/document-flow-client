@@ -1,6 +1,5 @@
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import FilterDropdown from "../FilterDropdown/FilterDropdown";
 import styles from "./FilterModal.module.css";
 import { IUser, IUserGroup } from "../../types/Types";
 import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
