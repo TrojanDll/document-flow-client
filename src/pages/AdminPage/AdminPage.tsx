@@ -3,7 +3,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import ContentContainer from "../../components/ContentContainer/ContentContainer";
 import styles from "./AdminPage.module.css";
 import PageTitle from "../../components/PageTitle/PageTitle";
-import { Button, Form, InputGroup } from "react-bootstrap";
+import { Badge, Button, Form, InputGroup } from "react-bootstrap";
 import searchImg from "./../../assets/img/icons/search.svg";
 // import FilterModal from "../../components/FilterModal/FilterModal";
 import TableUsers from "../../components/TableUsers/TableUsers";
@@ -13,6 +13,12 @@ import CreateGroupModal from "../../components/CreateGroupModal/CreateGroupModal
 import { IUser } from "../../types/Types";
 import FilterModal from "../../components/FilterModal/FilterModal";
 
+export interface IUsersFilters {
+  groupFilter: string;
+  postFilter: string;
+  departmentFilter: string;
+}
+
 const AdminPage = () => {
   const [modalFilterShow, setModalFilterShow] = useState(false);
   const [modalCreateUserShow, setModalCreateUserShow] = useState(false);
@@ -21,6 +27,12 @@ const AdminPage = () => {
   const { data: fetchedUsers, isLoading, refetch: getUsers } = useGetUsersQuery();
   const [modifiedUsers, setModifiedUsers] = useState<IUser[]>([]);
   const [searchedUsers, setSearchedUsers] = useState<IUser[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<IUser[]>([]);
+
+  const [groupFilter, setGroupFilter] = useState("");
+  const [postFilter, setPostFilter] = useState("");
+  const [departmentFilter, setDepartmentFilter] = useState("");
+  const [countOfFilters, setCountOfFilters] = useState(0);
 
   function sortByField<T>(arr: T[], field: keyof T): T[] {
     return arr.slice().sort((a, b) => {
@@ -52,15 +64,56 @@ const AdminPage = () => {
   };
 
   useEffect(() => {
+    setFilteredUsers(
+      searchedUsers.filter((user) => {
+        const userGroups = user.groupResponseDTOs?.map((group) => group.name);
+        let isAppropriate = true;
+        let countOfFilters = 0;
+        if (groupFilter.length > 0) {
+          if (userGroups?.indexOf(groupFilter) === -1) {
+            isAppropriate = false;
+          }
+          countOfFilters++;
+        }
+
+        if (postFilter.length > 0) {
+          if (user.post?.indexOf(postFilter) === -1) {
+            isAppropriate = false;
+          }
+          countOfFilters++;
+        }
+
+        if (departmentFilter.length > 0) {
+          if (user.department?.indexOf(departmentFilter) === -1) {
+            isAppropriate = false;
+          }
+          countOfFilters++;
+        }
+
+        if (isAppropriate) {
+          return user;
+        }
+        setCountOfFilters(countOfFilters);
+      })
+    );
+  }, [groupFilter, postFilter, departmentFilter, searchedUsers]);
+
+  const handleUpdateFilters = (filters: IUsersFilters) => {
+    setGroupFilter(filters.groupFilter);
+    setDepartmentFilter(filters.departmentFilter);
+    setPostFilter(filters.postFilter);
+    setCountOfFilters(0);
+  };
+
+  useEffect(() => {
     if (!isLoading && fetchedUsers) {
       sortUsersByField(fetchedUsers, "firstName");
-      console.log("fetchedUsers");
-      console.log(fetchedUsers);
     }
   }, [isLoading]);
 
   useEffect(() => {
     setSearchedUsers(modifiedUsers);
+    setFilteredUsers(modifiedUsers);
   }, [modifiedUsers]);
 
   let refetchedUsers: IUser[];
@@ -94,10 +147,22 @@ const AdminPage = () => {
 
           <Button variant="outline-primary" onClick={() => setModalFilterShow(true)}>
             Фильтры
+            {countOfFilters > 0 ? (
+              <Badge bg="secondary" className={styles.countOfFiltersBadge}>
+                {countOfFilters}
+              </Badge>
+            ) : (
+              ""
+            )}
           </Button>
 
           {fetchedUsers ? (
-            <FilterModal users={fetchedUsers} show={modalFilterShow} onHide={() => setModalFilterShow(false)} />
+            <FilterModal
+              handleUpdateFilters={handleUpdateFilters}
+              users={fetchedUsers}
+              show={modalFilterShow}
+              onHide={() => setModalFilterShow(false)}
+            />
           ) : (
             ""
           )}
@@ -123,7 +188,7 @@ const AdminPage = () => {
             onHide={() => setModalCreateUserShow(false)}
           />
         </div>
-        {searchedUsers && <TableUsers handleUdateTable={handleUdateTable} users={searchedUsers} />}
+        {filteredUsers && <TableUsers handleUdateTable={handleUdateTable} users={filteredUsers} />}
       </ContentContainer>
     </div>
   );
