@@ -3,10 +3,10 @@ export const enum ETaskStatus {
   INPROGRESS = "INPROGRESS",
   POSTPONED = "POSTPONED",
   DONE = "DONE",
-  ABANDONED = "ABANDONED"
+  ABANDONED = "ABANDONED",
 }
 
-export const enum EDocumentStatus {
+export enum EDocumentStatus {
   APPROVED = "APPROVED",
   DECLINED = "DECLINED",
   SEEN = "SEEN",

@@ -116,13 +116,10 @@ const AdminPage = () => {
     setFilteredUsers(modifiedUsers);
   }, [modifiedUsers]);
 
-  let refetchedUsers: IUser[];
-
   const handleUdateTable = async () => {
     getUsers().then((resp) => {
       if (resp.data) {
-        refetchedUsers = resp.data;
-        sortUsersByField(refetchedUsers, "firstName");
+        sortUsersByField(resp.data, "firstName");
       }
     });
   };
