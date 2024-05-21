@@ -24,7 +24,7 @@ export interface IGroupResponseDTOs {
 export interface IUserGroup {
   id: number;
   name: string;
-  members: IUser[];
+  members?: IUser[];
 }
 
 export interface IDocument {

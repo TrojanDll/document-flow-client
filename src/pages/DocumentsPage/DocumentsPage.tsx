@@ -7,13 +7,18 @@ import DocumentsTable from "../../components/DocumentsTable/DocumentsTable";
 import { Badge, Button, Form, InputGroup } from "react-bootstrap";
 import styles from "./DocumentsPage.module.css";
 import CreateDocumentModal from "../../components/CreateDocumentModal/CreateDocumentModal";
-import { IDocument } from "../../types/Types";
+import { IDocument, IUser } from "../../types/Types";
 import { useDispatch } from "react-redux";
 import { documentApiSlice } from "../../features/documents/documentsApiSlice";
 import searchImg from "./../../assets/img/icons/search.svg";
 import { EDocumentStatus } from "../../types/Enums";
 import DocumentsFilterModal from "../../components/DocumentsFilterModal/DocumentsFilterModal";
 import loadingSvg from "./../../assets/img/icons/spinner.svg";
+
+export interface groupResponseDTO {
+  id: number;
+  name: string;
+}
 
 export interface IDocumentFilters {
   parentDocIdFilter: string;
@@ -35,7 +40,7 @@ const DocumentsPage: FC = () => {
 
   const [parentDocIdFilter, setParentDocIdFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState<EDocumentStatus | string>("");
-  const [userGroupFilter, setUserGroupFilter] = useState("");
+  const [userGroupFilter, setUserGroupFilter] = useState<string>("");
   const [creationDateFilter, setCreationDateFilter] = useState("");
   const [countOfFilters, setCountOfFilters] = useState(0);
 
@@ -144,7 +149,7 @@ const DocumentsPage: FC = () => {
         }
       })
     );
-  }, [parentDocIdFilter, statusFilter, userGroupFilter, creationDateFilter]);
+  }, [parentDocIdFilter, statusFilter, userGroupFilter, creationDateFilter, searchedDocuments]);
 
   const handleUpdateFilters = (filters: IDocumentFilters) => {
     setParentDocIdFilter(filters.parentDocIdFilter);

@@ -2,8 +2,10 @@ import { ChangeEvent, FC, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./DocumentsFilterModal.module.css";
 import { IDocument, IUserGroup } from "../../types/Types";
-import { IDocumentFilters } from "../../pages/DocumentsPage/DocumentsPage";
+import { IDocumentFilters, groupResponseDTO } from "../../pages/DocumentsPage/DocumentsPage";
 import { EDocumentStatus } from "../../types/Enums";
+import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
+import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 
 interface DocumentsFilterModalProps {
   props?: any;
@@ -16,7 +18,13 @@ interface DocumentsFilterModalProps {
 const DocumentsFilterModal: FC<DocumentsFilterModalProps> = (props) => {
   const { show, documents, handleUpdateFilters, onHide } = props;
 
-  const [groupFilterItems, setGroupFilterItems] = useState<string[]>([]);
+  const [groupFilterItems, setGroupFilterItems] = useState<IUserGroup[]>([]);
+
+  const {
+    data: currientUserData,
+    isLoading,
+    isSuccess,
+  } = localStorage.getItem("role") === "USER" ? useGetCurrientUserQuery() : useGetAllUsersGroupsQuery();
 
   const [parentDocIdFilter, setParentDocIdFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState<EDocumentStatus | string>("");
@@ -24,15 +32,14 @@ const DocumentsFilterModal: FC<DocumentsFilterModalProps> = (props) => {
   const [creationDateFilter, setCreationDateFilter] = useState("");
 
   useEffect(() => {
-    let groupFilterItems: string[] = [];
-    documents.forEach((document) => {
-      document.userGroups?.forEach((userGroup) => {
-        groupFilterItems.push(userGroup);
-      });
-    });
-    groupFilterItems = [...new Set(groupFilterItems)];
-    setGroupFilterItems(groupFilterItems);
-  }, []);
+    if (!isLoading && isSuccess && currientUserData) {
+      if (Array.isArray(currientUserData)) {
+        setGroupFilterItems(currientUserData);
+      } else if (currientUserData.groupResponseDTOs) {
+        setGroupFilterItems(currientUserData.groupResponseDTOs);
+      }
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     console.log(creationDateFilter);
@@ -80,8 +87,8 @@ const DocumentsFilterModal: FC<DocumentsFilterModalProps> = (props) => {
               <option value={""}>Группа</option>
               {groupFilterItems
                 ? groupFilterItems.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                    <option key={option.id} value={option.id}>
+                      {option.name}
                     </option>
                   ))
                 : ""}
