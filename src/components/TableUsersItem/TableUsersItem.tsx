@@ -1,6 +1,10 @@
 import { FC, useEffect, useState } from "react";
 import styles from "./TableUsersItem.module.css";
-import { useDeleteUserByIdMutation } from "../../features/admin/adminApiSlice";
+import {
+  useActivateUserByIdMutation,
+  useDeleteUserByIdMutation,
+  useDisableUserByIdMutation,
+} from "../../features/admin/adminApiSlice";
 import EditUserModal from "../EditUserModal/EditUserModal";
 import { IUser } from "../../types/Types";
 import DeleteModal from "../DeleteModal/DeleteModal";
@@ -20,11 +24,17 @@ interface TableUsersItemProps {
 const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handleUdateTable }) => {
   const [modalEditUserShow, setModalEditUserShow] = useState(false);
   // const [isUserChanged, setIsUserChanged] = useState(false);
-  const { id, firstName, lastName, patronymic, email, department, post, groupResponseDTOs, role } = user;
+  const { id, firstName, lastName, patronymic, email, department, post, groupResponseDTOs, role, active } = user;
   // const [getUserById] = useGetUserByIdMutation();
   const [deleteUserById] = useDeleteUserByIdMutation();
+  const [disableUserById] = useDisableUserByIdMutation();
+  const [activateUserById] = useActivateUserByIdMutation();
+
   const [handleHideDeleteModal, setHandleHideDeleteModal] = useState(false);
+  const [handleHideDisableModal, setHandleHideDisableModal] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
+  const [isDisableUser, setIsDisableUser] = useState(false);
+  const [isActivateUser, setIsActivateUser] = useState(false);
   // console.log(isUserChanged);
 
   let updatedUser: any;
@@ -38,17 +48,48 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handle
 
   useEffect(() => {
     if (isDelete) {
-      handleDeleteUser(id);
+      deleteUserById(id).then(() => {
+        handleUdateTable();
+      });
     }
-  }, [isDelete]);
+    if (isDisableUser) {
+      disableUserById(id).then(() => {
+        handleUdateTable();
+      });
+    }
+    if (isActivateUser) {
+      activateUserById(id).then(() => {
+        handleUdateTable();
+      });
+    }
+  }, [isDelete, isDisableUser]);
 
-  const handleDeleteUser = async (userId: number) => {
-    const resp = await deleteUserById(userId);
-    console.log("Удаление пользователя");
-    if (resp) {
+  const handleActivateUser = () => {
+    activateUserById(id).then(() => {
       handleUdateTable();
+    });
+  };
+
+  const handleDisableUser = (isDisable: boolean) => {
+    if (isDisable) {
+      disableUserById(id).then(() => {
+        handleUdateTable();
+      });
     }
   };
+
+  const banSvg = (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" className={`${styles.buttonSvg} ${styles.deleteSvg}`}>
+      <path d="M15 8a6.97 6.97 0 0 0-1.71-4.584l-9.874 9.875A7 7 0 0 0 15 8M2.71 12.584l9.874-9.875a7 7 0 0 0-9.874 9.874ZM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0" />
+    </svg>
+  );
+
+  const activateSvg = (
+    <svg xmlns="http://www.w3.org/2000/svg" className={`${styles.buttonSvg} ${styles.activateSvg}`} viewBox="0 0 16 16">
+      <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
+      <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
+    </svg>
+  );
 
   return (
     <tr className={styles[variant]}>
@@ -78,6 +119,7 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handle
             ))
           : "Группа не задана"}
       </td>
+      <td>{active ? "Активен" : "Не активен"}</td>
       <td className={styles.editButtonСell}>
         <div className={styles.editButtonWrapper}>
           <button onClick={() => setModalEditUserShow(true)} className={styles.editButton}>
@@ -101,6 +143,34 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handle
             onHide={() => setModalEditUserShow(false)}
           />
 
+          {role === "USER" && active ? (
+            <>
+              <button onClick={() => setHandleHideDisableModal(true)} className={styles.editButton}>
+                {banSvg}
+              </button>
+              <DeleteModal
+                header="Подтверждение отключения"
+                buttontext="Отключить"
+                text={`Вы уверены, что хотите отключить пользователя ${user.firstName} ${user.lastName} ${user.patronymic}?`}
+                onHide={() => setHandleHideDisableModal(false)}
+                show={handleHideDisableModal}
+                isDelete={handleDisableUser}
+              />
+            </>
+          ) : (
+            ""
+          )}
+
+          {role === "USER" && !active ? (
+            <>
+              <button onClick={() => handleActivateUser()} className={styles.editButton}>
+                {activateSvg}
+              </button>
+            </>
+          ) : (
+            ""
+          )}
+
           {role === "USER" ? (
             <>
               <button onClick={() => setHandleHideDeleteModal(true)} className={styles.editButton}>
@@ -114,6 +184,8 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handle
                 </svg>
               </button>
               <DeleteModal
+                header="Подтверждение удаления"
+                buttontext="Удалить"
                 text={`Вы уверены, что хотите удалить пользователя ${user.firstName} ${user.lastName} ${user.patronymic}?`}
                 onHide={() => setHandleHideDeleteModal(false)}
                 show={handleHideDeleteModal}

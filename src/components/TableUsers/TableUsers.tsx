@@ -20,6 +20,7 @@ const TableUsers: FC<ITableUsersProps> = ({ users, handleUdateTable }) => {
           <th>Отдел</th>
           <th>Должность</th>
           <th>Группа</th>
+          <th>Активность</th>
           <th></th>
         </tr>
       </thead>

@@ -41,3 +41,7 @@
 .groupItem {
   display: block;
 }
+
+.activateSvg:hover {
+  fill: #198754;
+}

@@ -48,6 +48,18 @@ export const adminApiSlice = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    disableUserById: builder.mutation({
+      query: (userId: number) => ({
+        url: `/api/admin/disable/${userId}`,
+        method: "PUT",
+      }),
+    }),
+    activateUserById: builder.mutation({
+      query: (userId: number) => ({
+        url: `/api/admin/activate/${userId}`,
+        method: "PUT",
+      }),
+    }),
     getAllUsersGroups: builder.query<IUserGroup[], void>({
       query: () => "/api/admin/usergroups/all",
     }),
@@ -76,6 +88,8 @@ export const {
   useUpdateUserByIdMutation,
   useGetUserByIdMutation,
   useDeleteUserByIdMutation,
+  useDisableUserByIdMutation,
+  useActivateUserByIdMutation,
   useCreateUsersGroupMutation,
   useGetAllUsersGroupsQuery,
   useDeleteUsersGroupByIdMutation,
