@@ -2,7 +2,8 @@ import { FC, useState } from "react";
 import styles from "./Sidebar.module.css";
 import { Link, useNavigate } from "react-router-dom";
 
-import peopleImg from "./../../assets/img/icons/people-fill.svg";
+import profileImg from "./../../assets/img/icons/person.svg";
+import peopleImg from "./../../assets/img/icons/people.svg";
 import taskImg from "./../../assets/img/icons/checkmark.svg";
 import documentImg from "./../../assets/img/icons/document.svg";
 import mailImg from "./../../assets/img/icons/mail.svg";
@@ -28,8 +29,13 @@ const Sidebar: FC = () => {
       <div className={styles.title}>Монтаж-сервис</div>
       <div className={styles.links}>
         <Link to="/profile" className={styles.linkWrapper}>
-          <img src={peopleImg} alt="peopleImg" className={styles.linkImg} />
+          <img src={profileImg} alt="person" className={styles.linkImg} />
           <div className={styles.linkText}>Профиль</div>
+        </Link>
+
+        <Link to="/users" className={styles.linkWrapper}>
+          <img src={peopleImg} alt="peopleImg" className={styles.linkImg} />
+          <div className={styles.linkText}>Пользователи</div>
         </Link>
 
         <Link to="/documents" className={styles.linkWrapper}>
