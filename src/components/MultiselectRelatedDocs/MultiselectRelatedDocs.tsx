@@ -48,16 +48,24 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
     let baseSelectedDocs: IDocument[] = [];
     let baseNotSelectedDocs: IDocument[] = [];
 
-    if (currientDocumentInfo) {
-      documents.forEach((document) => {
-        currientDocumentInfo?.relatedDocs?.forEach((currientRelatedDocId) => {
-          if (document.id === currientRelatedDocId && document.id !== currientDocumentInfo.id) {
+    if (currientDocumentInfo && currientDocumentInfo.relatedDocs) {
+      for (let document of documents) {
+        let isAddTobaseNotSelectedDocs = false;
+
+        for (let currientRelatedDocId of currientDocumentInfo.relatedDocs) {
+          if (currientRelatedDocId === document.id && currientDocumentInfo.id !== document.id) {
             baseSelectedDocs.push(document);
+            isAddTobaseNotSelectedDocs = false;
+            break;
           } else if (document.id !== currientDocumentInfo.id) {
-            baseNotSelectedDocs.push(document);
+            isAddTobaseNotSelectedDocs = true;
           }
-        });
-      });
+        }
+
+        if (isAddTobaseNotSelectedDocs) {
+          baseNotSelectedDocs.push(document);
+        }
+      }
     } else {
       baseNotSelectedDocs = documents;
     }
@@ -80,6 +88,12 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
     console.log("Выбраные связанные документы в компоненте MultiselectRelatedDocs");
     console.log(selectedDocuments);
   }, [selectedDocuments]);
+
+  useEffect(() => {
+    // setDocumentsIds(selectedDocuments.map((item) => item.id));
+    console.log("notSelectedDocuments");
+    console.log(notSelectedDocuments);
+  }, [notSelectedDocuments]);
 
   useEffect(() => {
     handleUpdateDocuments(documentsIds);
