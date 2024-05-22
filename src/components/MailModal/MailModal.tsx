@@ -3,6 +3,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./MailModal.module.css";
 import { useGetDocumentsByMyGroupQuery } from "../../features/documents/documentsApiSlice";
 import { useSendMessageMutation } from "../../features/email/emailApiSlice";
+import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
 
 interface MailModalProps {
   props?: any;
@@ -13,7 +14,7 @@ interface MailModalProps {
 const MailModal: FC<MailModalProps> = (props) => {
   const { show, onHide } = props;
   const { data: fetchedDocuments, isLoading, isSuccess } = useGetDocumentsByMyGroupQuery();
-  const [documentToSend, setDocumentToSend] = useState("");
+  const [documentsToSend, setDocumentsToSend] = useState<string[]>([""]);
   const [email, setEmail] = useState("");
   const [emailHeader, setEmailHeader] = useState("");
   const [emailText, setEmailText] = useState("");
@@ -29,11 +30,15 @@ const MailModal: FC<MailModalProps> = (props) => {
     onHide();
     sendMessage({
       email,
-      docId: documentToSend,
+      docIds: documentsToSend,
       header: emailHeader,
       body: emailText,
     }).then((resp) => {
       console.log(resp);
+      setEmail("");
+      setEmailHeader("");
+      setEmailText("");
+      setDocumentsToSend([""]);
     });
   };
   return (
@@ -75,9 +80,17 @@ const MailModal: FC<MailModalProps> = (props) => {
             />
           </div>
 
-          <Form.Group controlId="department">
-            <Form.Label>Документ для отправки</Form.Label>
-            <Form.Select
+          {fetchedDocuments ? (
+            <MultiselectRelatedDocs
+              header="Выберите документы для отправки"
+              handleUpdateDocuments={(docsId: string[]) => setDocumentsToSend(docsId)}
+              documents={fetchedDocuments}
+            />
+          ) : (
+            ""
+          )}
+
+          {/* <Form.Select
               required
               onChange={(e: ChangeEvent<HTMLSelectElement>) => setDocumentToSend(e.target.value)}
               aria-label="Выберите документы">
@@ -89,8 +102,7 @@ const MailModal: FC<MailModalProps> = (props) => {
                     </option>
                   ))
                 : ""}
-            </Form.Select>
-          </Form.Group>
+            </Form.Select> */}
 
           <Button className={styles.submitBtn} type="submit">
             Отправить

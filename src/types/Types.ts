@@ -56,7 +56,7 @@ export interface IDocumentEdit {
 
 export interface IEmailBody {
   email: string;
-  docId: string;
+  docIds: string[];
   header: string;
   body: string;
 }

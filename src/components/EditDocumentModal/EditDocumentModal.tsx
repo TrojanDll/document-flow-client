@@ -155,6 +155,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
 
           <div className={styles.inputsRow}>
             <MultiselectRelatedDocs
+              header="Выберите приложенные документы"
               isDisabled={!isCurrientUserOwner}
               isCurrientUserOwner={isCurrientUserOwner}
               currientDocumentInfo={documentData}

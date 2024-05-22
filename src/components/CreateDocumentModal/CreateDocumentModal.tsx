@@ -191,6 +191,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
 
           <div className={styles.inputsRow}>
             <MultiselectRelatedDocs
+              header="Выберите приложеннные документы"
               documents={fetchedDocuments ? fetchedDocuments : []}
               handleUpdateDocuments={handleUpdateDocuments}
             />

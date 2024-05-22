@@ -10,6 +10,7 @@ interface MultiselectRelatedDocsProps {
   documents: IDocument[];
   isDisabled?: boolean;
   isCurrientUserOwner?: boolean;
+  header: string;
 }
 
 const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
@@ -17,6 +18,7 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
   currientDocumentInfo,
   documents,
   isDisabled,
+  header,
 }) => {
   const [notSelectedDocuments, setNotSelectedDocuments] = useState<IDocument[]>([]);
   const [selectedDocuments, setSelectedDocuments] = useState<IDocument[]>([]);
@@ -140,7 +142,7 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
 
   return (
     <Form.Group controlId="department">
-      <Form.Label>Связанные документы</Form.Label>
+      <Form.Label>{header}</Form.Label>
       <Form.Select
         disabled={isDisabled}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => handleSelectDocuments(e)}
