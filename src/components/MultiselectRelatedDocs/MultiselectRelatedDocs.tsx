@@ -42,6 +42,10 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
   // }, []);
 
   useEffect(() => {
+    initMultiselect();
+  }, []);
+
+  const initMultiselect = () => {
     console.log("currientDocumentInfo");
     console.log(currientDocumentInfo);
 
@@ -72,7 +76,7 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
 
     setNotSelectedDocuments(baseNotSelectedDocs);
     setSelectedDocuments(baseSelectedDocs);
-  }, []);
+  };
 
   // useEffect(() => {
   //   console.log(notSelectedUsersGroups);

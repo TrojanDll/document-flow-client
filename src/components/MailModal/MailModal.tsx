@@ -44,7 +44,7 @@ const MailModal: FC<MailModalProps> = (props) => {
   return (
     <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Фильтр пользователей</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">Отправка документов</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleSendMail(e)}>

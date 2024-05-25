@@ -102,3 +102,17 @@ export interface IDocumentChangeResponse {
   changedDate: string;
   createdBy: string;
 }
+
+export interface IDocumentGroupRequest {
+  id?: number;
+  name: string;
+  docIds: string[];
+  userGroupIds: number[];
+}
+
+export interface IDocumentGroupResponse {
+  id: number;
+  name: string;
+  documents: IDocument[];
+  userGroups: IUserGroup[];
+}

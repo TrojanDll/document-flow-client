@@ -1,5 +1,12 @@
 import { apiSlice } from "../../app/api/apiSlice";
-import { IDocument, IDocumentChangeRequest, IDocumentChangeResponse, IDocumentEdit } from "../../types/Types";
+import {
+  IDocument,
+  IDocumentChangeRequest,
+  IDocumentChangeResponse,
+  IDocumentEdit,
+  IDocumentGroupRequest,
+  IDocumentGroupResponse,
+} from "../../types/Types";
 
 export interface IUpdateUserById {
   userId: number;
@@ -79,6 +86,40 @@ export const documentApiSlice = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    getAllDocumentsGroups: builder.query<IDocumentGroupResponse[], void>({
+      query: () => ({
+        url: "/api/users/document-groups/all",
+        method: "GET",
+      }),
+    }),
+    createDocumentGroup: builder.mutation<IDocumentGroupResponse, IDocumentGroupRequest>({
+      query: (groupData: IDocumentGroupRequest) => ({
+        url: `/api/admin/document-groups/new`,
+        method: "POST",
+        body: <IDocumentGroupRequest>{
+          name: groupData.name,
+          docIds: groupData.docIds,
+          userGroupIds: groupData.userGroupIds,
+        },
+      }),
+    }),
+    updateDocumentGroupById: builder.mutation<IDocumentGroupResponse, IDocumentGroupRequest>({
+      query: (groupData: IDocumentGroupRequest) => ({
+        url: `/api/admin/document-groups/${groupData.id}`,
+        method: "PUT",
+        body: <IDocumentGroupRequest>{
+          name: groupData.name,
+          docIds: groupData.docIds,
+          userGroupIds: groupData.userGroupIds,
+        },
+      }),
+    }),
+    deleteDocumentGroupById: builder.mutation<void, number>({
+      query: (documentGroupId: number) => ({
+        url: `/api/admin/document-groups/${documentGroupId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -91,6 +132,10 @@ export const {
   useCreateDocumentChangeMutation,
   useGetDocumentChangesByDocumentIDQuery,
   useDeleteDocumentChangeByChangeIDMutation,
+  useGetAllDocumentsGroupsQuery,
+  useCreateDocumentGroupMutation,
+  useUpdateDocumentGroupByIdMutation,
+  useDeleteDocumentGroupByIdMutation,
 } = documentApiSlice;
 
 // query: (credentials: Ilogin) => ({

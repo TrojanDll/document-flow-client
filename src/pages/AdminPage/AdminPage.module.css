@@ -6,6 +6,7 @@
   margin-top: 20px;
   display: flex;
   column-gap: 12px;
+  flex-wrap: wrap;
 }
 
 .groupWrapper {
@@ -19,4 +20,22 @@
 
 .countOfFiltersBadge {
   margin-left: 5px;
+}
+
+.filterButton {
+  display: flex;
+  align-items: center;
+  column-gap: 3px;
+}
+
+.filterSvg {
+  width: 16px;
+  height: 16px;
+}
+
+.toggleCurrientTableWrapper {
+  margin-top: 20px;
+  display: flex;
+  column-gap: 8px;
+  align-items: center;
 }

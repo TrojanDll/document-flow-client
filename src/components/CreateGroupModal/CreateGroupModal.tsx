@@ -6,6 +6,7 @@ import {
   useDeleteUsersGroupByIdMutation,
   useGetAllUsersGroupsQuery,
 } from "../../features/admin/adminApiSlice";
+import { useGetAllDocumentsGroupsQuery } from "../../features/documents/documentsApiSlice";
 
 interface CreateGroupModalProps {
   props?: any;
@@ -43,19 +44,15 @@ const CreateGroupModal: FC<CreateGroupModalProps> = (props) => {
 
   const { show, onHide } = props;
   return (
-    <Modal
-      {...props}
-      show={show}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered>
+    <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Создание / удаление группы</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">Создание / удаление группы пользователей</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form
           className={styles.addGroupWrapper}
-          onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleCreateGroup(e)}>
+          onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleCreateGroup(e)}
+        >
           <Form.Control
             value={newGroupName}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewGroupName(e.target.value)}
@@ -70,15 +67,15 @@ const CreateGroupModal: FC<CreateGroupModalProps> = (props) => {
 
         <Form
           className={styles.deleteGroupWrapper}
-          onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleDeleteGroup(e)}>
+          onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleDeleteGroup(e)}
+        >
           <Form.Group className={styles.deleteGroupSelect} controlId="department">
             <Form.Label>Удаление группы</Form.Label>
             <Form.Select
               value={userGroupToDelete}
-              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                setUserGroupToDelete(+e.target.value)
-              }
-              aria-label="Выберите группу">
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => setUserGroupToDelete(+e.target.value)}
+              aria-label="Выберите группу"
+            >
               <option>Список групп</option>
               {allUsersGroups
                 ? allUsersGroups.map((group) => (
