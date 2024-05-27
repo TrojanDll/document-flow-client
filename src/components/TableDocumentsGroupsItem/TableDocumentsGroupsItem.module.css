@@ -5,3 +5,46 @@
 .dark td {
   background-color: var(--dark-bg-100);
 }
+
+.editButtonWrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  column-gap: 10px;
+}
+
+/* .editButtonСell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+
+.editButton {
+  width: 150px;
+  display: block;
+  margin: 0 auto;
+  margin-top: 12px;
+}
+
+.buttonSvg {
+  width: 24px;
+  height: 24px;
+  fill: #6c757d;
+  transition: all 0.3s;
+}
+
+.deleteSvg:hover {
+  fill: #dc3545;
+}
+
+.downloadSvg:hover {
+  fill: #0d6efd;
+}
+
+.editSvg:hover {
+  fill: #ffc107;
+}
+
+.historySvg:hover {
+  fill: #6edff6;
+}

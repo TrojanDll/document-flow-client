@@ -49,6 +49,7 @@ export const documentApiSlice = apiSlice.injectEndpoints({
           relatedUserGroupIds: documentData.relatedUserGroupIds,
           expirationDate: documentData.expirationDate,
           comment: documentData.comment,
+          docGroupId: documentData.docGroupId,
         },
       }),
     }),

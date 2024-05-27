@@ -64,6 +64,8 @@ const DocumentsTableItem: FC<DocumentsTableItemProps> = ({ document, variant, nu
     const resp = await deleteDocumentById(docId);
     console.log("Удаление пользователя");
     if (resp) {
+      console.log("resp");
+      console.log(resp);
       handleUdateTable();
     }
   };
@@ -170,6 +172,8 @@ const DocumentsTableItem: FC<DocumentsTableItemProps> = ({ document, variant, nu
 
           <DeleteModal
             text={`Вы уверены, что хотите удалить документ ${document.fileName}?`}
+            header="Подтверждение удаления"
+            buttontext="Удалить"
             onHide={() => setHandleHideDeleteModal(false)}
             show={handleHideDeleteModal}
             isDelete={setIsDelete}

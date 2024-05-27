@@ -3,7 +3,10 @@ import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./CreateDocumentModal.module.css";
 import axios, { AxiosResponse } from "axios";
 import { BASE_URL } from "../../app/api/apiSlice";
-import { useUpdateDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
+import {
+  useGetAllDocumentsGroupsQuery,
+  useUpdateDocumentByIdMutation,
+} from "../../features/documents/documentsApiSlice";
 import { IDocument } from "../../types/Types";
 // import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
@@ -53,7 +56,10 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
   // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
   const [usersGroupsIds, setUsersGroupsIds] = useState<number[]>([]);
   const [status, setStatus] = useState<EDocumentStatus>(EDocumentStatus.APPROVED);
+  const [documentGroupId, setDocumentGroupId] = useState<number>();
   // const { data: currUser } = useGetCurrientUserQuery();
+
+  const { data: fetchedDocumentGroups } = useGetAllDocumentsGroupsQuery();
 
   useEffect(() => {
     console.log("Выбран файл: ");
@@ -128,6 +134,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
           relatedUserGroupIds: usersGroupsIds.map((item) => item.toString()),
           expirationDate: expirationDate,
           comment: comment,
+          docGroupId: documentGroupId,
         }).then((udatedDocumentData) => {
           onHide();
           handleUdateTable();
@@ -183,6 +190,25 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
           />
           <Form.Floating>Размер файла не должен превышать 10мб</Form.Floating>
         </Form.Group>
+
+        <div className={styles.inputsRow}>
+          <Form.Group controlId="department">
+            <Form.Label>Гуппа документа</Form.Label>
+            <Form.Select
+              value={documentGroupId}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => setDocumentGroupId(+e.target.value)}
+              aria-label="Выберите документы"
+            >
+              <option>Список групп документов</option>
+              {fetchedDocumentGroups &&
+                fetchedDocumentGroups.map((documentGroup) => (
+                  <option key={documentGroup.id} value={documentGroup.id}>
+                    {documentGroup.name}
+                  </option>
+                ))}
+            </Form.Select>
+          </Form.Group>
+        </div>
 
         <Form>
           <div className={styles.inputsRow}>

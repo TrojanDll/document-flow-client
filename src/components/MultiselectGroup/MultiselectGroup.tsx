@@ -154,7 +154,7 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
 
   return (
     <Form.Group controlId="department">
-      <Form.Label>Группа</Form.Label>
+      <Form.Label>Группы пользователей</Form.Label>
       <Form.Select
         disabled={isDisabled}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => handleSelectUsersGroup(e)}

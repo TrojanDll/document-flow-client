@@ -2,6 +2,7 @@ import { ChangeEvent, FC, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditDocumentModal.module.css";
 import {
+  useGetAllDocumentsGroupsQuery,
   useGetDocumentsByMyGroupQuery,
   useUpdateDocumentByIdMutation,
 } from "../../features/documents/documentsApiSlice";
@@ -24,6 +25,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   // const [editUserById] = useEditD();
   const [editDocument] = useUpdateDocumentByIdMutation();
   const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
+  const { data: fetchedDocumentGroups } = useGetAllDocumentsGroupsQuery();
   // const fetchedUsersGroups: IUserGroup[] = [
   //   {
   //     id: 1,
@@ -43,6 +45,9 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
     documentData.expirationDate?.slice(0, documentData.expirationDate.indexOf("T"))
   );
   // const [currientRelatedDocId, setCurrientRelatedDocId] = useState("");
+  const [documentGroupId, setDocumentGroupId] = useState<number>(
+    documentData.documentGroup ? documentData.documentGroup.id : NaN
+  );
   const [relatedDocIdList, setRelatedDocIdList] = useState<string[]>([]);
   const [parentDocId, setParentDocId] = useState(documentData.parentDocId);
   const [comment, setComment] = useState(documentData.comment);
@@ -74,6 +79,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         relatedUserGroupIds: stringifiedUsersGroupsIds,
         expirationDate: expirationDate,
         comment: comment,
+        docGroupId: documentGroupId,
       }).then((udatedDocumentData) => {
         onHide();
         handleUdateTable();
@@ -89,6 +95,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         relatedUserGroupIds: stringifiedUsersGroupsIds,
         expirationDate: expirationDate,
         comment: comment,
+        docGroupId: documentGroupId,
       });
     } catch (err) {
       console.log(err);
@@ -145,6 +152,25 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleEditDocumentSubmit}>
+          <div className={styles.inputsRow}>
+            <Form.Group controlId="department">
+              <Form.Label>Гуппа документа</Form.Label>
+              <Form.Select
+                value={documentGroupId}
+                onChange={(e: ChangeEvent<HTMLSelectElement>) => setDocumentGroupId(+e.target.value)}
+                aria-label="Выберите документы"
+              >
+                <option>Список групп документов</option>
+                {fetchedDocumentGroups &&
+                  fetchedDocumentGroups.map((documentGroup) => (
+                    <option key={documentGroup.id} value={documentGroup.id}>
+                      {documentGroup.name}
+                    </option>
+                  ))}
+              </Form.Select>
+            </Form.Group>
+          </div>
+
           <div className={styles.inputsRow}>
             <MultiselectGroup
               isDisabled={!isCurrientUserOwner}

@@ -42,6 +42,7 @@ export interface IDocument {
   userGroups?: string[];
   comment?: string;
   size?: number;
+  documentGroup?: IDocumentGroupResponse;
 }
 
 export interface IDocumentEdit {
@@ -52,6 +53,7 @@ export interface IDocumentEdit {
   comment?: string;
   relatedUserGroupIds?: string[];
   status?: EDocumentStatus;
+  docGroupId?: number;
 }
 
 export interface IEmailBody {
