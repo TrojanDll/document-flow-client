@@ -13,6 +13,7 @@ import CreateGroupModal from "../../components/CreateGroupModal/CreateGroupModal
 import searchImg from "./../../assets/img/icons/search.svg";
 import CreateDocumentGroupModal from "../../components/CreateDocumentGroupModal/CreateDocumentGroupModal";
 import { useGetAllDocumentsGroupsQuery } from "../../features/documents/documentsApiSlice";
+import TableDocumentsGroups from "../../components/TableDocumentsGroups/TableDocumentsGroups";
 
 export interface IUsersFilters {
   groupFilter: string;
@@ -43,6 +44,7 @@ const AdminPage = () => {
   const [currientTable, setCurrientTable] = useState<ECurrientTable>(ECurrientTable.USERS_TABLE);
 
   const { data: fetchedUsers, isLoading, refetch: getUsers } = useGetUsersQuery();
+  const { data: fetchedDocumentsGroups, refetch: getAllDocumentsGroups } = useGetAllDocumentsGroupsQuery();
 
   function sortByField<T>(arr: T[], field: keyof T): T[] {
     return arr.slice().sort((a, b) => {
@@ -131,76 +133,84 @@ const AdminPage = () => {
     });
   };
 
-  return (
-    <div>
-      <Sidebar />
-      <ContentContainer>
-        <PageTitle>Администрирование</PageTitle>
+  const usersContent = (
+    <>
+      <div className={styles.filters}>
+        <InputGroup className={styles.searchInput}>
+          <InputGroup.Text>
+            <img src={searchImg} alt="searchImg" />
+          </InputGroup.Text>
+          <Form.Control
+            onChange={(e: ChangeEvent<HTMLInputElement>) => handleSearchUsersByName(e.target.value)}
+            placeholder="Поиск"
+            aria-label="Username"
+          />
+        </InputGroup>
 
-        <div className={styles.filters}>
-          <InputGroup className={styles.searchInput}>
-            <InputGroup.Text>
-              <img src={searchImg} alt="searchImg" />
-            </InputGroup.Text>
-            <Form.Control
-              onChange={(e: ChangeEvent<HTMLInputElement>) => handleSearchUsersByName(e.target.value)}
-              placeholder="Поиск"
-              aria-label="Username"
-            />
-          </InputGroup>
-
-          <Button variant="outline-primary" onClick={() => setModalFilterShow(true)} className={styles.filterButton}>
-            Фильтры
-            {countOfFilters > 0 ? (
-              <Badge bg="secondary" className={styles.countOfFiltersBadge}>
-                {countOfFilters}
-              </Badge>
-            ) : (
-              ""
-            )}
-          </Button>
-
-          {fetchedUsers ? (
-            <FilterModal
-              handleUpdateFilters={handleUpdateFilters}
-              users={fetchedUsers}
-              show={modalFilterShow}
-              onHide={() => setModalFilterShow(false)}
-            />
+        <Button variant="outline-primary" onClick={() => setModalFilterShow(true)} className={styles.filterButton}>
+          Фильтры
+          {countOfFilters > 0 ? (
+            <Badge bg="secondary" className={styles.countOfFiltersBadge}>
+              {countOfFilters}
+            </Badge>
           ) : (
             ""
           )}
+        </Button>
 
-          <Button variant="secondary" onClick={() => setModalCreateGroupShow(true)}>
-            Настроить группы пользователей
-          </Button>
-          <CreateGroupModal show={modalCreateGroupShow} onHide={() => setModalCreateGroupShow(false)} />
-
-          <Button variant="secondary" onClick={() => setModalCreateDocumentGroupShow(true)}>
-            Настроить группы документов
-          </Button>
-          <CreateDocumentGroupModal
-            show={modalCreateDocumentGroupShow}
-            onHide={() => setModalCreateDocumentGroupShow(false)}
+        {fetchedUsers ? (
+          <FilterModal
+            handleUpdateFilters={handleUpdateFilters}
+            users={fetchedUsers}
+            show={modalFilterShow}
+            onHide={() => setModalFilterShow(false)}
           />
+        ) : (
+          ""
+        )}
 
-          {/* <Form className={styles.addGroupWrapper}>
+        <Button variant="secondary" onClick={() => setModalCreateGroupShow(true)}>
+          Настроить группы пользователей
+        </Button>
+        <CreateGroupModal show={modalCreateGroupShow} onHide={() => setModalCreateGroupShow(false)} />
+
+        <Button variant="secondary" onClick={() => setModalCreateDocumentGroupShow(true)}>
+          Настроить группы документов
+        </Button>
+        <CreateDocumentGroupModal
+          show={modalCreateDocumentGroupShow}
+          onHide={() => setModalCreateDocumentGroupShow(false)}
+        />
+
+        {/* <Form className={styles.addGroupWrapper}>
             <Form.Control type="text" placeholder="Новая группа документов" />
             <Button variant="secondary" type="submit">
               Добавить
             </Button>
           </Form> */}
 
-          <Button variant="success" onClick={() => setModalCreateUserShow(true)}>
-            + Добавить пользователя
-          </Button>
+        <Button variant="success" onClick={() => setModalCreateUserShow(true)}>
+          + Добавить пользователя
+        </Button>
 
-          <CreateUserModal
-            handleUdateTable={() => handleUdateTable()}
-            show={modalCreateUserShow}
-            onHide={() => setModalCreateUserShow(false)}
-          />
-        </div>
+        <CreateUserModal
+          handleUdateTable={() => handleUdateTable()}
+          show={modalCreateUserShow}
+          onHide={() => setModalCreateUserShow(false)}
+        />
+      </div>
+
+      <div className={styles.table}>
+        {filteredUsers && <TableUsers handleUdateTable={handleUdateTable} users={filteredUsers} />}
+      </div>
+    </>
+  );
+
+  return (
+    <div>
+      <Sidebar />
+      <ContentContainer>
+        <PageTitle>Администрирование</PageTitle>
 
         <div className={styles.toggleCurrientTableWrapper}>
           Таблица:
@@ -219,9 +229,11 @@ const AdminPage = () => {
           </Button>
         </div>
 
-        {currientTable === ECurrientTable.USERS_TABLE
-          ? filteredUsers && <TableUsers handleUdateTable={handleUdateTable} users={filteredUsers} />
-          : ""}
+        <div className={styles.table}>
+          {currientTable === ECurrientTable.USERS_TABLE
+            ? usersContent
+            : fetchedDocumentsGroups && <TableDocumentsGroups documentsGroups={fetchedDocumentsGroups} />}
+        </div>
       </ContentContainer>
     </div>
   );

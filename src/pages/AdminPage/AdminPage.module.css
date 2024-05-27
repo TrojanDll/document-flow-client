@@ -5,7 +5,7 @@
 .filters {
   margin-top: 20px;
   display: flex;
-  column-gap: 12px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
@@ -38,4 +38,8 @@
   display: flex;
   column-gap: 8px;
   align-items: center;
+}
+
+.table {
+  margin-top: 20px;
 }

@@ -63,7 +63,12 @@ export const adminApiSlice = apiSlice.injectEndpoints({
     getAllUsersGroups: builder.query<IUserGroup[], void>({
       query: () => "/api/admin/usergroups/all",
     }),
-    //
+    getUsersGroupById: builder.mutation<IUserGroup[], number>({
+      query: (userGroupId: number) => ({
+        url: `/api/admin/usergroups/${userGroupId}`,
+        method: "GET",
+      }),
+    }),
     createUsersGroup: builder.mutation({
       query: (name: string) => ({
         url: `/api/admin/usergroups/new`,
@@ -93,6 +98,7 @@ export const {
   useCreateUsersGroupMutation,
   useGetAllUsersGroupsQuery,
   useDeleteUsersGroupByIdMutation,
+  useGetUsersGroupByIdMutation,
 } = adminApiSlice;
 
 // query: (credentials: Ilogin) => ({

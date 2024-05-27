@@ -24,6 +24,12 @@ export const documentApiSlice = apiSlice.injectEndpoints({
     getAllDocuments: builder.query<IDocument[], void>({
       query: () => "/api/admin/docs/all",
     }),
+    getDocumentById: builder.mutation<IDocument, string>({
+      query: (docId: string) => ({
+        url: `/api/docs/${docId}`,
+        method: "GET",
+      }),
+    }),
     deleteDocumentById: builder.mutation<void, string>({
       query: (docId: string) => ({
         url: `/api/docs/${docId}`,
@@ -125,6 +131,7 @@ export const documentApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetAllDocumentsQuery,
+  useGetDocumentByIdMutation,
   useDeleteDocumentByIdMutation,
   useUpdateDocumentByIdMutation,
   useUploadDocumentMutation,

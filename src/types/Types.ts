@@ -113,6 +113,6 @@ export interface IDocumentGroupRequest {
 export interface IDocumentGroupResponse {
   id: number;
   name: string;
-  documents: IDocument[];
-  userGroups: IUserGroup[];
+  documentIds: string[];
+  userGroupIds: number[];
 }

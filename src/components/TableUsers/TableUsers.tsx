@@ -69,11 +69,7 @@ const TableUsers: FC<ITableUsersProps> = ({ users, handleUdateTable, isReadonly 
     </>
   );
 
-  return (
-    <Table bordered className={styles.table}>
-      {content}
-    </Table>
-  );
+  return <Table bordered>{content}</Table>;
 };
 
 export default TableUsers;
