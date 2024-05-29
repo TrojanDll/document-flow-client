@@ -24,11 +24,10 @@ interface TableUsersItemProps {
 }
 
 const TableDocumentsGroupsItem: FC<TableUsersItemProps> = ({ documentsGroup, variant, number, handleUpdateTable }) => {
-  const { id, name, documentIds, userGroupIds } = documentsGroup;
+  const { id, name, docs, userGroups } = documentsGroup;
 
   // const [getDocumentInfoById, { isLoading: isGetDocumentByIdLoading, isSuccess: isGetDocumentByIdSuccess }] =
   //   useGetDocumentInfoByIdMutation();
-  const [getUsersGroupById] = useGetUsersGroupByIdMutation();
   const [deleteDocumentGroupById] = useDeleteDocumentGroupByIdMutation();
 
   const [visibleDocumentsNames, setVisibleDocumentsNames] = useState<string[]>([]);
@@ -41,75 +40,15 @@ const TableDocumentsGroupsItem: FC<TableUsersItemProps> = ({ documentsGroup, var
 
   useEffect(() => {
     // Есть проблема - стейт записывается до того как пройдут все запросы. Надо сделать Promise при запросее документов, и только потом записывать их в стейт
-
-    // if (documentIds.length > 0) {
-    //   console.log("documentIds");
-    //   console.log(documentIds);
-    //   const fetchingDocuments = new Promise(function (resolve) {
-    //     let visibleDocumentsNamesToAdd: string[] = [];
-
-    //     for (let i = 0; i < countOfFirstVisibleDocuments; i++) {
-    //       console.log("documentIds[i]");
-    //       console.log(documentIds[i]);
-    //       getDocumentInfoById(documentIds[i]).then((responce) => {
-    //         if (responce.data?.fileName) {
-    //           visibleDocumentsNamesToAdd.push(responce.data.fileName);
-    //         }
-    //         if (i === countOfFirstVisibleDocuments - 1) {
-    //           resolve(visibleDocumentsNamesToAdd);
-    //         }
-    //       });
-    //     }
-    //   });
-
-    //   fetchingDocuments.then((resp) => {
-    //     console.log("resp");
-    //     console.log(resp);
-    //     setVisibleDocumentsNames(resp as string[]);
-    //   });
-
-    const fetchingUsersGroups = new Promise(function (resolve) {
-      let usersGroupsNamesToAdd: string[] = [];
-
-      userGroupIds.forEach((userGroupId, i) => {
-        getUsersGroupById(userGroupId)
-          .then((responce) => {
-            if (responce.data) {
-              usersGroupsNamesToAdd.push(responce.data.name);
-            }
-          })
-          .then(() => {
-            if (userGroupIds.length - 1 >= i) {
-              resolve(usersGroupsNamesToAdd);
-            }
-          });
-      });
-    });
-
-    fetchingUsersGroups.then((resp) => {
-      setVisibleUsersGroupsNames(resp as string[]);
-    });
   }, []);
-
-  // const getMoreDocuments = () => {
-  //   for (let i = visibleDocumentsNames.length; i < visibleDocumentsNames.length + 10; i++) {
-  //     if (documentIds[i]) {
-  //       getDocumentInfoById(documentIds[i]).then((responce) => {
-  //         if (isGetDocumentByIdSuccess && responce.data?.fileName) {
-  //           setVisibleDocumentsNames([...visibleDocumentsNames, responce.data.fileName]);
-  //         }
-  //       });
-  //     }
-  //   }
-  // };
 
   useEffect(() => {
     if (isDelete) {
-      handleDocumentGroupById(id);
+      handleDeleteDocumentGroupById(id);
     }
   }, [isDelete]);
 
-  const handleDocumentGroupById = async (docGroupId: number) => {
+  const handleDeleteDocumentGroupById = async (docGroupId: number) => {
     const resp = await deleteDocumentGroupById(docGroupId);
     console.log("Удаление пользователя");
     if (resp) {
@@ -141,9 +80,9 @@ const TableDocumentsGroupsItem: FC<TableUsersItemProps> = ({ documentsGroup, var
       <td>{number}</td>
       <td>{name}</td>
       <td>
-        {visibleUsersGroupsNames.map((usersGroupName) => (
-          <div key={usersGroupName} className={styles.userGroupItem}>
-            {usersGroupName}
+        {userGroups.map((userGroup) => (
+          <div key={userGroup.id} className={styles.userGroupItem}>
+            {userGroup.name}
           </div>
         ))}
       </td>
@@ -162,7 +101,7 @@ const TableDocumentsGroupsItem: FC<TableUsersItemProps> = ({ documentsGroup, var
           ""
         )}
       </td> */}
-      <td>{documentIds.length}</td>
+      <td>{docs.length}</td>
       <td>
         <div className={styles.editButtonWrapper}>
           <button onClick={() => setModalEditDocumentGroupShow(true)} className={styles.actionButton}>

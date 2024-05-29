@@ -205,8 +205,8 @@ const AdminPage = () => {
   const documentGroupsContent = fetchedDocumentsGroups && (
     <>
       <div className={styles.filters}>
-        <Button variant="secondary" onClick={() => setModalCreateDocumentGroupShow(true)}>
-          Создать группу документов
+        <Button variant="success" onClick={() => setModalCreateDocumentGroupShow(true)}>
+          + Создать группу документов
         </Button>
         <CreateDocumentGroupModal
           show={modalCreateDocumentGroupShow}

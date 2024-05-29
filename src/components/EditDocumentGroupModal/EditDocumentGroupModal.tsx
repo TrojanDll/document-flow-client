@@ -70,10 +70,10 @@ const EditDocumentGroupModal: FC<CreateDocumentGroupModalProps> = (props) => {
             </Form.Group>
 
             <Form.Group className={styles.input}>
-              {/* <MultiselectGroup
+              <MultiselectGroup
                 handleUpdateUsersGroups={(usersGroupsIds: number[]) => setAddingUserGroupIds(usersGroupsIds)}
-                preselectedGroups={}
-              /> */}
+                preselectedGroups={currientDocumentGroup.userGroups}
+              />
             </Form.Group>
           </div>
 
