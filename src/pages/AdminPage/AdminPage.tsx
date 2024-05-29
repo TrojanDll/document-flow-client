@@ -133,6 +133,10 @@ const AdminPage = () => {
     });
   };
 
+  const handleUpdateDocumentGroupsTable = () => {
+    getAllDocumentsGroups();
+  };
+
   const usersContent = (
     <>
       <div className={styles.filters}>
@@ -174,14 +178,6 @@ const AdminPage = () => {
         </Button>
         <CreateGroupModal show={modalCreateGroupShow} onHide={() => setModalCreateGroupShow(false)} />
 
-        <Button variant="secondary" onClick={() => setModalCreateDocumentGroupShow(true)}>
-          Настроить группы документов
-        </Button>
-        <CreateDocumentGroupModal
-          show={modalCreateDocumentGroupShow}
-          onHide={() => setModalCreateDocumentGroupShow(false)}
-        />
-
         {/* <Form className={styles.addGroupWrapper}>
             <Form.Control type="text" placeholder="Новая группа документов" />
             <Button variant="secondary" type="submit">
@@ -202,6 +198,27 @@ const AdminPage = () => {
 
       <div className={styles.table}>
         {filteredUsers && <TableUsers handleUdateTable={handleUdateTable} users={filteredUsers} />}
+      </div>
+    </>
+  );
+
+  const documentGroupsContent = fetchedDocumentsGroups && (
+    <>
+      <div className={styles.filters}>
+        <Button variant="secondary" onClick={() => setModalCreateDocumentGroupShow(true)}>
+          Создать группу документов
+        </Button>
+        <CreateDocumentGroupModal
+          show={modalCreateDocumentGroupShow}
+          onHide={() => setModalCreateDocumentGroupShow(false)}
+        />
+      </div>
+
+      <div className={styles.table}>
+        <TableDocumentsGroups
+          handleUpdateTable={handleUpdateDocumentGroupsTable}
+          documentsGroups={fetchedDocumentsGroups}
+        />
       </div>
     </>
   );
@@ -230,9 +247,7 @@ const AdminPage = () => {
         </div>
 
         <div className={styles.table}>
-          {currientTable === ECurrientTable.USERS_TABLE
-            ? usersContent
-            : fetchedDocumentsGroups && <TableDocumentsGroups documentsGroups={fetchedDocumentsGroups} />}
+          {currientTable === ECurrientTable.USERS_TABLE ? usersContent : documentGroupsContent}
         </div>
       </ContentContainer>
     </div>

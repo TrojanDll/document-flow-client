@@ -1,9 +1,15 @@
 import { FC, useEffect, useState } from "react";
 import styles from "./TableDocumentsGroupsItem.module.css";
 import { IDocument, IDocumentGroupResponse } from "../../types/Types";
-import { useGetAllDocumentsQuery, useGetDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
+import {
+  useDeleteDocumentGroupByIdMutation,
+  useGetAllDocumentsQuery,
+  useGetDocumentInfoByIdMutation,
+} from "../../features/documents/documentsApiSlice";
 import { Button } from "react-bootstrap";
 import { useGetAllUsersGroupsQuery, useGetUsersGroupByIdMutation } from "../../features/admin/adminApiSlice";
+import DeleteModal from "../DeleteModal/DeleteModal";
+import EditDocumentGroupModal from "../EditDocumentGroupModal/EditDocumentGroupModal";
 
 export enum TableUsersItemVariants {
   light = "light",
@@ -14,62 +20,102 @@ interface TableUsersItemProps {
   documentsGroup: IDocumentGroupResponse;
   variant: TableUsersItemVariants;
   number: number;
+  handleUpdateTable: () => void;
 }
 
-const TableDocumentsGroupsItem: FC<TableUsersItemProps> = ({ documentsGroup, variant, number }) => {
+const TableDocumentsGroupsItem: FC<TableUsersItemProps> = ({ documentsGroup, variant, number, handleUpdateTable }) => {
   const { id, name, documentIds, userGroupIds } = documentsGroup;
-  console.log("documentsGroup");
-  console.log(documentsGroup);
 
-  const [getDocumentById, { isLoading: isGetDocumentByIdLoading, isSuccess: isGetDocumentByIdSuccess }] =
-    useGetDocumentByIdMutation();
+  // const [getDocumentInfoById, { isLoading: isGetDocumentByIdLoading, isSuccess: isGetDocumentByIdSuccess }] =
+  //   useGetDocumentInfoByIdMutation();
   const [getUsersGroupById] = useGetUsersGroupByIdMutation();
+  const [deleteDocumentGroupById] = useDeleteDocumentGroupByIdMutation();
 
   const [visibleDocumentsNames, setVisibleDocumentsNames] = useState<string[]>([]);
   const [visibleUsersGroupsNames, setVisibleUsersGroupsNames] = useState<string[]>([]);
   const [modalEditDocumentGroupShow, setModalEditDocumentGroupShow] = useState(false);
+  const [handleHideDeleteModal, setHandleHideDeleteModal] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
 
-  const countOfFirstVisibleDocuments = 3;
+  // const countOfFirstVisibleDocuments = 5;
 
   useEffect(() => {
-    let i = 0;
-    documentIds.forEach((documentId) => {
-      if (i < countOfFirstVisibleDocuments) {
-        getDocumentById(documentId).then((responce) => {
-          console.log("responce");
-          console.log(responce);
-          if (isGetDocumentByIdSuccess && responce.data?.fileName) {
-            setVisibleDocumentsNames([...visibleDocumentsNames, responce.data.fileName]);
-          }
-        });
-      }
-      i++;
-    });
+    // Есть проблема - стейт записывается до того как пройдут все запросы. Надо сделать Promise при запросее документов, и только потом записывать их в стейт
 
-    let usersGroupsNamesToAdd: string[] = [];
+    // if (documentIds.length > 0) {
+    //   console.log("documentIds");
+    //   console.log(documentIds);
+    //   const fetchingDocuments = new Promise(function (resolve) {
+    //     let visibleDocumentsNamesToAdd: string[] = [];
 
-    userGroupIds.forEach((userGroupId) => {
-      getUsersGroupById(userGroupId).then((responce) => {
-        console.log("userGroup");
-        console.log(responce);
-        if (responce.data) {
-          usersGroupsNamesToAdd.push(responce.data.name);
-        }
+    //     for (let i = 0; i < countOfFirstVisibleDocuments; i++) {
+    //       console.log("documentIds[i]");
+    //       console.log(documentIds[i]);
+    //       getDocumentInfoById(documentIds[i]).then((responce) => {
+    //         if (responce.data?.fileName) {
+    //           visibleDocumentsNamesToAdd.push(responce.data.fileName);
+    //         }
+    //         if (i === countOfFirstVisibleDocuments - 1) {
+    //           resolve(visibleDocumentsNamesToAdd);
+    //         }
+    //       });
+    //     }
+    //   });
+
+    //   fetchingDocuments.then((resp) => {
+    //     console.log("resp");
+    //     console.log(resp);
+    //     setVisibleDocumentsNames(resp as string[]);
+    //   });
+
+    const fetchingUsersGroups = new Promise(function (resolve) {
+      let usersGroupsNamesToAdd: string[] = [];
+
+      userGroupIds.forEach((userGroupId, i) => {
+        getUsersGroupById(userGroupId)
+          .then((responce) => {
+            if (responce.data) {
+              usersGroupsNamesToAdd.push(responce.data.name);
+            }
+          })
+          .then(() => {
+            if (userGroupIds.length - 1 >= i) {
+              resolve(usersGroupsNamesToAdd);
+            }
+          });
       });
     });
 
-    setVisibleUsersGroupsNames(usersGroupsNamesToAdd);
+    fetchingUsersGroups.then((resp) => {
+      setVisibleUsersGroupsNames(resp as string[]);
+    });
   }, []);
 
-  const getMoreDocuments = () => {
-    for (let i = visibleDocumentsNames.length; i < visibleDocumentsNames.length + 10; i++) {
-      if (documentIds[i]) {
-        getDocumentById(documentIds[i]).then((responce) => {
-          if (isGetDocumentByIdSuccess && responce.data?.fileName) {
-            setVisibleDocumentsNames([...visibleDocumentsNames, responce.data.fileName]);
-          }
-        });
-      }
+  // const getMoreDocuments = () => {
+  //   for (let i = visibleDocumentsNames.length; i < visibleDocumentsNames.length + 10; i++) {
+  //     if (documentIds[i]) {
+  //       getDocumentInfoById(documentIds[i]).then((responce) => {
+  //         if (isGetDocumentByIdSuccess && responce.data?.fileName) {
+  //           setVisibleDocumentsNames([...visibleDocumentsNames, responce.data.fileName]);
+  //         }
+  //       });
+  //     }
+  //   }
+  // };
+
+  useEffect(() => {
+    if (isDelete) {
+      handleDocumentGroupById(id);
+    }
+  }, [isDelete]);
+
+  const handleDocumentGroupById = async (docGroupId: number) => {
+    const resp = await deleteDocumentGroupById(docGroupId);
+    console.log("Удаление пользователя");
+    if (resp) {
+      console.log("resp");
+      console.log(resp);
+      handleUpdateTable();
     }
   };
 
@@ -96,27 +142,53 @@ const TableDocumentsGroupsItem: FC<TableUsersItemProps> = ({ documentsGroup, var
       <td>{name}</td>
       <td>
         {visibleUsersGroupsNames.map((usersGroupName) => (
-          <div className={styles.userGroupItem}>{usersGroupName}</div>
+          <div key={usersGroupName} className={styles.userGroupItem}>
+            {usersGroupName}
+          </div>
         ))}
       </td>
-      <td>
+      {/* <td>
         {visibleDocumentsNames.map((documentName) => (
-          <div className={styles.documentName}>{documentName}</div>
+          <div key={documentName} className={styles.documentName}>
+            {documentName}
+          </div>
         ))}
 
-        {visibleDocumentsNames.length > countOfFirstVisibleDocuments ? (
+        {documentIds.length > countOfFirstVisibleDocuments ? (
           <Button variant="link" onClick={getMoreDocuments}>
             Показать больше...
           </Button>
         ) : (
           ""
         )}
-      </td>
+      </td> */}
       <td>{documentIds.length}</td>
       <td>
-        <button onClick={() => setModalEditDocumentGroupShow(true)} className={styles.actionButton}>
-          {editSvg}
-        </button>
+        <div className={styles.editButtonWrapper}>
+          <button onClick={() => setModalEditDocumentGroupShow(true)} className={styles.actionButton}>
+            {editSvg}
+          </button>
+
+          <EditDocumentGroupModal
+            onHide={() => setModalEditDocumentGroupShow(false)}
+            show={modalEditDocumentGroupShow}
+            handleUpdateTable={handleUpdateTable}
+            currientDocumentGroup={documentsGroup}
+          />
+
+          <button onClick={() => setHandleHideDeleteModal(true)} className={styles.actionButton}>
+            {deleteSvg}
+          </button>
+
+          <DeleteModal
+            text={`Вы уверены, что хотите удалить группу ${name}?`}
+            header="Подтверждение удаления"
+            buttontext="Удалить"
+            onHide={() => setHandleHideDeleteModal(false)}
+            show={handleHideDeleteModal}
+            isDelete={setIsDelete}
+          />
+        </div>
       </td>
     </tr>
   );

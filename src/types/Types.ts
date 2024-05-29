@@ -108,13 +108,13 @@ export interface IDocumentChangeResponse {
 export interface IDocumentGroupRequest {
   id?: number;
   name: string;
-  docIds: string[];
+  docIds?: string[];
   userGroupIds: number[];
 }
 
 export interface IDocumentGroupResponse {
   id: number;
   name: string;
-  documentIds: string[];
-  userGroupIds: number[];
+  docs: IDocument[];
+  userGroups: IUserGroup[];
 }

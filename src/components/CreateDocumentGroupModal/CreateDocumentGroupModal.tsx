@@ -57,10 +57,10 @@ const CreateDocumentGroupModal: FC<CreateDocumentGroupModalProps> = (props) => {
   return (
     <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Создание / удаление группы документов</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">Создание группы документов</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <h3 className={styles.subtitle}>Создание группы</h3>
+        {/* <h3 className={styles.subtitle}>Создание группы</h3> */}
         <Form onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleCreateGroup(e)}>
           <div className={styles.addGroupWrapper}>
             <Form.Group className={styles.input}>
@@ -92,7 +92,7 @@ const CreateDocumentGroupModal: FC<CreateDocumentGroupModalProps> = (props) => {
             Добавить
           </Button>
         </Form>
-
+        {/* 
         <h3 className={styles.subtitle}>Удаление группы</h3>
 
         <Form
@@ -118,7 +118,7 @@ const CreateDocumentGroupModal: FC<CreateDocumentGroupModalProps> = (props) => {
           <Button className={styles.deleteGroupSubmit} variant="danger" type="submit">
             Удалить
           </Button>
-        </Form>
+        </Form> */}
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={onHide}>Отмена</Button>

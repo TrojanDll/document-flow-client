@@ -1,0 +1,12 @@
+.groupWrapper {
+  width: 100%;
+}
+
+.addGroupWrapper {
+  width: 100%;
+  /* display: flex; */
+}
+
+.input {
+  margin-top: 12px;
+}

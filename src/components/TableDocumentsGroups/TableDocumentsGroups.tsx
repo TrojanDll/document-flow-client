@@ -8,9 +8,10 @@ import TableDocumentsGroupsItem from "../TableDocumentsGroupsItem/TableDocuments
 
 interface ITableDocumentsGroupsProps {
   documentsGroups: IDocumentGroupResponse[];
+  handleUpdateTable: () => void;
 }
 
-const TableDocumentsGroups: FC<ITableDocumentsGroupsProps> = ({ documentsGroups }) => {
+const TableDocumentsGroups: FC<ITableDocumentsGroupsProps> = ({ documentsGroups, handleUpdateTable }) => {
   return (
     <Table bordered className={styles.table}>
       <thead className={styles.tableHead}>
@@ -18,27 +19,22 @@ const TableDocumentsGroups: FC<ITableDocumentsGroupsProps> = ({ documentsGroups 
           <th>№</th>
           <th>Название</th>
           <th>Группы пользователей</th>
-          <th>Документы в группе</th>
           <th>Кол-во документов</th>
           <th></th>
         </tr>
       </thead>
 
       <tbody>
-        {documentsGroups.map((documentsGroup, i) => (
-          // <TableUserItemReadonly
-          //   variant={i % 2 === 0 ? TableUsersItemVariants.light : TableUsersItemVariants.dark}
-          //   key={user.id}
-          //   user={user}
-          //   number={i + 1}
-          // />
-          <TableDocumentsGroupsItem
-            variant={i % 2 === 0 ? TableUsersItemVariants.light : TableUsersItemVariants.dark}
-            key={documentsGroup.id}
-            documentsGroup={documentsGroup}
-            number={i + 1}
-          />
-        ))}
+        {documentsGroups &&
+          documentsGroups.map((documentsGroup, i) => (
+            <TableDocumentsGroupsItem
+              handleUpdateTable={handleUpdateTable}
+              variant={i % 2 === 0 ? TableUsersItemVariants.light : TableUsersItemVariants.dark}
+              key={documentsGroup.id}
+              documentsGroup={documentsGroup}
+              number={i + 1}
+            />
+          ))}
       </tbody>
     </Table>
   );
