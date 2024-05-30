@@ -7,7 +7,6 @@ import {
   useGetAllDocumentsGroupsQuery,
   useGetAllDocumentsQuery,
 } from "../../features/documents/documentsApiSlice";
-import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 
@@ -40,6 +39,11 @@ const CreateDocumentGroupModal: FC<CreateDocumentGroupModalProps> = (props) => {
       docIds: addingDocIds,
       userGroupIds: addingUserGroupIds,
     }).then(() => {
+      console.log({
+        name: newGroupName,
+        docIds: addingDocIds,
+        userGroupIds: addingUserGroupIds,
+      });
       getAllDocumentsGroups();
       setNewGroupName("");
       onHide();

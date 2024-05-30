@@ -4,6 +4,9 @@ import styles from "./MailModal.module.css";
 import { useGetDocumentsByMyGroupQuery } from "../../features/documents/documentsApiSlice";
 import { useSendMessageMutation } from "../../features/email/emailApiSlice";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllDocumentsToSend } from "../../features/email/documentsToSendSlice";
+import { RootState } from "./../../app/store";
 
 interface MailModalProps {
   props?: any;
@@ -20,10 +23,12 @@ const MailModal: FC<MailModalProps> = (props) => {
   const [emailText, setEmailText] = useState("");
   const [sendMessage] = useSendMessageMutation();
 
-  useEffect(() => {
-    if (fetchedDocuments && isSuccess) {
-    }
-  }, [isLoading]);
+  const docs = useSelector((state: RootState) => getAllDocumentsToSend(state));
+  console.log(docs);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {}, [docs]);
 
   const handleSendMail = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -85,6 +90,7 @@ const MailModal: FC<MailModalProps> = (props) => {
               header="Выберите документы для отправки"
               handleUpdateDocuments={(docsId: string[]) => setDocumentsToSend(docsId)}
               documents={fetchedDocuments}
+              preselectedDocuments={docs}
             />
           ) : (
             ""

@@ -3,11 +3,14 @@ import { Badge, Button, Form } from "react-bootstrap";
 import styles from "./MultiselectRelatedDocs.module.css";
 import closeImg from "./../../assets/img/icons/close.svg";
 import { IDocument } from "../../types/Types";
+import { useDispatch } from "react-redux";
+import { deleteDocumentToSend } from "../../features/email/documentsToSendSlice";
 
 interface MultiselectRelatedDocsProps {
   handleUpdateDocuments: (arg: string[]) => void;
   currientDocumentInfo?: IDocument;
   documents: IDocument[];
+  preselectedDocuments?: IDocument[];
   isDisabled?: boolean;
   isCurrientUserOwner?: boolean;
   header: string;
@@ -19,10 +22,13 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
   documents,
   isDisabled,
   header,
+  preselectedDocuments,
 }) => {
   const [notSelectedDocuments, setNotSelectedDocuments] = useState<IDocument[]>([]);
   const [selectedDocuments, setSelectedDocuments] = useState<IDocument[]>([]);
   const [documentsIds, setDocumentsIds] = useState<string[]>([]);
+
+  const dispatch = useDispatch();
 
   // useEffect(() => {
   //   let baseSelectedDocs: IDocument[] = [];
@@ -70,6 +76,19 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
           baseNotSelectedDocs.push(document);
         }
       }
+    } else if (preselectedDocuments) {
+      baseSelectedDocs = preselectedDocuments;
+      baseNotSelectedDocs = documents.filter((document) => {
+        let isAddToNotSelectedDocs = true;
+        preselectedDocuments.forEach((preselectedDocument) => {
+          if (preselectedDocument.id === document.id) {
+            isAddToNotSelectedDocs = false;
+          }
+        });
+        if (isAddToNotSelectedDocs) {
+          return document;
+        }
+      });
     } else {
       baseNotSelectedDocs = documents;
     }
@@ -121,10 +140,11 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
 
   const handleUnselectDocuments = (e: React.MouseEvent<HTMLButtonElement>) => {
     console.log(e.currentTarget.dataset.value);
+    const selectedId = e.currentTarget.dataset.value;
+
     if (e.currentTarget.dataset.value === "closeBtn") {
       console.log("closeBtn");
     } else {
-      const selectedId = e.currentTarget.dataset.value;
       selectedDocuments.forEach((item) => {
         if (item.id === selectedId) {
           setNotSelectedDocuments([...notSelectedDocuments, item]);
@@ -139,6 +159,8 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
         })
       );
     }
+
+    dispatch(deleteDocumentToSend({ docToSendId: selectedId as string }));
   };
 
   // const handleUnSelectRelatedDocument = (e: React.MouseEvent<HTMLButtonElement>) => {
