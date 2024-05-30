@@ -1,13 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import styles from "./TableDocumentsGroupsItem.module.css";
-import { IDocument, IDocumentGroupResponse } from "../../types/Types";
-import {
-  useDeleteDocumentGroupByIdMutation,
-  useGetAllDocumentsQuery,
-  useGetDocumentInfoByIdMutation,
-} from "../../features/documents/documentsApiSlice";
-import { Button } from "react-bootstrap";
-import { useGetAllUsersGroupsQuery, useGetUsersGroupByIdMutation } from "../../features/admin/adminApiSlice";
+import { IDocumentGroupResponse } from "../../types/Types";
+import { useDeleteDocumentGroupByIdMutation } from "../../features/documents/documentsApiSlice";
 import DeleteModal from "../DeleteModal/DeleteModal";
 import EditDocumentGroupModal from "../EditDocumentGroupModal/EditDocumentGroupModal";
 
@@ -30,8 +24,8 @@ const TableDocumentsGroupsItem: FC<TableUsersItemProps> = ({ documentsGroup, var
   //   useGetDocumentInfoByIdMutation();
   const [deleteDocumentGroupById] = useDeleteDocumentGroupByIdMutation();
 
-  const [visibleDocumentsNames, setVisibleDocumentsNames] = useState<string[]>([]);
-  const [visibleUsersGroupsNames, setVisibleUsersGroupsNames] = useState<string[]>([]);
+  // const [visibleDocumentsNames, setVisibleDocumentsNames] = useState<string[]>([]);
+  // const [visibleUsersGroupsNames, setVisibleUsersGroupsNames] = useState<string[]>([]);
   const [modalEditDocumentGroupShow, setModalEditDocumentGroupShow] = useState(false);
   const [handleHideDeleteModal, setHandleHideDeleteModal] = useState(false);
   const [isDelete, setIsDelete] = useState(false);

@@ -8,8 +8,8 @@ import {
 } from "../../features/documents/documentsApiSlice";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
 import { IDocument } from "./../../types/Types";
-import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 import { EDocumentStatus } from "../../types/Enums";
+import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 
 interface EditDocumentModalProps {
   props?: any;
@@ -156,6 +156,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
             <Form.Group controlId="department">
               <Form.Label>Гуппа документа</Form.Label>
               <Form.Select
+                disabled={!isCurrientUserOwner}
                 value={documentGroupId}
                 onChange={(e: ChangeEvent<HTMLSelectElement>) => setDocumentGroupId(+e.target.value)}
                 aria-label="Выберите документы"
@@ -181,7 +182,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
 
           <div className={styles.inputsRow}>
             <MultiselectRelatedDocs
-              header="Выберите приложенные документы"
+              header="Приложенные документы"
               isDisabled={!isCurrientUserOwner}
               isCurrientUserOwner={isCurrientUserOwner}
               currientDocumentInfo={documentData}

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { IDocument, IUser } from "../../types/Types";
+import { IDocument } from "../../types/Types";
 
 interface IDocumentsToSendState {
   data: IDocument[];

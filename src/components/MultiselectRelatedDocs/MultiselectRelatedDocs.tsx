@@ -1,11 +1,7 @@
 import Select, { OnChangeValue } from "react-select";
-import { ChangeEvent, FC, useEffect, useState } from "react";
-import { Badge, Button, Form } from "react-bootstrap";
-import styles from "./MultiselectRelatedDocs.module.css";
-import closeImg from "./../../assets/img/icons/close.svg";
+import { FC, useEffect, useState } from "react";
+import { Form } from "react-bootstrap";
 import { IDocument } from "../../types/Types";
-import { useDispatch } from "react-redux";
-import { deleteDocumentToSend } from "../../features/email/documentsToSendSlice";
 
 interface MultiselectRelatedDocsProps {
   handleUpdateDocuments: (arg: string[]) => void;
@@ -26,17 +22,13 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
   handleUpdateDocuments,
   currientDocumentInfo,
   documents,
-  isDisabled,
   header,
+  // isDisabled,
   preselectedDocuments,
 }) => {
   const [notSelectedDocuments, setNotSelectedDocuments] = useState<IOption[]>([]);
   const [selectedDocuments, setSelectedDocuments] = useState<IOption[]>([]);
   const [documentsIds, setDocumentsIds] = useState<string[]>([]);
-
-  const [currentItem, setCurrentItem] = useState();
-
-  const dispatch = useDispatch();
 
   // useEffect(() => {
   //   let baseSelectedDocs: IDocument[] = [];
@@ -230,6 +222,7 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
         onChange={handleSelectDocuments}
         value={selectedDocuments}
         options={notSelectedDocuments}
+        placeholder="Документы"
       />
 
       {/* <Form.Select

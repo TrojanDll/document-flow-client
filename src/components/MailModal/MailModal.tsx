@@ -1,10 +1,10 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./MailModal.module.css";
 import { useGetDocumentsByMyGroupQuery } from "../../features/documents/documentsApiSlice";
 import { useSendMessageMutation } from "../../features/email/emailApiSlice";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getAllDocumentsToSend } from "../../features/email/documentsToSendSlice";
 import { RootState } from "./../../app/store";
 
@@ -16,7 +16,7 @@ interface MailModalProps {
 
 const MailModal: FC<MailModalProps> = (props) => {
   const { show, onHide } = props;
-  const { data: fetchedDocuments, isLoading, isSuccess } = useGetDocumentsByMyGroupQuery();
+  const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
   const [documentsToSend, setDocumentsToSend] = useState<string[]>([""]);
   const [email, setEmail] = useState("");
   const [emailHeader, setEmailHeader] = useState("");
@@ -25,8 +25,6 @@ const MailModal: FC<MailModalProps> = (props) => {
 
   const docs = useSelector((state: RootState) => getAllDocumentsToSend(state));
   console.log(docs);
-
-  const dispatch = useDispatch();
 
   useEffect(() => {}, [docs]);
 

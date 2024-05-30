@@ -2,7 +2,7 @@ import { ChangeEvent, FC, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./DocumentsFilterModal.module.css";
 import { IDocument, IUserGroup } from "../../types/Types";
-import { IDocumentFilters, groupResponseDTO } from "../../pages/DocumentsPage/DocumentsPage";
+import { IDocumentFilters } from "../../pages/DocumentsPage/DocumentsPage";
 import { EDocumentStatus } from "../../types/Enums";
 import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
 import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";

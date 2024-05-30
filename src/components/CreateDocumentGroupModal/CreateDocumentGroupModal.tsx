@@ -1,9 +1,8 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./CreateDocumentGroupModal.module.css";
 import {
   useCreateDocumentGroupMutation,
-  useDeleteDocumentGroupByIdMutation,
   useGetAllDocumentsGroupsQuery,
   useGetAllDocumentsQuery,
 } from "../../features/documents/documentsApiSlice";
@@ -25,11 +24,11 @@ const CreateDocumentGroupModal: FC<CreateDocumentGroupModalProps> = (props) => {
   const [addingUserGroupIds, setAddingUserGroupIds] = useState<number[]>([]);
 
   const [createDocumentGroup] = useCreateDocumentGroupMutation();
-  const [deleteDocumentGroupById] = useDeleteDocumentGroupByIdMutation();
+  // const [deleteDocumentGroupById] = useDeleteDocumentGroupByIdMutation();
   // const [userGroup, setUserGroup] = useState(0);
-  const [documentGroupToDelete, setDocumentGroupToDelete] = useState(0);
+  // const [documentGroupToDelete, setDocumentGroupToDelete] = useState(0);
 
-  const { data: allDocumentsGroups, refetch: getAllDocumentsGroups } = useGetAllDocumentsGroupsQuery();
+  const { refetch: getAllDocumentsGroups } = useGetAllDocumentsGroupsQuery();
   const { data: fetchedDocuments } = useGetAllDocumentsQuery();
 
   const handleCreateGroup = (e: React.FormEvent<HTMLFormElement>) => {
@@ -50,13 +49,13 @@ const CreateDocumentGroupModal: FC<CreateDocumentGroupModalProps> = (props) => {
     });
   };
 
-  const handleDeleteGroup = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(documentGroupToDelete);
-    deleteDocumentGroupById(documentGroupToDelete).then(() => {
-      getAllDocumentsGroups();
-    });
-  };
+  // const handleDeleteGroup = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   console.log(documentGroupToDelete);
+  //   deleteDocumentGroupById(documentGroupToDelete).then(() => {
+  //     getAllDocumentsGroups();
+  //   });
+  // };
 
   return (
     <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import styles from "./TableUserItemReadonly.module.css";
 import { IUser } from "../../types/Types";
 
@@ -14,7 +14,7 @@ interface TableUsersItemProps {
 }
 
 const TableUserItemReadonly: FC<TableUsersItemProps> = ({ user, variant, number }) => {
-  const { id, firstName, lastName, patronymic, email, department, post, groupResponseDTOs } = user;
+  const { firstName, lastName, patronymic, email, department, post, groupResponseDTOs } = user;
 
   return (
     <tr className={styles[variant]}>

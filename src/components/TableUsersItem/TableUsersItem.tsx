@@ -33,8 +33,6 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handle
   const [handleHideDeleteModal, setHandleHideDeleteModal] = useState(false);
   const [handleHideDisableModal, setHandleHideDisableModal] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
-  const [isDisableUser, setIsDisableUser] = useState(false);
-  const [isActivateUser, setIsActivateUser] = useState(false);
   // console.log(isUserChanged);
 
   let updatedUser: any;
@@ -52,17 +50,7 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handle
         handleUdateTable();
       });
     }
-    if (isDisableUser) {
-      disableUserById(id).then(() => {
-        handleUdateTable();
-      });
-    }
-    if (isActivateUser) {
-      activateUserById(id).then(() => {
-        handleUdateTable();
-      });
-    }
-  }, [isDelete, isDisableUser]);
+  }, [isDelete]);
 
   const handleActivateUser = () => {
     activateUserById(id).then(() => {

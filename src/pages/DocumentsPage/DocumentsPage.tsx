@@ -7,7 +7,7 @@ import DocumentsTable from "../../components/DocumentsTable/DocumentsTable";
 import { Badge, Button, Form, InputGroup } from "react-bootstrap";
 import styles from "./DocumentsPage.module.css";
 import CreateDocumentModal from "../../components/CreateDocumentModal/CreateDocumentModal";
-import { IDocument, IUser } from "../../types/Types";
+import { IDocument } from "../../types/Types";
 import { useDispatch } from "react-redux";
 import { documentApiSlice } from "../../features/documents/documentsApiSlice";
 import searchImg from "./../../assets/img/icons/search.svg";

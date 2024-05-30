@@ -90,6 +90,8 @@ const TasksTableItem: FC<TasksTableItemProps> = ({ task, variant, handleUdateTab
             </svg>
           </button>
           <DeleteModal
+            header="Удаление задачи"
+            buttontext="Удалить"
             text={`Вы уверены, что хотите удалить задачу ${task.header}?`}
             onHide={() => setHandleHideDeleteModal(false)}
             show={handleHideDeleteModal}

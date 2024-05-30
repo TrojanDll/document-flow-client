@@ -1,15 +1,9 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditDocumentGroupModal.module.css";
-import {
-  useCreateDocumentGroupMutation,
-  useGetAllDocumentsGroupsQuery,
-  useGetAllDocumentsQuery,
-  useUpdateDocumentGroupByIdMutation,
-} from "../../features/documents/documentsApiSlice";
-import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
+import { useUpdateDocumentGroupByIdMutation } from "../../features/documents/documentsApiSlice";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
-import { IDocumentGroupResponse, IUserGroup } from "../../types/Types";
+import { IDocumentGroupResponse } from "../../types/Types";
 
 interface CreateDocumentGroupModalProps {
   props?: any;
@@ -24,15 +18,12 @@ const EditDocumentGroupModal: FC<CreateDocumentGroupModalProps> = (props) => {
 
   // console.log(setGroupFilterItems, setPostFilterItems, setDepartmentFilterItems);
   const [newGroupName, setNewGroupName] = useState<string>(currientDocumentGroup.name);
-  const [addingDocIds, setAddingDocIds] = useState<string[]>(currientDocumentGroup.docs.map((doc) => doc.id));
+  const [addingDocIds] = useState<string[]>(currientDocumentGroup.docs.map((doc) => doc.id));
   const [addingUserGroupIds, setAddingUserGroupIds] = useState<number[]>(
     currientDocumentGroup.userGroups.map((group) => group.id)
   );
-  const [usersGroups, setUsersGroups] = useState<IUserGroup[]>();
 
   const [updateDocumentGroup] = useUpdateDocumentGroupByIdMutation();
-
-  const { data: fetchedDocuments } = useGetAllDocumentsQuery();
 
   const handleUpdateGroup = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

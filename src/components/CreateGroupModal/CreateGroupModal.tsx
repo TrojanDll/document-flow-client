@@ -6,7 +6,6 @@ import {
   useDeleteUsersGroupByIdMutation,
   useGetAllUsersGroupsQuery,
 } from "../../features/admin/adminApiSlice";
-import { useGetAllDocumentsGroupsQuery } from "../../features/documents/documentsApiSlice";
 
 interface CreateGroupModalProps {
   props?: any;

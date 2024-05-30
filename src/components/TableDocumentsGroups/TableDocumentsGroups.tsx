@@ -1,9 +1,8 @@
 import { FC } from "react";
 import styles from "./TableDocumentsGroups.module.css";
 import { Table } from "react-bootstrap";
-import TableUsersItem, { TableUsersItemVariants } from "../TableUsersItem/TableUsersItem";
-import { IDocumentGroupResponse, IUser } from "../../types/Types";
-import TableUserItemReadonly from "../TableUserItemReadonly/TableUserItemReadonly";
+import { TableUsersItemVariants } from "../TableUsersItem/TableUsersItem";
+import { IDocumentGroupResponse } from "../../types/Types";
 import TableDocumentsGroupsItem from "../TableDocumentsGroupsItem/TableDocumentsGroupsItem";
 
 interface ITableDocumentsGroupsProps {
