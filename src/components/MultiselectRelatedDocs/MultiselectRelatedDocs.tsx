@@ -1,3 +1,4 @@
+import Select, { OnChangeValue } from "react-select";
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import { Badge, Button, Form } from "react-bootstrap";
 import styles from "./MultiselectRelatedDocs.module.css";
@@ -16,6 +17,11 @@ interface MultiselectRelatedDocsProps {
   header: string;
 }
 
+interface IOption {
+  label: string;
+  value: string;
+}
+
 const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
   handleUpdateDocuments,
   currientDocumentInfo,
@@ -24,9 +30,11 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
   header,
   preselectedDocuments,
 }) => {
-  const [notSelectedDocuments, setNotSelectedDocuments] = useState<IDocument[]>([]);
-  const [selectedDocuments, setSelectedDocuments] = useState<IDocument[]>([]);
+  const [notSelectedDocuments, setNotSelectedDocuments] = useState<IOption[]>([]);
+  const [selectedDocuments, setSelectedDocuments] = useState<IOption[]>([]);
   const [documentsIds, setDocumentsIds] = useState<string[]>([]);
+
+  const [currentItem, setCurrentItem] = useState();
 
   const dispatch = useDispatch();
 
@@ -93,8 +101,21 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
       baseNotSelectedDocs = documents;
     }
 
-    setNotSelectedDocuments(baseNotSelectedDocs);
-    setSelectedDocuments(baseSelectedDocs);
+    setNotSelectedDocuments(
+      baseNotSelectedDocs.map(
+        (baseNotSelectedDoc) => ({ value: baseNotSelectedDoc.id, label: baseNotSelectedDoc.fileName } as IOption)
+      )
+    );
+    setSelectedDocuments(
+      baseSelectedDocs.map(
+        (baseSelectedDoc) => ({ value: baseSelectedDoc.id, label: baseSelectedDoc.fileName } as IOption)
+      )
+    );
+    console.log(
+      baseSelectedDocs.map(
+        (baseSelectedDoc) => ({ value: baseSelectedDoc.id, label: baseSelectedDoc.fileName } as IOption)
+      )
+    );
   };
 
   // useEffect(() => {
@@ -107,7 +128,7 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
   // }, [userGroup]);
 
   useEffect(() => {
-    setDocumentsIds(selectedDocuments.map((item) => item.id));
+    setDocumentsIds(selectedDocuments.map((item) => item.value));
     console.log("Выбраные связанные документы в компоненте MultiselectRelatedDocs");
     console.log(selectedDocuments);
   }, [selectedDocuments]);
@@ -122,46 +143,66 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
     handleUpdateDocuments(documentsIds);
   }, [documentsIds]);
 
-  const handleSelectDocuments = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    notSelectedDocuments.forEach((item) => {
-      if (item.id === e.target.value) {
-        setSelectedDocuments([...selectedDocuments, item]);
-      }
-    });
+  // const handleSelectDocuments = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   notSelectedDocuments.forEach((item) => {
+  //     if (item.id === e.target.value) {
+  //       setSelectedDocuments([...selectedDocuments, item]);
+  //     }
+  //   });
 
-    setNotSelectedDocuments(
-      notSelectedDocuments.filter((item) => {
-        if (item.id !== e.target.value) {
-          return item;
-        }
-      })
-    );
+  //   setNotSelectedDocuments(
+  //     notSelectedDocuments.filter((item) => {
+  //       if (item.id !== e.target.value) {
+  //         return item;
+  //       }
+  //     })
+  //   );
+  // };
+
+  const handleSelectDocuments = (newValue: OnChangeValue<IOption, boolean>) => {
+    console.log("handleSelectDocuments");
+    // notSelectedDocuments.forEach((item) => {
+    //   if (item.value === (newValue as IOption).value) {
+    //     setSelectedDocuments([...selectedDocuments, item]);
+    //   }
+    // });
+
+    // setSelectedDocuments([...selectedDocuments, newValue as IOption]);
+    setSelectedDocuments(newValue as IOption[]);
+
+    // setNotSelectedDocuments(
+    //   notSelectedDocuments.filter((item) => {
+    //     if (item.value !== (newValue as IOption).value) {
+    //       return item;
+    //     }
+    //   })
+    // );
   };
 
-  const handleUnselectDocuments = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log(e.currentTarget.dataset.value);
-    const selectedId = e.currentTarget.dataset.value;
+  // const handleUnselectDocuments = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   console.log(e.currentTarget.dataset.value);
+  //   const selectedId = e.currentTarget.dataset.value;
 
-    if (e.currentTarget.dataset.value === "closeBtn") {
-      console.log("closeBtn");
-    } else {
-      selectedDocuments.forEach((item) => {
-        if (item.id === selectedId) {
-          setNotSelectedDocuments([...notSelectedDocuments, item]);
-        }
-      });
+  //   if (e.currentTarget.dataset.value === "closeBtn") {
+  //     console.log("closeBtn");
+  //   } else {
+  //     selectedDocuments.forEach((item) => {
+  //       if (item.id === selectedId) {
+  //         setNotSelectedDocuments([...notSelectedDocuments, item]);
+  //       }
+  //     });
 
-      setSelectedDocuments(
-        selectedDocuments.filter((item) => {
-          if (item.id !== selectedId) {
-            return item;
-          }
-        })
-      );
-    }
+  //     setSelectedDocuments(
+  //       selectedDocuments.filter((item) => {
+  //         if (item.id !== selectedId) {
+  //           return item;
+  //         }
+  //       })
+  //     );
+  //   }
 
-    dispatch(deleteDocumentToSend({ docToSendId: selectedId as string }));
-  };
+  //   dispatch(deleteDocumentToSend({ docToSendId: selectedId as string }));
+  // };
 
   // const handleUnSelectRelatedDocument = (e: React.MouseEvent<HTMLButtonElement>) => {
   //   const selectedId = e.currentTarget.dataset.value;
@@ -183,7 +224,15 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
   return (
     <Form.Group controlId="department">
       <Form.Label>{header}</Form.Label>
-      <Form.Select
+
+      <Select
+        isMulti={true}
+        onChange={handleSelectDocuments}
+        value={selectedDocuments}
+        options={notSelectedDocuments}
+      />
+
+      {/* <Form.Select
         disabled={isDisabled}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => handleSelectDocuments(e)}
         aria-label="Выберите документы"
@@ -211,7 +260,7 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
               </Badge>
             </Button>
           ))}
-      </div>
+      </div> */}
     </Form.Group>
   );
 };
