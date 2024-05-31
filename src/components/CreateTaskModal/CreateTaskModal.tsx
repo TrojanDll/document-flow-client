@@ -83,6 +83,7 @@ const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
               onChange={(e: ChangeEvent<HTMLInputElement>) => setHeader(e.target.value)}
               type="text"
               placeholder="Введите название"
+              required
             />
           </Form.Group>
 
@@ -103,6 +104,7 @@ const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
               onChange={(e: ChangeEvent<HTMLInputElement>) => setDeadlineRawFormat(e.target.value)}
               type="date"
               placeholder="Введите дату"
+              required
             />
           </Form.Group>
 

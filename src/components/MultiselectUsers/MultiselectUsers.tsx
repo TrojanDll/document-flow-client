@@ -1,4 +1,5 @@
 import { ChangeEvent, FC, useEffect, useState } from "react";
+import Select, { OnChangeValue } from "react-select";
 import { Badge, Button, Form } from "react-bootstrap";
 import styles from "./MultiselectUsers.module.css";
 import closeImg from "./../../assets/img/icons/close.svg";
@@ -11,9 +12,19 @@ interface MultiselectUsersProps {
   users: IUser[];
 }
 
+interface IOption {
+  value: string;
+  label: string;
+}
+
 const MultiselectUsers: FC<MultiselectUsersProps> = ({ isDisabled, users, handleUpdateUsers, fetchedUsersList }) => {
-  const [notSelectedUsers, setNotSelectedUsers] = useState<IUser[]>(users);
-  const [selectedUsers, setSelectedUsers] = useState<IUser[]>([]);
+  const [notSelectedUsers, setNotSelectedUsers] = useState<IOption[]>(
+    users.map((user) => ({
+      value: user.email ? user.email : "",
+      label: `${user.firstName + " " + user.lastName + " " + user.patronymic}`,
+    }))
+  );
+  const [selectedUsers, setSelectedUsers] = useState<IOption[]>([]);
   const [userEmails, setUserEmails] = useState<string[]>([]);
 
   useEffect(() => {
@@ -37,55 +48,78 @@ const MultiselectUsers: FC<MultiselectUsersProps> = ({ isDisabled, users, handle
       baseNotSelectedUsers = users;
     }
 
-    setNotSelectedUsers(baseNotSelectedUsers);
-    setSelectedUsers(baseSelectedUsers);
+    setNotSelectedUsers(
+      baseNotSelectedUsers.map((user) => ({
+        value: user.email ? user.email : "",
+        label: `${user.firstName + " " + user.lastName + " " + user.patronymic}`,
+      }))
+    );
+    setSelectedUsers(
+      baseSelectedUsers.map((user) => ({
+        value: user.email ? user.email : "",
+        label: `${user.firstName + " " + user.lastName + " " + user.patronymic}`,
+      }))
+    );
   }, []);
 
   useEffect(() => {
-    setUserEmails(selectedUsers.map((item) => (item.email ? item.email : "")));
+    setUserEmails(selectedUsers.map((item) => (item.value ? item.value : "")));
   }, [selectedUsers]);
 
   useEffect(() => {
     handleUpdateUsers(userEmails);
   }, [userEmails]);
 
-  const handleSelectUsersGroup = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    notSelectedUsers.forEach((item) => {
-      if (item.id === +e.target.value) {
-        setSelectedUsers([...selectedUsers, item]);
-      }
-    });
+  // const handleSelectUsersGroup = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   notSelectedUsers.forEach((item) => {
+  //     if (item.id === +e.target.value) {
+  //       setSelectedUsers([...selectedUsers, item]);
+  //     }
+  //   });
 
-    setNotSelectedUsers(
-      notSelectedUsers.filter((item) => {
-        if (item.id !== +e.target.value) {
-          return item;
-        }
-      })
-    );
-  };
+  //   setNotSelectedUsers(
+  //     notSelectedUsers.filter((item) => {
+  //       if (item.id !== +e.target.value) {
+  //         return item;
+  //       }
+  //     })
+  //   );
+  // };
 
-  const handleUnselectUsersGroup = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const selectedId = e.currentTarget.dataset.value ? +e.currentTarget.dataset.value : 0;
-    selectedUsers.forEach((item) => {
-      if (item.id === selectedId) {
-        setNotSelectedUsers([...notSelectedUsers, item]);
-      }
-    });
+  // const handleUnselectUsersGroup = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   const selectedId = e.currentTarget.dataset.value ? +e.currentTarget.dataset.value : 0;
+  //   selectedUsers.forEach((item) => {
+  //     if (item.id === selectedId) {
+  //       setNotSelectedUsers([...notSelectedUsers, item]);
+  //     }
+  //   });
 
-    setSelectedUsers(
-      selectedUsers.filter((item) => {
-        if (item.id !== selectedId) {
-          return item;
-        }
-      })
-    );
+  //   setSelectedUsers(
+  //     selectedUsers.filter((item) => {
+  //       if (item.id !== selectedId) {
+  //         return item;
+  //       }
+  //     })
+  //   );
+  // };
+
+  const handleSelectUsers = (newValue: OnChangeValue<IOption, boolean>) => {
+    setSelectedUsers(newValue as IOption[]);
   };
 
   return (
     <Form.Group controlId="department">
       <Form.Label>Назначить задачу пользователям:</Form.Label>
-      <Form.Select
+
+      <Select
+        isMulti={true}
+        onChange={handleSelectUsers}
+        value={selectedUsers}
+        options={notSelectedUsers}
+        placeholder="Пользователи"
+      />
+
+      {/* <Form.Select
         disabled={isDisabled}
         onChange={(e: ChangeEvent<HTMLSelectElement>) => handleSelectUsersGroup(e)}
         aria-label="Выберите группу"
@@ -116,7 +150,7 @@ const MultiselectUsers: FC<MultiselectUsersProps> = ({ isDisabled, users, handle
               </Badge>
             </Button>
           ))}
-      </div>
+      </div> */}
     </Form.Group>
   );
 };

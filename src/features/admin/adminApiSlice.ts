@@ -19,7 +19,7 @@ interface IGetUserById {
 export const adminApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getUsers: builder.query<IUser[], void>({
-      query: () => "/api/admin/users",
+      query: () => "/api/users/all",
     }),
     getUserById: builder.mutation({
       query: (data?: IGetUserById) => ({

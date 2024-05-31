@@ -3,11 +3,11 @@ import styles from "./UsersPage.module.css";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import ContentContainer from "../../components/ContentContainer/ContentContainer";
 import PageTitle from "../../components/PageTitle/PageTitle";
-import { useGetCurrientGroupMembersQuery } from "../../features/users/usersApiSlice";
 import TableUsers from "../../components/TableUsers/TableUsers";
+import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
 
 const UsersPage: FC = () => {
-  const { data: currientGroupMembers } = useGetCurrientGroupMembersQuery();
+  const { data: currientGroupMembers } = useGetUsersQuery();
 
   return (
     <div className={styles.layout}>

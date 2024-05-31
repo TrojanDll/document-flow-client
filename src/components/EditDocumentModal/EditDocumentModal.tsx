@@ -177,6 +177,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
               isDisabled={!isCurrientUserOwner}
               currientDocumentInfo={documentData}
               handleUpdateUsersGroups={handleUpdateUsersGroups}
+              preselectedGroups={documentData.documentGroup?.userGroups}
             />
           </div>
 

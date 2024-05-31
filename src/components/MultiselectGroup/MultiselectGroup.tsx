@@ -53,7 +53,23 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
     console.log("usersGroups");
     console.log(usersGroups);
     let baseSelectedGroups: IUserGroup[] = [];
-    if (currientDocumentInfo) {
+    if (preselectedGroups && fetchedUsersGroups) {
+      setNotSelectedUsersGroups(
+        fetchedUsersGroups.filter((fetchedUsersGroup) => {
+          let isContains = false;
+          preselectedGroups.forEach((preselectedGroup) => {
+            if (preselectedGroup.id === fetchedUsersGroup.id) {
+              isContains = true;
+            }
+          });
+          if (isContains) {
+            baseSelectedGroups.push(fetchedUsersGroup);
+          } else {
+            return fetchedUsersGroup;
+          }
+        })
+      );
+    } else if (currientDocumentInfo) {
       setNotSelectedUsersGroups(
         usersGroups.filter((group) => {
           const currientDocumentUsersGroups = currientDocumentInfo.userGroups;
@@ -74,44 +90,6 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
             return group;
           } else {
             baseSelectedGroups.push(group);
-          }
-        })
-      );
-    } else if (preselectedGroups && fetchedUsersGroups) {
-      setNotSelectedUsersGroups(
-        // preselectedGroups.filter((preselectedGroup) => {
-        //   // const currientUserGroups = editableUserInfo?.groupResponseDTOs?.map((item) => item.id);
-        //   // console.log("currientUserGroups");
-        //   // console.log(currientUserGroups);
-
-        //   let isContains = false
-        //   fetchedUsersGroups?.forEach(fetchedUsersGroup => {
-        //     if (preselectedGroup.id === fetchedUsersGroup.id) {
-        //       isContains = true;
-        //     }
-
-        //   })
-        //   if (isContains) {
-
-        //   }
-        //   // if (currientUserGroups?.indexOf(group.id) === -1) {
-        //   //   return group;
-        //   // } else {
-        //   //   baseSelectedGroups.push(group);
-        //   // }
-        // })
-
-        fetchedUsersGroups.filter((fetchedUsersGroup) => {
-          let isContains = false;
-          preselectedGroups.forEach((preselectedGroup) => {
-            if (preselectedGroup.id === fetchedUsersGroup.id) {
-              isContains = true;
-            }
-          });
-          if (isContains) {
-            baseSelectedGroups.push(fetchedUsersGroup);
-          } else {
-            return fetchedUsersGroup;
           }
         })
       );
