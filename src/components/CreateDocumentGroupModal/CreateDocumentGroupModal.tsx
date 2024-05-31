@@ -18,16 +18,11 @@ interface CreateDocumentGroupModalProps {
 const CreateDocumentGroupModal: FC<CreateDocumentGroupModalProps> = (props) => {
   const { show, onHide } = props;
 
-  // console.log(setGroupFilterItems, setPostFilterItems, setDepartmentFilterItems);
   const [newGroupName, setNewGroupName] = useState("");
   const [addingDocIds, setAddingDocIds] = useState<string[]>([]);
   const [addingUserGroupIds, setAddingUserGroupIds] = useState<number[]>([]);
 
   const [createDocumentGroup] = useCreateDocumentGroupMutation();
-  // const [deleteDocumentGroupById] = useDeleteDocumentGroupByIdMutation();
-  // const [userGroup, setUserGroup] = useState(0);
-  // const [documentGroupToDelete, setDocumentGroupToDelete] = useState(0);
-
   const { refetch: getAllDocumentsGroups } = useGetAllDocumentsGroupsQuery();
   const { data: fetchedDocuments } = useGetAllDocumentsQuery();
 
@@ -38,24 +33,11 @@ const CreateDocumentGroupModal: FC<CreateDocumentGroupModalProps> = (props) => {
       docIds: addingDocIds,
       userGroupIds: addingUserGroupIds,
     }).then(() => {
-      console.log({
-        name: newGroupName,
-        docIds: addingDocIds,
-        userGroupIds: addingUserGroupIds,
-      });
       getAllDocumentsGroups();
       setNewGroupName("");
       onHide();
     });
   };
-
-  // const handleDeleteGroup = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   console.log(documentGroupToDelete);
-  //   deleteDocumentGroupById(documentGroupToDelete).then(() => {
-  //     getAllDocumentsGroups();
-  //   });
-  // };
 
   return (
     <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
@@ -63,7 +45,6 @@ const CreateDocumentGroupModal: FC<CreateDocumentGroupModalProps> = (props) => {
         <Modal.Title id="contained-modal-title-vcenter">Создание группы документов</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {/* <h3 className={styles.subtitle}>Создание группы</h3> */}
         <Form onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleCreateGroup(e)}>
           <div className={styles.addGroupWrapper}>
             <Form.Group className={styles.input}>
@@ -95,33 +76,6 @@ const CreateDocumentGroupModal: FC<CreateDocumentGroupModalProps> = (props) => {
             Добавить
           </Button>
         </Form>
-        {/* 
-        <h3 className={styles.subtitle}>Удаление группы</h3>
-
-        <Form
-          className={styles.deleteGroupWrapper}
-          onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleDeleteGroup(e)}
-        >
-          <Form.Group className={styles.deleteGroupSelect}>
-            <Form.Select
-              value={documentGroupToDelete}
-              onChange={(e: ChangeEvent<HTMLSelectElement>) => setDocumentGroupToDelete(+e.target.value)}
-              aria-label="Выберите группу"
-            >
-              <option>Список групп</option>
-              {allDocumentsGroups
-                ? allDocumentsGroups.map((group) => (
-                    <option key={group.id} value={group.id}>
-                      {group.name}
-                    </option>
-                  ))
-                : ""}
-            </Form.Select>
-          </Form.Group>
-          <Button className={styles.deleteGroupSubmit} variant="danger" type="submit">
-            Удалить
-          </Button>
-        </Form> */}
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={onHide}>Отмена</Button>

@@ -1,10 +1,12 @@
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import { Badge, Button, Form } from "react-bootstrap";
 import styles from "./MultiselectGroup.module.css";
-import closeImg from "./../../assets/img/icons/close.svg";
+
 import { IDocument, IUser, IUserGroup } from "../../types/Types";
 import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
+
+import closeImg from "./../../assets/img/icons/close.svg";
 
 interface MultiselectGroupProps {
   // Отправляет наверх id группы
@@ -50,8 +52,6 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
   }, [isLoading]);
 
   useEffect(() => {
-    console.log("usersGroups");
-    console.log(usersGroups);
     let baseSelectedGroups: IUserGroup[] = [];
     if (preselectedGroups && fetchedUsersGroups) {
       setNotSelectedUsersGroups(
@@ -84,8 +84,6 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
       setNotSelectedUsersGroups(
         usersGroups.filter((group) => {
           const currientUserGroups = editableUserInfo?.groupResponseDTOs?.map((item) => item.id);
-          console.log("currientUserGroups");
-          console.log(currientUserGroups);
           if (currientUserGroups?.indexOf(group.id) === -1) {
             return group;
           } else {
@@ -99,15 +97,6 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
 
     setSelectedUsersGroups(baseSelectedGroups);
   }, [usersGroups]);
-
-  // useEffect(() => {
-  //   console.log(notSelectedUsersGroups);
-  // }, [notSelectedUsersGroups]);
-
-  // let fetchedUsersGroups;
-  // useEffect(() => {
-  //   console.log(userGroup);
-  // }, [userGroup]);
 
   useEffect(() => {
     setUsersGroupsIds(selectedUsersGroups.map((item) => item.id));
@@ -136,8 +125,6 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
   const handleUnselectUsersGroup = (e: React.MouseEvent<HTMLButtonElement>) => {
     const selectedId = e.currentTarget.dataset.value ? +e.currentTarget.dataset.value : 0;
 
-    // if (selectedId !== fetchedCurrientUser.)
-
     selectedUsersGroups.forEach((item) => {
       if (item.id === selectedId) {
         setNotSelectedUsersGroups([...notSelectedUsersGroups, item]);
@@ -152,23 +139,6 @@ const MultiselectGroup: FC<MultiselectGroupProps> = ({
       })
     );
   };
-
-  // const handleUnSelectRelatedDocument = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   const selectedId = e.currentTarget.dataset.value;
-  //   selectedRelatedDocId.forEach((item) => {
-  //     if (item.id === selectedId) {
-  //       notSelectedRelatedDocId.push(item);
-  //     }
-  //   });
-
-  //   setSelectedRelatedDocId(
-  //     selectedRelatedDocId.filter((item) => {
-  //       if (item.id !== selectedId) {
-  //         return item;
-  //       }
-  //     })
-  //   );
-  // };
 
   return (
     <Form.Group controlId="department">

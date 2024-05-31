@@ -35,11 +35,6 @@ const MultiselectUsers: FC<MultiselectUsersProps> = ({
   const [userEmails, setUserEmails] = useState<string[]>([]);
 
   useEffect(() => {
-    console.log("users");
-    console.log(users);
-    console.log("preselectedUsers");
-    console.log(preselectedUsers);
-
     let baseSelectedUsers: IUser[] = [];
     let baseNotSelectedUsers: IUser[] = [];
 
@@ -93,39 +88,6 @@ const MultiselectUsers: FC<MultiselectUsersProps> = ({
     handleUpdateUsers(selectedUsers.map((item) => item.value));
   }, [userEmails]);
 
-  // const handleSelectUsersGroup = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   notSelectedUsers.forEach((item) => {
-  //     if (item.id === +e.target.value) {
-  //       setSelectedUsers([...selectedUsers, item]);
-  //     }
-  //   });
-
-  //   setNotSelectedUsers(
-  //     notSelectedUsers.filter((item) => {
-  //       if (item.id !== +e.target.value) {
-  //         return item;
-  //       }
-  //     })
-  //   );
-  // };
-
-  // const handleUnselectUsersGroup = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   const selectedId = e.currentTarget.dataset.value ? +e.currentTarget.dataset.value : 0;
-  //   selectedUsers.forEach((item) => {
-  //     if (item.id === selectedId) {
-  //       setNotSelectedUsers([...notSelectedUsers, item]);
-  //     }
-  //   });
-
-  //   setSelectedUsers(
-  //     selectedUsers.filter((item) => {
-  //       if (item.id !== selectedId) {
-  //         return item;
-  //       }
-  //     })
-  //   );
-  // };
-
   const handleSelectUsers = (newValue: OnChangeValue<IOption, boolean>) => {
     setSelectedUsers(newValue as IOption[]);
   };
@@ -142,39 +104,6 @@ const MultiselectUsers: FC<MultiselectUsersProps> = ({
         placeholder="Пользователи"
         isDisabled={isDisabled}
       />
-
-      {/* <Form.Select
-        disabled={isDisabled}
-        onChange={(e: ChangeEvent<HTMLSelectElement>) => handleSelectUsersGroup(e)}
-        aria-label="Выберите группу"
-      >
-        <option>Выберите пользователей</option>
-        {notSelectedUsers &&
-          notSelectedUsers.map((user) => (
-            <option key={user.id} value={user.id}>
-              {user.firstName} {user.patronymic} - {user.email}
-            </option>
-          ))}
-      </Form.Select>
-      <div className={styles.selectedItems}>
-        {selectedUsers &&
-          selectedUsers.map((user) => (
-            <Button
-              key={user.id}
-              variant="outline-secondary"
-              onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleUnselectUsersGroup(e)}
-              data-value={user.id}
-            >
-              {user.firstName} {user.patronymic} -{" "}
-              {user.groupResponseDTOs?.map((group) => (
-                <span className={styles.userGroupItem}>{group.name}; </span>
-              ))}
-              <Badge className={styles.badge} bg="light">
-                <img src={closeImg} alt="closeImg" />
-              </Badge>
-            </Button>
-          ))}
-      </div> */}
     </Form.Group>
   );
 };

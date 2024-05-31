@@ -1,9 +1,11 @@
 import { FC } from "react";
 import styles from "./TableDocumentsGroups.module.css";
 import { Table } from "react-bootstrap";
-import { TableUsersItemVariants } from "../TableUsersItem/TableUsersItem";
+
 import { IDocumentGroupResponse } from "../../types/Types";
 import TableDocumentsGroupsItem from "../TableDocumentsGroupsItem/TableDocumentsGroupsItem";
+
+import { TableUsersItemVariants } from "../TableUsersItem/TableUsersItem";
 
 interface ITableDocumentsGroupsProps {
   documentsGroups: IDocumentGroupResponse[];

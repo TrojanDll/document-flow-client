@@ -1,8 +1,8 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { Badge, Button, Form, InputGroup } from "react-bootstrap";
 import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
-import { IUser } from "../../types/Types";
 import styles from "./AdminPage.module.css";
+import { IUser } from "../../types/Types";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import ContentContainer from "../../components/ContentContainer/ContentContainer";
 import FilterModal from "../../components/FilterModal/FilterModal";
@@ -12,8 +12,8 @@ import CreateUserModal from "../../components/CreateUserModal/CreateUserModal";
 import CreateGroupModal from "../../components/CreateGroupModal/CreateGroupModal";
 import searchImg from "./../../assets/img/icons/search.svg";
 import CreateDocumentGroupModal from "../../components/CreateDocumentGroupModal/CreateDocumentGroupModal";
-import { useGetAllDocumentsGroupsQuery } from "../../features/documents/documentsApiSlice";
 import TableDocumentsGroups from "../../components/TableDocumentsGroups/TableDocumentsGroups";
+import { useGetAllDocumentsGroupsQuery } from "../../features/documents/documentsApiSlice";
 
 export interface IUsersFilters {
   groupFilter: string;
@@ -35,12 +35,10 @@ const AdminPage = () => {
   const [modifiedUsers, setModifiedUsers] = useState<IUser[]>([]);
   const [searchedUsers, setSearchedUsers] = useState<IUser[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<IUser[]>([]);
-
   const [groupFilter, setGroupFilter] = useState("");
   const [postFilter, setPostFilter] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("");
   const [countOfFilters, setCountOfFilters] = useState(0);
-
   const [currientTable, setCurrientTable] = useState<ECurrientTable>(ECurrientTable.USERS_TABLE);
 
   const { data: fetchedUsers, isLoading, refetch: getUsers } = useGetUsersQuery();
@@ -177,13 +175,6 @@ const AdminPage = () => {
           Настроить группы пользователей
         </Button>
         <CreateGroupModal show={modalCreateGroupShow} onHide={() => setModalCreateGroupShow(false)} />
-
-        {/* <Form className={styles.addGroupWrapper}>
-            <Form.Control type="text" placeholder="Новая группа документов" />
-            <Button variant="secondary" type="submit">
-              Добавить
-            </Button>
-          </Form> */}
 
         <Button variant="success" onClick={() => setModalCreateUserShow(true)}>
           + Добавить пользователя

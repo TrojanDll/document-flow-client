@@ -30,31 +30,11 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
   const [selectedDocuments, setSelectedDocuments] = useState<IOption[]>([]);
   const [documentsIds, setDocumentsIds] = useState<string[]>([]);
 
-  // useEffect(() => {
-  //   let baseSelectedDocs: IDocument[] = [];
-  //   setNotSelectedDocuments(
-  //     documents.filter((document) => {
-  //       const currientDocumentRelatedDocs = currientDocumentInfo ? currientDocumentInfo.relatedDocIds : [];
-  //       console.log("currientDocumentRelatedDocs");
-  //       console.log(currientDocumentRelatedDocs);
-  //       if (currientDocumentRelatedDocs?.indexOf(document.id) === -1) {
-  //         return document;
-  //       } else {
-  //         baseSelectedDocs.push(document);
-  //       }
-  //     })
-  //   );
-  //   setSelectedDocuments(baseSelectedDocs);
-  // }, []);
-
   useEffect(() => {
     initMultiselect();
   }, []);
 
   const initMultiselect = () => {
-    console.log("currientDocumentInfo");
-    console.log(currientDocumentInfo);
-
     let baseSelectedDocs: IDocument[] = [];
     let baseNotSelectedDocs: IDocument[] = [];
 
@@ -103,115 +83,19 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
         (baseSelectedDoc) => ({ value: baseSelectedDoc.id, label: baseSelectedDoc.fileName } as IOption)
       )
     );
-    console.log(
-      baseSelectedDocs.map(
-        (baseSelectedDoc) => ({ value: baseSelectedDoc.id, label: baseSelectedDoc.fileName } as IOption)
-      )
-    );
   };
-
-  // useEffect(() => {
-  //   console.log(notSelectedUsersGroups);
-  // }, [notSelectedUsersGroups]);
-
-  // let fetchedUsersGroups;
-  // useEffect(() => {
-  //   console.log(userGroup);
-  // }, [userGroup]);
 
   useEffect(() => {
     setDocumentsIds(selectedDocuments.map((item) => item.value));
-    console.log("Выбраные связанные документы в компоненте MultiselectRelatedDocs");
-    console.log(selectedDocuments);
   }, [selectedDocuments]);
-
-  useEffect(() => {
-    // setDocumentsIds(selectedDocuments.map((item) => item.id));
-    console.log("notSelectedDocuments");
-    console.log(notSelectedDocuments);
-  }, [notSelectedDocuments]);
 
   useEffect(() => {
     handleUpdateDocuments(documentsIds);
   }, [documentsIds]);
 
-  // const handleSelectDocuments = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   notSelectedDocuments.forEach((item) => {
-  //     if (item.id === e.target.value) {
-  //       setSelectedDocuments([...selectedDocuments, item]);
-  //     }
-  //   });
-
-  //   setNotSelectedDocuments(
-  //     notSelectedDocuments.filter((item) => {
-  //       if (item.id !== e.target.value) {
-  //         return item;
-  //       }
-  //     })
-  //   );
-  // };
-
   const handleSelectDocuments = (newValue: OnChangeValue<IOption, boolean>) => {
-    console.log("handleSelectDocuments");
-    // notSelectedDocuments.forEach((item) => {
-    //   if (item.value === (newValue as IOption).value) {
-    //     setSelectedDocuments([...selectedDocuments, item]);
-    //   }
-    // });
-
-    // setSelectedDocuments([...selectedDocuments, newValue as IOption]);
     setSelectedDocuments(newValue as IOption[]);
-
-    // setNotSelectedDocuments(
-    //   notSelectedDocuments.filter((item) => {
-    //     if (item.value !== (newValue as IOption).value) {
-    //       return item;
-    //     }
-    //   })
-    // );
   };
-
-  // const handleUnselectDocuments = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   console.log(e.currentTarget.dataset.value);
-  //   const selectedId = e.currentTarget.dataset.value;
-
-  //   if (e.currentTarget.dataset.value === "closeBtn") {
-  //     console.log("closeBtn");
-  //   } else {
-  //     selectedDocuments.forEach((item) => {
-  //       if (item.id === selectedId) {
-  //         setNotSelectedDocuments([...notSelectedDocuments, item]);
-  //       }
-  //     });
-
-  //     setSelectedDocuments(
-  //       selectedDocuments.filter((item) => {
-  //         if (item.id !== selectedId) {
-  //           return item;
-  //         }
-  //       })
-  //     );
-  //   }
-
-  //   dispatch(deleteDocumentToSend({ docToSendId: selectedId as string }));
-  // };
-
-  // const handleUnSelectRelatedDocument = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   const selectedId = e.currentTarget.dataset.value;
-  //   selectedRelatedDocId.forEach((item) => {
-  //     if (item.id === selectedId) {
-  //       notSelectedRelatedDocId.push(item);
-  //     }
-  //   });
-
-  //   setSelectedRelatedDocId(
-  //     selectedRelatedDocId.filter((item) => {
-  //       if (item.id !== selectedId) {
-  //         return item;
-  //       }
-  //     })
-  //   );
-  // };
 
   return (
     <Form.Group controlId="department">
@@ -224,36 +108,6 @@ const MultiselectRelatedDocs: FC<MultiselectRelatedDocsProps> = ({
         options={notSelectedDocuments}
         placeholder="Документы"
       />
-
-      {/* <Form.Select
-        disabled={isDisabled}
-        onChange={(e: ChangeEvent<HTMLSelectElement>) => handleSelectDocuments(e)}
-        aria-label="Выберите документы"
-      >
-        <option>Список документов</option>
-        {notSelectedDocuments &&
-          notSelectedDocuments.map((documents) => (
-            <option key={documents.id} value={documents.id}>
-              {documents.fileName}
-            </option>
-          ))}
-      </Form.Select>
-      <div className={styles.selectedItems}>
-        {selectedDocuments &&
-          selectedDocuments.map((documents) => (
-            <Button
-              key={documents.id}
-              variant="outline-secondary"
-              onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleUnselectDocuments(e)}
-              data-value={documents.id}
-            >
-              {documents.fileName}
-              <Badge data-type="closeBtn" bg="light">
-                <img src={closeImg} alt="closeImg" />
-              </Badge>
-            </Button>
-          ))}
-      </div> */}
     </Form.Group>
   );
 };

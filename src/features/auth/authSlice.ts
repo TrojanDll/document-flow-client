@@ -10,8 +10,6 @@ const authSlice = createSlice({
   initialState: <IauthSliceState>{ accessToken: "", refreshToken: "" },
   reducers: {
     setCredentials: (state, action) => {
-      console.log(action.payload);
-
       const { accessToken, refreshToken, role } = action.payload.data;
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);

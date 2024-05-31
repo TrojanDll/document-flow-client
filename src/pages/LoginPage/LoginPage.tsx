@@ -27,12 +27,12 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const userData = await login({ email, password });
-      console.log(userData);
-      dispatch(setCredentials({ ...userData }));
-      setEmail("");
-      setPassword("");
-      navigate("/profile");
+      login({ email, password }).then((userData) => {
+        dispatch(setCredentials({ ...userData }));
+        setEmail("");
+        setPassword("");
+        navigate("/profile");
+      });
     } catch (err) {
       console.log(err);
     }

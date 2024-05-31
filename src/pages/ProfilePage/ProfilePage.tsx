@@ -1,15 +1,18 @@
 import { FC, useEffect, useState } from "react";
+import { Button, Form } from "react-bootstrap";
+import styles from "./ProfilePage.module.css";
+
+import { IDocument } from "../../types/Types";
+
 import Sidebar from "../../components/Sidebar/Sidebar";
 import ContentContainer from "../../components/ContentContainer/ContentContainer";
-import PageTitle from "../../components/PageTitle/PageTitle";
-import styles from "./ProfilePage.module.css";
-import { Button, Form } from "react-bootstrap";
-// import searchImg from "./../../assets/img/icons/search.svg";
-import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
-import spinner from "./../../assets/img/icons/spinner.svg";
-import { useGetDocumentsByMyGroupQuery } from "../../features/documents/documentsApiSlice";
 import DocumentsTable from "../../components/DocumentsTable/DocumentsTable";
-import { IDocument } from "../../types/Types";
+import PageTitle from "../../components/PageTitle/PageTitle";
+
+import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
+import { useGetDocumentsByMyGroupQuery } from "../../features/documents/documentsApiSlice";
+
+import spinner from "./../../assets/img/icons/spinner.svg";
 
 const ProfilePage: FC = () => {
   const { data: fetchedCurrientUser, isLoading } = useGetCurrientUserQuery();
@@ -43,14 +46,6 @@ const ProfilePage: FC = () => {
       <Sidebar />
       <ContentContainer>
         <PageTitle>Профиль</PageTitle>
-        {/* <div className={styles.filters}>
-          <InputGroup className={styles.searchInput}>
-            <InputGroup.Text>
-              <img src={searchImg} alt="searchImg" />
-            </InputGroup.Text>
-            <Form.Control placeholder="Поиск..." aria-label="Username" />
-          </InputGroup>
-        </div> */}
 
         <Form className={styles.profileInfo}>
           <div className={styles.inputsRow}>

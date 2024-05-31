@@ -13,8 +13,6 @@ export const store = configureStore({
   devTools: true,
 });
 
-// Определяем RootState на основе store
 export type RootState = ReturnType<typeof store.getState>;
 
-// Экспортируем store как по умолчанию, так и тип RootState
 export default store;

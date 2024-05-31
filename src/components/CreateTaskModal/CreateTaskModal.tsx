@@ -1,11 +1,14 @@
 import { ChangeEvent, FC, FormEvent, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+
 import { ETaskStatus } from "../../types/Enums";
+import { ITaskRequest, IUser } from "../../types/Types";
+
 import { useGetDocumentsByMyGroupQuery } from "../../features/documents/documentsApiSlice";
 import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
-import MultiselectUsers from "../MultiselectUsers/MultiselectUsers";
 import { useCreateTaskMutation } from "../../features/tasks/tasksApiSlice";
-import { ITaskRequest, IUser } from "../../types/Types";
+
+import MultiselectUsers from "../MultiselectUsers/MultiselectUsers";
 
 interface CreateTaskModalProps {
   props?: any;
@@ -17,21 +20,20 @@ interface CreateTaskModalProps {
 const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
   const { show, handleUdateTable, onHide } = props;
 
-  const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
-  const { data: fetchedUsers } = useGetUsersQuery();
-  const [createTask] = useCreateTaskMutation();
-
   const [header, setHeader] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [deadlineRawFormat, setDeadlineRawFormat] = useState<string>("");
   const [docId, setDocId] = useState<string>("");
   const [userEmails, setUserEmails] = useState<string[]>([]);
 
+  const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
+  const { data: fetchedUsers } = useGetUsersQuery();
+  const [createTask] = useCreateTaskMutation();
+
   const handleSubmitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const deadlineIso = new Date(deadlineRawFormat).toISOString();
     const currientDate = new Date().toISOString();
-    console.log(currientDate);
 
     try {
       const dataToCreateTask: ITaskRequest = {
@@ -44,11 +46,8 @@ const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
         creationDate: currientDate,
       };
 
-      createTask(dataToCreateTask).then((resp: any) => {
-        console.log(resp);
+      createTask(dataToCreateTask).then(() => {
         handleUdateTable();
-        console.log("Запрос на создание таски: ");
-        console.log(dataToCreateTask);
         onHide();
       });
     } catch {}

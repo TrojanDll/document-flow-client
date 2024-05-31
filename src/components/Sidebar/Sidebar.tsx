@@ -1,6 +1,11 @@
 import { FC, useState } from "react";
 import styles from "./Sidebar.module.css";
 import { Link, useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import MailModal from "../MailModal/MailModal";
+
+import { logOut } from "../../features/auth/authSlice";
+import { useDispatch } from "react-redux";
 
 import profileImg from "./../../assets/img/icons/person.svg";
 import peopleImg from "./../../assets/img/icons/people.svg";
@@ -8,10 +13,6 @@ import taskImg from "./../../assets/img/icons/checkmark.svg";
 import documentImg from "./../../assets/img/icons/document.svg";
 import mailImg from "./../../assets/img/icons/mail.svg";
 import gearImg from "./../../assets/img/icons/gear.svg";
-import { Button } from "react-bootstrap";
-import { logOut } from "../../features/auth/authSlice";
-import { useDispatch } from "react-redux";
-import MailModal from "../MailModal/MailModal";
 
 const Sidebar: FC = () => {
   const [modalShow, setModalShow] = useState(false);

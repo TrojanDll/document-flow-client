@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./DocumentHistoryModal.module.css";
 import {
@@ -19,22 +19,13 @@ interface DocumentHistoryModalProps {
 const DocumentHistoryModal: FC<DocumentHistoryModalProps> = (props) => {
   const { show, onHide, isCurrientUserOwner, documentData } = props;
 
-  const {
-    data: fetchedDocumentHistory,
-    isSuccess: isFetchedDocumentHistorySuccess,
-    refetch: documentHistoryRefetch,
-  } = useGetDocumentChangesByDocumentIDQuery(documentData.id);
+  const { data: fetchedDocumentHistory, refetch: documentHistoryRefetch } = useGetDocumentChangesByDocumentIDQuery(
+    documentData.id
+  );
   const [createDocumentChange] = useCreateDocumentChangeMutation();
 
   const [header, setHeader] = useState("");
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    if (isFetchedDocumentHistorySuccess) {
-      console.log("fetchedDocumentHistory");
-      console.log(fetchedDocumentHistory);
-    }
-  }, [isFetchedDocumentHistorySuccess]);
 
   const handleCreateHistoryItem = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,8 +37,7 @@ const DocumentHistoryModal: FC<DocumentHistoryModalProps> = (props) => {
         message: message,
         changedDate: new Date().toISOString(),
       };
-      createDocumentChange(dataToCreateDocumentChange).then((resp) => {
-        console.log(resp);
+      createDocumentChange(dataToCreateDocumentChange).then(() => {
         documentHistoryRefetch();
         setHeader("");
         setMessage("");
@@ -59,11 +49,6 @@ const DocumentHistoryModal: FC<DocumentHistoryModalProps> = (props) => {
     onHide();
     setHeader("");
     setMessage("");
-  };
-
-  const updateHistoryItems = () => {
-    documentHistoryRefetch();
-    console.log("Обновление истории");
   };
 
   return (
@@ -112,7 +97,7 @@ const DocumentHistoryModal: FC<DocumentHistoryModalProps> = (props) => {
             ? fetchedDocumentHistory.map((item) => (
                 <DocumentHistoryItem
                   isCurrientUserOwner={isCurrientUserOwner}
-                  updateHistoryItems={updateHistoryItems}
+                  updateHistoryItems={documentHistoryRefetch}
                   key={item.id}
                   historyItem={item}
                 />

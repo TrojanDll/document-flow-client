@@ -1,12 +1,13 @@
 import { ChangeEvent, FC, FormEvent, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { ETaskStatus } from "../../types/Enums";
-import { useGetDocumentsByMyGroupQuery } from "../../features/documents/documentsApiSlice";
-import MultiselectUsers from "../MultiselectUsers/MultiselectUsers";
-import { useUpdateTaskByIdMutation } from "../../features/tasks/tasksApiSlice";
-import { ITaskRequestToEdit, ITaskResponse, IUser } from "../../types/Types";
-
 import styles from "./EditTaskModal.module.css";
+
+import { ITaskRequestToEdit, ITaskResponse, IUser } from "../../types/Types";
+import { ETaskStatus } from "../../types/Enums";
+
+import MultiselectUsers from "../MultiselectUsers/MultiselectUsers";
+import { useGetDocumentsByMyGroupQuery } from "../../features/documents/documentsApiSlice";
+import { useUpdateTaskByIdMutation } from "../../features/tasks/tasksApiSlice";
 import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
 
 interface EditTaskModalProps {
@@ -20,10 +21,6 @@ interface EditTaskModalProps {
 const EditTaskModal: FC<EditTaskModalProps> = (props) => {
   const { show, handleUdateTable, onHide, editingTask } = props;
 
-  const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
-  const { data: fetchedUsers } = useGetUsersQuery();
-  const [editTask] = useUpdateTaskByIdMutation();
-
   const [header, setHeader] = useState<string>(editingTask.header);
   const [description, setDescription] = useState(editingTask.description);
   const [status, setStatus] = useState(editingTask.status as ETaskStatus);
@@ -35,11 +32,14 @@ const EditTaskModal: FC<EditTaskModalProps> = (props) => {
     editingTask.users ? editingTask.users.map((item) => (item.email ? item.email : "")) : [""]
   );
 
+  const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
+  const { data: fetchedUsers } = useGetUsersQuery();
+  const [editTask] = useUpdateTaskByIdMutation();
+
   const handleSubmitForm = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const deadlineIso = new Date(deadlineRawFormat ? deadlineRawFormat : "01-01-2024").toISOString();
     const currientDate = new Date().toISOString();
-    console.log(currientDate);
 
     try {
       const dataToEdit: ITaskRequestToEdit = {
@@ -53,11 +53,8 @@ const EditTaskModal: FC<EditTaskModalProps> = (props) => {
         creationDate: currientDate,
       };
 
-      editTask(dataToEdit).then((resp: any) => {
-        console.log(resp);
+      editTask(dataToEdit).then(() => {
         handleUdateTable();
-        console.log("Запрос на редактирование таски: ");
-        console.log(dataToEdit);
         onHide();
       });
     } catch {}

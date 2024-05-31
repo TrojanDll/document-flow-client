@@ -1,6 +1,15 @@
 import { ChangeEvent, FC, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditDocumentModal.module.css";
+
+import MultiselectUsers from "../MultiselectUsers/MultiselectUsers";
+import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
+import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
+
+import { IDocument, IDocumentEdit, IUser } from "./../../types/Types";
+import { EDocumentStatus } from "../../types/Enums";
+
+import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
 import {
   useAddPrivatedUserToDocumentUsersMutation,
   useGetAllDocumentsGroupsQuery,
@@ -8,12 +17,6 @@ import {
   useRemovePrivatedUserToDocumentUsersMutation,
   useUpdateDocumentByIdMutation,
 } from "../../features/documents/documentsApiSlice";
-import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
-import { IDocument, IDocumentEdit, IUser } from "./../../types/Types";
-import { EDocumentStatus } from "../../types/Enums";
-import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
-import MultiselectUsers from "../MultiselectUsers/MultiselectUsers";
-import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
 
 interface EditDocumentModalProps {
   props?: any;
@@ -26,42 +29,29 @@ interface EditDocumentModalProps {
 
 const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   const { show, documentData, onHide, handleUdateTable, isCurrientUserOwner } = props;
-  // const [editUserById] = useEditD();
-  const [editDocument] = useUpdateDocumentByIdMutation();
-  const [addPrivatUser] = useAddPrivatedUserToDocumentUsersMutation();
-  const [removePrivatUser] = useRemovePrivatedUserToDocumentUsersMutation();
-  const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
-  const { data: fetchedDocumentGroups } = useGetAllDocumentsGroupsQuery();
-  const { data: fetchedUsers } = useGetUsersQuery();
 
   const [expirationDate, setExpirationDate] = useState(documentData.expirationDate);
   const [selectedExpirationDate, setSelectedExpirationDate] = useState(
     documentData.expirationDate?.slice(0, documentData.expirationDate.indexOf("T"))
   );
-  // const [currientRelatedDocId, setCurrientRelatedDocId] = useState("");
   const [documentGroupId, setDocumentGroupId] = useState<number>(
     documentData.documentGroup ? documentData.documentGroup.id : NaN
   );
   const [relatedDocIdList, setRelatedDocIdList] = useState<string[]>([]);
   const [parentDocId, setParentDocId] = useState(documentData.parentDocId);
   const [comment, setComment] = useState(documentData.comment);
-  // const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
-  // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
   const [usersGroupsIds, setUsersGroupsIds] = useState<number[]>([]);
   const [status, setStatus] = useState<EDocumentStatus>(documentData.status as EDocumentStatus);
   const [privatUsersIds, setPrivatUsersIds] = useState<number[]>(
     documentData.users ? documentData.users?.map((user) => user.id) : []
   );
 
-  // useEffect(() => {
-  //   if (!isLoading && isSuccess) {
-  //     setNotSelectedUsersGroups(fetchedUsersGroups);
-  //   }
-  // }, [isLoading]);
-
-  // useEffect(() => {
-  //   console.log(notSelectedUsersGroups);
-  // }, [notSelectedUsersGroups]);
+  const [editDocument] = useUpdateDocumentByIdMutation();
+  const [addPrivatUser] = useAddPrivatedUserToDocumentUsersMutation();
+  const [removePrivatUser] = useRemovePrivatedUserToDocumentUsersMutation();
+  const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
+  const { data: fetchedDocumentGroups } = useGetAllDocumentsGroupsQuery();
+  const { data: fetchedUsers } = useGetUsersQuery();
 
   const handleEditDocumentSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -79,7 +69,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         docGroupId: documentGroupId,
       };
 
-      editDocument(dataToRequest).then((udatedDocumentData) => {
+      editDocument(dataToRequest).then(() => {
         if (privatUsersIds) {
           documentData.users?.forEach((user) => {
             removePrivatUser({ userId: user.id, docId: documentData.id });
@@ -91,40 +81,11 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         }
         onHide();
         handleUdateTable();
-        console.log("Ответ от сервера при обновленнии документов: ");
-        console.log(udatedDocumentData);
       });
-      console.log("Запрос на сервер на обновление документов: ");
-      console.log(dataToRequest);
     } catch (err) {
       console.log(err);
     }
   };
-
-  const handleRefuseButton = () => {
-    onHide();
-  };
-
-  // let fetchedUsersGroups;
-  // useEffect(() => {
-  //   console.log(userGroup);
-  // }, [userGroup]);
-
-  // const handleSelectUsersGroup = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   notSelectedUsersGroups.forEach((item) => {
-  //     if (item.id === +e.target.value) {
-  //       selectedUsersGroups.push(item);
-  //     }
-  //   });
-
-  //   setNotSelectedUsersGroups(
-  //     notSelectedUsersGroups.filter((item) => {
-  //       if (item.id !== +e.target.value) {
-  //         return item;
-  //       }
-  //     }),
-  //   );
-  // };
 
   const handleUpdateUsersGroups = (groups: number[]) => {
     setUsersGroupsIds(groups);
@@ -140,7 +101,6 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
 
   const handleDate = (e: ChangeEvent<HTMLInputElement>) => {
     const date = new Date(e.target.value).toISOString();
-    console.log(date);
 
     setSelectedExpirationDate(e.target.value);
     setExpirationDate(date);
@@ -284,7 +244,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleRefuseButton}>{isCurrientUserOwner ? "Отмена" : "Закрыть"} </Button>
+        <Button onClick={onHide}>{isCurrientUserOwner ? "Отмена" : "Закрыть"} </Button>
       </Modal.Footer>
     </Modal>
   );

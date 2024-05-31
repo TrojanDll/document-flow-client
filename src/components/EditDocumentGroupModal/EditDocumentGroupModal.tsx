@@ -1,8 +1,9 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditDocumentGroupModal.module.css";
-import { useUpdateDocumentGroupByIdMutation } from "../../features/documents/documentsApiSlice";
+
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
+import { useUpdateDocumentGroupByIdMutation } from "../../features/documents/documentsApiSlice";
 import { IDocumentGroupResponse } from "../../types/Types";
 
 interface CreateDocumentGroupModalProps {
@@ -16,7 +17,6 @@ interface CreateDocumentGroupModalProps {
 const EditDocumentGroupModal: FC<CreateDocumentGroupModalProps> = (props) => {
   const { show, onHide, currientDocumentGroup, handleUpdateTable } = props;
 
-  // console.log(setGroupFilterItems, setPostFilterItems, setDepartmentFilterItems);
   const [newGroupName, setNewGroupName] = useState<string>(currientDocumentGroup.name);
   const [addingDocIds] = useState<string[]>(currientDocumentGroup.docs.map((doc) => doc.id));
   const [addingUserGroupIds, setAddingUserGroupIds] = useState<number[]>(
@@ -38,15 +38,12 @@ const EditDocumentGroupModal: FC<CreateDocumentGroupModalProps> = (props) => {
     });
   };
 
-  useEffect(() => {}, []);
-
   return (
     <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">Редактирование группы документов</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {/* <h3 className={styles.subtitle}>Создание группы</h3> */}
         <Form onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleUpdateGroup(e)}>
           <div className={styles.addGroupWrapper}>
             <Form.Group className={styles.input}>

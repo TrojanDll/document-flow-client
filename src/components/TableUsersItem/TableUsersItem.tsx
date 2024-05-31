@@ -1,13 +1,16 @@
 import { FC, useEffect, useState } from "react";
 import styles from "./TableUsersItem.module.css";
+
+import { IUser } from "../../types/Types";
+
+import EditUserModal from "../EditUserModal/EditUserModal";
+import DeleteModal from "../DeleteModal/DeleteModal";
+
 import {
   useActivateUserByIdMutation,
   useDeleteUserByIdMutation,
   useDisableUserByIdMutation,
 } from "../../features/admin/adminApiSlice";
-import EditUserModal from "../EditUserModal/EditUserModal";
-import { IUser } from "../../types/Types";
-import DeleteModal from "../DeleteModal/DeleteModal";
 
 export enum TableUsersItemVariants {
   light = "light",
@@ -23,9 +26,7 @@ interface TableUsersItemProps {
 
 const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handleUdateTable }) => {
   const [modalEditUserShow, setModalEditUserShow] = useState(false);
-  // const [isUserChanged, setIsUserChanged] = useState(false);
   const { id, firstName, lastName, patronymic, email, department, post, groupResponseDTOs, role, active } = user;
-  // const [getUserById] = useGetUserByIdMutation();
   const [deleteUserById] = useDeleteUserByIdMutation();
   const [disableUserById] = useDisableUserByIdMutation();
   const [activateUserById] = useActivateUserByIdMutation();
@@ -33,16 +34,8 @@ const TableUsersItem: FC<TableUsersItemProps> = ({ user, variant, number, handle
   const [handleHideDeleteModal, setHandleHideDeleteModal] = useState(false);
   const [handleHideDisableModal, setHandleHideDisableModal] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
-  // console.log(isUserChanged);
 
   let updatedUser: any;
-  // let receivedContent = null;
-
-  // const handleEdit = async (userId: number) => {
-  //   updatedUser = await getUserById({ id: userId });
-  //   setIsUserChanged(true);
-  //   console.log(updatedUser.data);
-  // };
 
   useEffect(() => {
     if (isDelete) {

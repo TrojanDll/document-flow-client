@@ -25,11 +25,6 @@ const documentsToSendSlice = createSlice({
     },
     deleteDocumentToSend: (state, action: PayloadAction<IDeleteDocumentsToSendPayload>) => {
       const { docToSendId } = action.payload;
-      // state.data = state.data.filter((docIdToSend) => {
-      //   if (docIdToSend.id !== docToSendId) {
-      //     return docIdToSend;
-      //   }
-      // });
 
       state.data = state.data.filter((docIdToSend) => docIdToSend.id !== docToSendId && docIdToSend);
     },

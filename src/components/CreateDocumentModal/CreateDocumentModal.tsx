@@ -1,21 +1,24 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
-import styles from "./CreateDocumentModal.module.css";
-import axios, { AxiosResponse } from "axios";
+import { ChangeEvent, FC, useState } from "react";
 import { BASE_URL } from "../../app/api/apiSlice";
+import axios, { AxiosResponse } from "axios";
+
+import styles from "./CreateDocumentModal.module.css";
+import { Button, Form, Modal } from "react-bootstrap";
+
 import {
   useAddPrivatedUserToDocumentUsersMutation,
   useGetAllDocumentsGroupsQuery,
   useRemovePrivatedUserToDocumentUsersMutation,
   useUpdateDocumentByIdMutation,
 } from "../../features/documents/documentsApiSlice";
+
+import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
 import { IDocument, IUser } from "../../types/Types";
-// import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
+import { EDocumentStatus } from "../../types/Enums";
+
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
-import { EDocumentStatus } from "../../types/Enums";
 import MultiselectUsers from "../MultiselectUsers/MultiselectUsers";
-import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
 
 interface CreateDocumentModalProps {
   props?: any;
@@ -23,47 +26,31 @@ interface CreateDocumentModalProps {
   show: boolean;
   handleUdateTable: () => void;
   fetchedDocuments: IDocument[];
-  // documentData: IDocument;
 }
 
 const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
   const { show, onHide, handleUdateTable, fetchedDocuments } = props;
 
-  // const [documentData, setDocumentData] = useState<IDocument>();
   const [file, setFile] = useState<File | null>(null);
+  const [expirationDate, setExpirationDate] = useState("");
+  const [selectedExpirationDate, setSelectedExpirationDate] = useState("");
+  const [relatedDocIdList, setRelatedDocIdList] = useState<string[]>([]);
+  const [parentDocId, setParentDocId] = useState("");
+  const [comment, setComment] = useState("");
+  const [usersGroupsIds, setUsersGroupsIds] = useState<number[]>([]);
+  const [status, setStatus] = useState<EDocumentStatus>(EDocumentStatus.APPROVED);
+  const [documentGroupId, setDocumentGroupId] = useState<number>();
+  const [privatUsersIds, setPrivatUsersIds] = useState<number[]>([]);
+
+  const { data: fetchedDocumentGroups } = useGetAllDocumentsGroupsQuery();
   const [editCreateDocument] = useUpdateDocumentByIdMutation();
   const [addPrivatUser] = useAddPrivatedUserToDocumentUsersMutation();
   const [removePrivatUser] = useRemovePrivatedUserToDocumentUsersMutation();
   const { data: fetchedUsers } = useGetUsersQuery();
 
-  const [expirationDate, setExpirationDate] = useState("");
-  const [selectedExpirationDate, setSelectedExpirationDate] = useState("");
-  // const [currientRelatedDocId, setCurrientRelatedDocId] = useState("");
-  const [relatedDocIdList, setRelatedDocIdList] = useState<string[]>([]);
-  const [parentDocId, setParentDocId] = useState("");
-  const [comment, setComment] = useState("");
-  // const [notSelectedUsersGroups, setNotSelectedUsersGroups] = useState<IUserGroup[]>([]);
-  // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
-  const [usersGroupsIds, setUsersGroupsIds] = useState<number[]>([]);
-  const [status, setStatus] = useState<EDocumentStatus>(EDocumentStatus.APPROVED);
-  const [documentGroupId, setDocumentGroupId] = useState<number>();
-  const [privatUsersIds, setPrivatUsersIds] = useState<number[]>([]);
-  // const { data: currUser } = useGetCurrientUserQuery();
-
-  const { data: fetchedDocumentGroups } = useGetAllDocumentsGroupsQuery();
-
-  useEffect(() => {
-    console.log("Выбран файл: ");
-    console.log(file);
-  }, [file]);
-
   const handleUploadFile = async () => {
     props.onHide();
     if (file) {
-      // uploadDocument(file).then((resp) => {
-      //   console.log(resp);
-      // });
-
       try {
         axios({
           method: "POST",
@@ -107,10 +94,6 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
           }
         }
       }
-
-      // refetch().then(() => {
-      //   console.log(data);
-      // });
     }
   };
 
@@ -126,7 +109,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
           expirationDate: expirationDate,
           comment: comment,
           docGroupId: documentGroupId,
-        }).then((udatedDocumentData) => {
+        }).then(() => {
           if (privatUsersIds) {
             documentData.users?.forEach((user) => {
               removePrivatUser({ userId: user.id, docId: documentData.id });
@@ -138,19 +121,6 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
           }
           onHide();
           handleUdateTable();
-          console.log("Ответ от сервера на обновление документа из CreateDocumentModal: ");
-          console.log(udatedDocumentData);
-        });
-        console.log("Запрос на обновление документа из CreateDocumentModal: ");
-
-        console.log({
-          id: documentData.id,
-          status: status,
-          relatedDocIds: relatedDocIdList,
-          parentDocId: parentDocId,
-          relatedUserGroupIds: usersGroupsIds,
-          expirationDate: expirationDate,
-          comment: comment,
         });
       } catch (err) {
         console.log(err);
@@ -172,7 +142,6 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
 
   const handleDate = (e: ChangeEvent<HTMLInputElement>) => {
     const date = new Date(e.target.value).toISOString();
-    console.log(date);
 
     setSelectedExpirationDate(e.target.value);
     setExpirationDate(date);

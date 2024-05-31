@@ -1,12 +1,15 @@
 import { FC, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./MailModal.module.css";
+
+import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
+
 import { useGetDocumentsByMyGroupQuery } from "../../features/documents/documentsApiSlice";
 import { useSendMessageMutation } from "../../features/email/emailApiSlice";
-import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
-import { useSelector } from "react-redux";
 import { getAllDocumentsToSend } from "../../features/email/documentsToSendSlice";
+
 import { RootState } from "./../../app/store";
+import { useSelector } from "react-redux";
 
 interface MailModalProps {
   props?: any;
@@ -16,7 +19,6 @@ interface MailModalProps {
 
 const MailModal: FC<MailModalProps> = (props) => {
   const { show, onHide } = props;
-  const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
   const [documentsToSend, setDocumentsToSend] = useState<string[]>([""]);
   const [email, setEmail] = useState("");
   const [emailHeader, setEmailHeader] = useState("");
@@ -24,7 +26,7 @@ const MailModal: FC<MailModalProps> = (props) => {
   const [sendMessage] = useSendMessageMutation();
 
   const docs = useSelector((state: RootState) => getAllDocumentsToSend(state));
-  console.log(docs);
+  const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
 
   useEffect(() => {}, [docs]);
 
@@ -36,8 +38,7 @@ const MailModal: FC<MailModalProps> = (props) => {
       docIds: documentsToSend,
       header: emailHeader,
       body: emailText,
-    }).then((resp) => {
-      console.log(resp);
+    }).then(() => {
       setEmail("");
       setEmailHeader("");
       setEmailText("");
@@ -93,20 +94,6 @@ const MailModal: FC<MailModalProps> = (props) => {
           ) : (
             ""
           )}
-
-          {/* <Form.Select
-              required
-              onChange={(e: ChangeEvent<HTMLSelectElement>) => setDocumentToSend(e.target.value)}
-              aria-label="Выберите документы">
-              <option>Выберите документ</option>
-              {fetchedDocuments
-                ? fetchedDocuments.map((document) => (
-                    <option key={document.id} value={document.id}>
-                      {document.fileName}
-                    </option>
-                  ))
-                : ""}
-            </Form.Select> */}
 
           <Button className={styles.submitBtn} type="submit">
             Отправить

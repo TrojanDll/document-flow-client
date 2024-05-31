@@ -16,9 +16,3 @@ export const emailApiSlice = apiSlice.injectEndpoints({
 });
 
 export const { useSendMessageMutation } = emailApiSlice;
-
-// query: (credentials: Ilogin) => ({
-//   url: "/api/auth/login",
-//   method: "POST",
-//   body: { email: credentials.email, password: credentials.password },
-// }),

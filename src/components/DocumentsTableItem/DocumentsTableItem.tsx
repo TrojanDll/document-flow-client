@@ -1,19 +1,24 @@
 import { FC, useEffect, useState } from "react";
 import styles from "./DocumentsTableItem.module.css";
-import { useDeleteDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
-import EditDocumentModal from "../EditDocumentModal/EditDocumentModal";
+
 import { IDocument } from "../../types/Types";
-import DeleteModal from "../DeleteModal/DeleteModal";
 import { EDocumentStatus } from "../../types/Enums";
-import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
+
+import DeleteModal from "../DeleteModal/DeleteModal";
+import EditDocumentModal from "../EditDocumentModal/EditDocumentModal";
 import DocumentHistoryModal from "../DocumentHistoryModal/DocumentHistoryModal";
+
+import { useDeleteDocumentByIdMutation } from "../../features/documents/documentsApiSlice";
+import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addDocumentToSend,
   deleteDocumentToSend,
   getAllDocumentsToSend,
 } from "../../features/email/documentsToSendSlice";
+
 import { RootState } from "../../app/store";
+
 export enum DocumentsTableItemVariants {
   light = "light",
   dark = "dark",
@@ -27,23 +32,18 @@ interface DocumentsTableItemProps {
 }
 
 const DocumentsTableItem: FC<DocumentsTableItemProps> = ({ document, variant, number, handleUdateTable }) => {
-  // const [isUserChanged, setIsUserChanged] = useState(false);
-  // const [fileUrl, setFileUrl] = useState("");
-  const { data: currientUser, isSuccess: isSuccessCurrientUser } = useGetCurrientUserQuery();
-  const [deleteDocumentById] = useDeleteDocumentByIdMutation();
-
   const [modalEditDocumentShow, setModalEditDocumentShow] = useState(false);
   const [modalDocumentHistoryShow, setModalDocumentHistoryShow] = useState(false);
-
-  // const [getUserById] = useGetUserByIdMutation();
   const [handleHideDeleteModal, setHandleHideDeleteModal] = useState(false);
-
   const [isDelete, setIsDelete] = useState(false);
   const [isCurrientUserOwner, setIsCurrientUserOwner] = useState(false);
   const [isAddedToSend, setIsAddedToSend] = useState(false);
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const documentsToSendInState = useSelector((state: RootState) => getAllDocumentsToSend(state));
+
+  const { data: currientUser, isSuccess: isSuccessCurrientUser } = useGetCurrientUserQuery();
+  const [deleteDocumentById] = useDeleteDocumentByIdMutation();
 
   useEffect(() => {
     if (isDelete) {
@@ -70,29 +70,21 @@ const DocumentsTableItem: FC<DocumentsTableItemProps> = ({ document, variant, nu
   }, [documentsToSendInState]);
 
   const handleDeleteDocument = async (docId: string) => {
-    const resp = await deleteDocumentById(docId);
-    console.log("Удаление пользователя");
-    if (resp) {
-      console.log("resp");
-      console.log(resp);
+    deleteDocumentById(docId).then(() => {
       handleUdateTable();
-    }
+    });
   };
 
   const statusComparison = (status: EDocumentStatus | undefined) => {
     switch (status) {
       case EDocumentStatus.APPROVED:
         return "Подтвержден";
-        break;
       case EDocumentStatus.DECLINED:
         return "Отклонен";
-        break;
       case EDocumentStatus.INPROGRESS:
         return "В работе";
-        break;
       case EDocumentStatus.SEEN:
         return "Просмотрен";
-        break;
     }
   };
 

@@ -1,9 +1,11 @@
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./DocumentsFilterModal.module.css";
+
 import { IDocument, IUserGroup } from "../../types/Types";
-import { IDocumentFilters } from "../../pages/DocumentsPage/DocumentsPage";
 import { EDocumentStatus } from "../../types/Enums";
+
+import { IDocumentFilters } from "../../pages/DocumentsPage/DocumentsPage";
 import { useGetCurrientUserQuery } from "../../features/users/usersApiSlice";
 import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 
@@ -41,10 +43,6 @@ const DocumentsFilterModal: FC<DocumentsFilterModalProps> = (props) => {
     }
   }, [isLoading]);
 
-  useEffect(() => {
-    console.log(creationDateFilter);
-  }, [creationDateFilter]);
-
   const applyFilters = () => {
     handleUpdateFilters({
       parentDocIdFilter,
@@ -53,7 +51,6 @@ const DocumentsFilterModal: FC<DocumentsFilterModalProps> = (props) => {
       creationDateFilter,
     });
     onHide();
-    console.log("applyFilters");
   };
 
   const resetFilters = () => {

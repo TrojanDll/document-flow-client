@@ -1,6 +1,7 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./CreateGroupModal.module.css";
+
 import {
   useCreateUsersGroupMutation,
   useDeleteUsersGroupByIdMutation,
@@ -14,11 +15,9 @@ interface CreateGroupModalProps {
 }
 
 const CreateGroupModal: FC<CreateGroupModalProps> = (props) => {
-  // console.log(setGroupFilterItems, setPostFilterItems, setDepartmentFilterItems);
   const [newGroupName, setNewGroupName] = useState("");
   const [createUsersGroup] = useCreateUsersGroupMutation();
   const [deleteUsersGroupById] = useDeleteUsersGroupByIdMutation();
-  // const [userGroup, setUserGroup] = useState(0);
   const [userGroupToDelete, setUserGroupToDelete] = useState(0);
 
   const { data: allUsersGroups, refetch: getAllUsersGroups } = useGetAllUsersGroupsQuery();
@@ -33,13 +32,10 @@ const CreateGroupModal: FC<CreateGroupModalProps> = (props) => {
 
   const handleDeleteGroup = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(userGroupToDelete);
     deleteUsersGroupById(userGroupToDelete).then(() => {
       getAllUsersGroups();
     });
   };
-
-  useEffect(() => {}, []);
 
   const { show, onHide } = props;
   return (

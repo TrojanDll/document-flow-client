@@ -20,21 +20,11 @@ interface TableUsersItemProps {
 const TableDocumentsGroupsItem: FC<TableUsersItemProps> = ({ documentsGroup, variant, number, handleUpdateTable }) => {
   const { id, name, docs, userGroups } = documentsGroup;
 
-  // const [getDocumentInfoById, { isLoading: isGetDocumentByIdLoading, isSuccess: isGetDocumentByIdSuccess }] =
-  //   useGetDocumentInfoByIdMutation();
   const [deleteDocumentGroupById] = useDeleteDocumentGroupByIdMutation();
 
-  // const [visibleDocumentsNames, setVisibleDocumentsNames] = useState<string[]>([]);
-  // const [visibleUsersGroupsNames, setVisibleUsersGroupsNames] = useState<string[]>([]);
   const [modalEditDocumentGroupShow, setModalEditDocumentGroupShow] = useState(false);
   const [handleHideDeleteModal, setHandleHideDeleteModal] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
-
-  // const countOfFirstVisibleDocuments = 5;
-
-  useEffect(() => {
-    // Есть проблема - стейт записывается до того как пройдут все запросы. Надо сделать Promise при запросее документов, и только потом записывать их в стейт
-  }, []);
 
   useEffect(() => {
     if (isDelete) {
@@ -43,13 +33,9 @@ const TableDocumentsGroupsItem: FC<TableUsersItemProps> = ({ documentsGroup, var
   }, [isDelete]);
 
   const handleDeleteDocumentGroupById = async (docGroupId: number) => {
-    const resp = await deleteDocumentGroupById(docGroupId);
-    console.log("Удаление пользователя");
-    if (resp) {
-      console.log("resp");
-      console.log(resp);
+    deleteDocumentGroupById(docGroupId).then(() => {
       handleUpdateTable();
-    }
+    });
   };
 
   const editSvg = (
@@ -80,21 +66,6 @@ const TableDocumentsGroupsItem: FC<TableUsersItemProps> = ({ documentsGroup, var
           </div>
         ))}
       </td>
-      {/* <td>
-        {visibleDocumentsNames.map((documentName) => (
-          <div key={documentName} className={styles.documentName}>
-            {documentName}
-          </div>
-        ))}
-
-        {documentIds.length > countOfFirstVisibleDocuments ? (
-          <Button variant="link" onClick={getMoreDocuments}>
-            Показать больше...
-          </Button>
-        ) : (
-          ""
-        )}
-      </td> */}
       <td>{docs.length}</td>
       <td>
         <div className={styles.editButtonWrapper}>

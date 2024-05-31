@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./CreateUserModal.module.css";
+
 import { useRegisterMutation } from "../../features/auth/authApiSlice";
 
 interface CreateUserModalProps {
@@ -11,10 +12,7 @@ interface CreateUserModalProps {
 }
 
 const CreateUserModal: FC<CreateUserModalProps> = (props) => {
-  // const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
-
   const { show } = props;
-  const [register] = useRegisterMutation();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [patronymic, setPatronymic] = useState("");
@@ -22,13 +20,14 @@ const CreateUserModal: FC<CreateUserModalProps> = (props) => {
   const [post, setPost] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [userGroupIds, setUserGroupIds] = useState<number[]>([]);
+
+  const [register] = useRegisterMutation();
 
   const handleRegistrationSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const userData = await register({
+      register({
         firstName,
         lastName,
         patronymic,
@@ -36,10 +35,10 @@ const CreateUserModal: FC<CreateUserModalProps> = (props) => {
         post,
         email,
         password,
+      }).then(() => {
+        props.onHide();
+        props.handleUdateTable();
       });
-      props.onHide();
-      props.handleUdateTable();
-      console.log(userData);
     } catch (err) {
       console.log(err);
     }
@@ -55,10 +54,6 @@ const CreateUserModal: FC<CreateUserModalProps> = (props) => {
     setEmail("");
     setPassword("");
   };
-
-  // const handleUpdateUsersGroups = (groupIds: number[]) => {
-  //   setUserGroupIds(groupIds);
-  // };
 
   return (
     <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
@@ -125,8 +120,6 @@ const CreateUserModal: FC<CreateUserModalProps> = (props) => {
               />
             </Form.Group>
           </div>
-
-          {/* {fetchedUsersGroups ? <MultiselectGroup handleUpdateUsersGroups={handleUpdateUsersGroups} /> : ""} */}
 
           <div className={styles.inputsRow}>
             <Form.Group className={styles.input} controlId="email">

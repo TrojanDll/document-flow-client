@@ -1,6 +1,7 @@
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./FilterModal.module.css";
+
 import { IUser, IUserGroup } from "../../types/Types";
 import { useGetAllUsersGroupsQuery } from "../../features/admin/adminApiSlice";
 import { IUsersFilters } from "../../pages/AdminPage/AdminPage";
@@ -16,15 +17,14 @@ interface FilterModalProps {
 const FilterModal: FC<FilterModalProps> = (props) => {
   const { show, users, handleUpdateFilters, onHide } = props;
 
-  const { data: fetchedGroups, isLoading: isGroupsLoading, isSuccess: isGroupsSuccess } = useGetAllUsersGroupsQuery();
-
   const [groupFilterItems, setGroupFilterItems] = useState<IUserGroup[]>([]);
   const postFilterItems = users ? users.map((user) => (user.post ? user.post : "")) : [""];
   const departmentFilterItems = users ? users.map((user) => (user.department ? user.department : "")) : [""];
-
   const [groupFilter, setGroupFilter] = useState("");
   const [postFilter, setPostFilter] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("");
+
+  const { data: fetchedGroups, isLoading: isGroupsLoading, isSuccess: isGroupsSuccess } = useGetAllUsersGroupsQuery();
 
   useEffect(() => {
     if (!isGroupsLoading && isGroupsSuccess) {
@@ -39,7 +39,6 @@ const FilterModal: FC<FilterModalProps> = (props) => {
       departmentFilter,
     });
     onHide();
-    console.log("applyFilters");
   };
 
   const resetFilters = () => {

@@ -1,9 +1,10 @@
 import { FC, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditUserModal.module.css";
-import { useUpdateUserByIdMutation } from "../../features/admin/adminApiSlice";
+
 import { IUser } from "../../types/Types";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
+import { useUpdateUserByIdMutation } from "../../features/admin/adminApiSlice";
 
 interface EditUserModalProps {
   props?: any;
@@ -15,8 +16,7 @@ interface EditUserModalProps {
 
 const EditUserModal: FC<EditUserModalProps> = (props) => {
   const { show, userData, onHide, handleUdateTable } = props;
-  const [editUserById] = useUpdateUserByIdMutation();
-  // const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
+
   const [firstName, setFirstName] = useState(userData.firstName);
   const [lastName, setLastName] = useState(userData.lastName);
   const [patronymic, setPatronymic] = useState(userData.patronymic);
@@ -25,6 +25,8 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
   const [email, setEmail] = useState(userData.email);
   const [password, setPassword] = useState(userData.password);
   const [userGroupIds, setUserGroupIds] = useState(userData.groupResponseDTOs?.map((item) => item.id));
+
+  const [editUserById] = useUpdateUserByIdMutation();
 
   const handleEditUserSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,11 +47,9 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
         requestData.password = password;
       }
 
-      editUserById(requestData).then((udatedUserData) => {
-        console.log(requestData);
+      editUserById(requestData).then(() => {
         onHide();
         handleUdateTable();
-        console.log(udatedUserData);
       });
     } catch (err) {
       console.log(err);
@@ -67,8 +67,6 @@ const EditUserModal: FC<EditUserModalProps> = (props) => {
   };
 
   const handleUpdateUsersGroups = (groupIds: number[]) => {
-    console.log("groupIds");
-    console.log(groupIds);
     setUserGroupIds(groupIds);
   };
   return (
