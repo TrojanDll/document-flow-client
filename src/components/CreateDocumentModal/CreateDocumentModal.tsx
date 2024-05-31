@@ -4,14 +4,18 @@ import styles from "./CreateDocumentModal.module.css";
 import axios, { AxiosResponse } from "axios";
 import { BASE_URL } from "../../app/api/apiSlice";
 import {
+  useAddPrivatedUserToDocumentUsersMutation,
   useGetAllDocumentsGroupsQuery,
+  useRemovePrivatedUserToDocumentUsersMutation,
   useUpdateDocumentByIdMutation,
 } from "../../features/documents/documentsApiSlice";
-import { IDocument } from "../../types/Types";
+import { IDocument, IUser } from "../../types/Types";
 // import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
 import { EDocumentStatus } from "../../types/Enums";
+import MultiselectUsers from "../MultiselectUsers/MultiselectUsers";
+import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
 
 interface CreateDocumentModalProps {
   props?: any;
@@ -24,27 +28,13 @@ interface CreateDocumentModalProps {
 
 const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
   const { show, onHide, handleUdateTable, fetchedDocuments } = props;
-  // Понять как получить текущий документ
 
   // const [documentData, setDocumentData] = useState<IDocument>();
   const [file, setFile] = useState<File | null>(null);
   const [editCreateDocument] = useUpdateDocumentByIdMutation();
-  // const { data: fetchedUsersGroups } = useGetAllUsersGroupsQuery();
-
-  // console.log(fetchedUsersGroups);
-  // const fetchedUsersGroups: IUserGroup[] = [
-  //   {
-  //     id: 1,
-  //     name: "sdv",
-  //     members: [
-  //       {
-  //         id: 1,
-  //       },
-  //     ],
-  //   },
-  // ];
-
-  // const { data: fetchedUsersGroups, isLoading, isSuccess } = useGetAllUsersGroupsQuery();
+  const [addPrivatUser] = useAddPrivatedUserToDocumentUsersMutation();
+  const [removePrivatUser] = useRemovePrivatedUserToDocumentUsersMutation();
+  const { data: fetchedUsers } = useGetUsersQuery();
 
   const [expirationDate, setExpirationDate] = useState("");
   const [selectedExpirationDate, setSelectedExpirationDate] = useState("");
@@ -57,6 +47,7 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
   const [usersGroupsIds, setUsersGroupsIds] = useState<number[]>([]);
   const [status, setStatus] = useState<EDocumentStatus>(EDocumentStatus.APPROVED);
   const [documentGroupId, setDocumentGroupId] = useState<number>();
+  const [privatUsersIds, setPrivatUsersIds] = useState<number[]>([]);
   // const { data: currUser } = useGetCurrientUserQuery();
 
   const { data: fetchedDocumentGroups } = useGetAllDocumentsGroupsQuery();
@@ -136,6 +127,15 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
           comment: comment,
           docGroupId: documentGroupId,
         }).then((udatedDocumentData) => {
+          if (privatUsersIds) {
+            documentData.users?.forEach((user) => {
+              removePrivatUser({ userId: user.id, docId: documentData.id });
+            });
+
+            privatUsersIds.forEach((privatUsersId) => {
+              addPrivatUser({ userId: privatUsersId, docId: documentData.id });
+            });
+          }
           onHide();
           handleUdateTable();
           console.log("Ответ от сервера на обновление документа из CreateDocumentModal: ");
@@ -164,6 +164,10 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
 
   const handleUpdateDocuments = (documents: string[]) => {
     setRelatedDocIdList(documents);
+  };
+
+  const handleUpdateUsers = (handledUsers: IUser[]) => {
+    setPrivatUsersIds(handledUsers.map((handledUser) => handledUser.id));
   };
 
   const handleDate = (e: ChangeEvent<HTMLInputElement>) => {
@@ -213,6 +217,18 @@ const CreateDocumentModal: FC<CreateDocumentModalProps> = (props) => {
         <Form>
           <div className={styles.inputsRow}>
             <MultiselectGroup handleUpdateUsersGroups={handleUpdateUsersGroups} />
+          </div>
+
+          <div className={styles.inputsRow}>
+            {fetchedUsers ? (
+              <MultiselectUsers
+                title="Индивидуальный доступ:"
+                users={fetchedUsers}
+                handleUpdateUsers={handleUpdateUsers}
+              />
+            ) : (
+              ""
+            )}
           </div>
 
           <div className={styles.inputsRow}>

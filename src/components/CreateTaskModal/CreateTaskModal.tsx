@@ -5,8 +5,7 @@ import { useGetDocumentsByMyGroupQuery } from "../../features/documents/document
 import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
 import MultiselectUsers from "../MultiselectUsers/MultiselectUsers";
 import { useCreateTaskMutation } from "../../features/tasks/tasksApiSlice";
-import { useGetCurrientGroupMembersQuery } from "../../features/users/usersApiSlice";
-import { ITaskRequest } from "../../types/Types";
+import { ITaskRequest, IUser } from "../../types/Types";
 
 interface CreateTaskModalProps {
   props?: any;
@@ -20,7 +19,6 @@ const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
 
   const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
   const { data: fetchedUsers } = useGetUsersQuery();
-  const { data: currientGroupMembers } = useGetCurrientGroupMembersQuery();
   const [createTask] = useCreateTaskMutation();
 
   const [header, setHeader] = useState<string>("");
@@ -65,8 +63,8 @@ const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
     setUserEmails([]);
   };
 
-  const handleUpdateUsers = (userEmails: string[]) => {
-    setUserEmails(userEmails);
+  const handleUpdateUsers = (handledUsers: IUser[]) => {
+    setUserEmails(handledUsers.map((user) => (user.email ? user.email : "")));
   };
 
   return (
@@ -125,9 +123,11 @@ const CreateTaskModal: FC<CreateTaskModalProps> = (props) => {
           </Form.Group>
 
           {fetchedUsers ? (
-            <MultiselectUsers handleUpdateUsers={handleUpdateUsers} users={fetchedUsers} />
-          ) : currientGroupMembers ? (
-            <MultiselectUsers handleUpdateUsers={handleUpdateUsers} users={currientGroupMembers} />
+            <MultiselectUsers
+              title="Назначить задачу пользователям:"
+              handleUpdateUsers={handleUpdateUsers}
+              users={fetchedUsers}
+            />
           ) : (
             ""
           )}

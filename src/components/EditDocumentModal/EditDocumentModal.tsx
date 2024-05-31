@@ -2,14 +2,18 @@ import { ChangeEvent, FC, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import styles from "./EditDocumentModal.module.css";
 import {
+  useAddPrivatedUserToDocumentUsersMutation,
   useGetAllDocumentsGroupsQuery,
   useGetDocumentsByMyGroupQuery,
+  useRemovePrivatedUserToDocumentUsersMutation,
   useUpdateDocumentByIdMutation,
 } from "../../features/documents/documentsApiSlice";
 import MultiselectRelatedDocs from "../MultiselectRelatedDocs/MultiselectRelatedDocs";
-import { IDocument } from "./../../types/Types";
+import { IDocument, IDocumentEdit, IUser } from "./../../types/Types";
 import { EDocumentStatus } from "../../types/Enums";
 import MultiselectGroup from "../MultiselectGroup/MultiselectGroup";
+import MultiselectUsers from "../MultiselectUsers/MultiselectUsers";
+import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
 
 interface EditDocumentModalProps {
   props?: any;
@@ -24,21 +28,11 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   const { show, documentData, onHide, handleUdateTable, isCurrientUserOwner } = props;
   // const [editUserById] = useEditD();
   const [editDocument] = useUpdateDocumentByIdMutation();
+  const [addPrivatUser] = useAddPrivatedUserToDocumentUsersMutation();
+  const [removePrivatUser] = useRemovePrivatedUserToDocumentUsersMutation();
   const { data: fetchedDocuments } = useGetDocumentsByMyGroupQuery();
   const { data: fetchedDocumentGroups } = useGetAllDocumentsGroupsQuery();
-  // const fetchedUsersGroups: IUserGroup[] = [
-  //   {
-  //     id: 1,
-  //     name: "sdv",
-  //     members: [
-  //       {
-  //         id: 1,
-  //       },
-  //     ],
-  //   },
-  // ];
-
-  // const { data: fetchedUsersGroups, isLoading, isSuccess } = useGetAllUsersGroupsQuery();
+  const { data: fetchedUsers } = useGetUsersQuery();
 
   const [expirationDate, setExpirationDate] = useState(documentData.expirationDate);
   const [selectedExpirationDate, setSelectedExpirationDate] = useState(
@@ -55,6 +49,9 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
   // const [selectedUsersGroupsIds, setSelectedUsersGroups] = useState<IUserGroup[]>([]);
   const [usersGroupsIds, setUsersGroupsIds] = useState<number[]>([]);
   const [status, setStatus] = useState<EDocumentStatus>(documentData.status as EDocumentStatus);
+  const [privatUsersIds, setPrivatUsersIds] = useState<number[]>(
+    documentData.users ? documentData.users?.map((user) => user.id) : []
+  );
 
   // useEffect(() => {
   //   if (!isLoading && isSuccess) {
@@ -71,7 +68,7 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
 
     try {
       const stringifiedUsersGroupsIds = await usersGroupsIds.map((item) => item.toString());
-      editDocument({
+      const dataToRequest: IDocumentEdit = {
         id: documentData.id,
         status: status ? status : EDocumentStatus.APPROVED,
         relatedDocIds: relatedDocIdList,
@@ -80,23 +77,25 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
         expirationDate: expirationDate,
         comment: comment,
         docGroupId: documentGroupId,
-      }).then((udatedDocumentData) => {
+      };
+
+      editDocument(dataToRequest).then((udatedDocumentData) => {
+        if (privatUsersIds) {
+          documentData.users?.forEach((user) => {
+            removePrivatUser({ userId: user.id, docId: documentData.id });
+          });
+
+          privatUsersIds.forEach((privatUsersId) => {
+            addPrivatUser({ userId: privatUsersId, docId: documentData.id });
+          });
+        }
         onHide();
         handleUdateTable();
         console.log("Ответ от сервера при обновленнии документов: ");
         console.log(udatedDocumentData);
       });
-      console.log("Запрос на сервер на обновоение документов: ");
-      console.log({
-        id: documentData.id,
-        status: status,
-        relatedDocIds: relatedDocIdList,
-        parentDocId: parentDocId,
-        relatedUserGroupIds: stringifiedUsersGroupsIds,
-        expirationDate: expirationDate,
-        comment: comment,
-        docGroupId: documentGroupId,
-      });
+      console.log("Запрос на сервер на обновление документов: ");
+      console.log(dataToRequest);
     } catch (err) {
       console.log(err);
     }
@@ -133,6 +132,10 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
 
   const handleUpdateDocuments = (documents: string[]) => {
     setRelatedDocIdList(documents);
+  };
+
+  const handleUpdateUsers = (handledUsers: IUser[]) => {
+    setPrivatUsersIds(handledUsers.map((handledUser) => handledUser.id));
   };
 
   const handleDate = (e: ChangeEvent<HTMLInputElement>) => {
@@ -179,6 +182,20 @@ const EditDocumentModal: FC<EditDocumentModalProps> = (props) => {
               handleUpdateUsersGroups={handleUpdateUsersGroups}
               preselectedGroups={documentData.documentGroup?.userGroups}
             />
+          </div>
+
+          <div className={styles.inputsRow}>
+            {fetchedUsers ? (
+              <MultiselectUsers
+                title="Индивидуальный доступ:"
+                isDisabled={!isCurrientUserOwner}
+                users={fetchedUsers}
+                handleUpdateUsers={handleUpdateUsers}
+                preselectedUsers={documentData.users}
+              />
+            ) : (
+              ""
+            )}
           </div>
 
           <div className={styles.inputsRow}>

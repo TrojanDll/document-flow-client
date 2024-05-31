@@ -4,7 +4,7 @@ import { ETaskStatus } from "../../types/Enums";
 import { useGetDocumentsByMyGroupQuery } from "../../features/documents/documentsApiSlice";
 import MultiselectUsers from "../MultiselectUsers/MultiselectUsers";
 import { useUpdateTaskByIdMutation } from "../../features/tasks/tasksApiSlice";
-import { ITaskRequestToEdit, ITaskResponse } from "../../types/Types";
+import { ITaskRequestToEdit, ITaskResponse, IUser } from "../../types/Types";
 
 import styles from "./EditTaskModal.module.css";
 import { useGetUsersQuery } from "../../features/admin/adminApiSlice";
@@ -73,14 +73,14 @@ const EditTaskModal: FC<EditTaskModalProps> = (props) => {
     setUserEmails([]);
   };
 
-  const handleUpdateUsers = (userEmails: string[]) => {
-    setUserEmails(userEmails);
+  const handleUpdateUsers = (handledUsers: IUser[]) => {
+    setUserEmails(handledUsers.map((user) => (user.email ? user.email : "")));
   };
 
   return (
     <Modal {...props} show={show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">Редкатирование задачи</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">Редактирование задачи</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={(e: FormEvent<HTMLFormElement>) => handleSubmitForm(e)}>
@@ -150,6 +150,7 @@ const EditTaskModal: FC<EditTaskModalProps> = (props) => {
 
           {fetchedUsers ? (
             <MultiselectUsers
+              title="Назначить задачу пользователям:"
               fetchedUsersList={editingTask.users}
               handleUpdateUsers={handleUpdateUsers}
               users={fetchedUsers}

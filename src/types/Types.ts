@@ -43,6 +43,7 @@ export interface IDocument {
   comment?: string;
   size?: number;
   documentGroup?: IDocumentGroupResponse;
+  users?: IUser[];
 }
 
 export interface IDocumentEdit {
@@ -117,4 +118,9 @@ export interface IDocumentGroupResponse {
   name: string;
   docs: IDocument[];
   userGroups: IUserGroup[];
+}
+
+export interface IAddPrivatedUserRequest {
+  userId: number;
+  docId: string;
 }

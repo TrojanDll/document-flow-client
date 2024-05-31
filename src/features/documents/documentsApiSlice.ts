@@ -1,5 +1,6 @@
 import { apiSlice } from "../../app/api/apiSlice";
 import {
+  IAddPrivatedUserRequest,
   IDocument,
   IDocumentChangeRequest,
   IDocumentChangeResponse,
@@ -127,6 +128,18 @@ export const documentApiSlice = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    addPrivatedUserToDocumentUsers: builder.mutation<void, IAddPrivatedUserRequest>({
+      query: (dataToAdd: IAddPrivatedUserRequest) => ({
+        url: `/api/users/docs/add-user/${dataToAdd.userId}/${dataToAdd.docId}`,
+        method: "PUT",
+      }),
+    }),
+    removePrivatedUserToDocumentUsers: builder.mutation<void, IAddPrivatedUserRequest>({
+      query: (dataToAdd: IAddPrivatedUserRequest) => ({
+        url: `/api/users/docs/remove-user/${dataToAdd.userId}/${dataToAdd.docId}`,
+        method: "PUT",
+      }),
+    }),
   }),
 });
 
@@ -144,6 +157,8 @@ export const {
   useCreateDocumentGroupMutation,
   useUpdateDocumentGroupByIdMutation,
   useDeleteDocumentGroupByIdMutation,
+  useAddPrivatedUserToDocumentUsersMutation,
+  useRemovePrivatedUserToDocumentUsersMutation,
 } = documentApiSlice;
 
 // query: (credentials: Ilogin) => ({
