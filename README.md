@@ -53,9 +53,9 @@ ___
 ___
 
 ### Running the Project Locally
-  * git clone https://github.com/TrojanDll/document-flow-client.git 
-  * npm install
-  * npm run dev
+  * `git clone https://github.com/TrojanDll/document-flow-client.git` 
+  * `npm install`
+  * `npm run dev`
 
 <br>
 <br>
