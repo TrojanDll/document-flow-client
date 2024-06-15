@@ -1,6 +1,10 @@
 # Приложение документооборота
 
 ### Приложение доступно по адресу - http://217.18.61.214/
+Логин - admin@admin.ru <br>
+Пароль - admin
+
+Для остальных пользователей пароль - 123
 
 В данном репозитории представлена <img height="16" width="16" src="https://cdn.simpleicons.org/htmx/#3366CC" /> frontend <img height="16" width="16" src="https://cdn.simpleicons.org/htmx/#3366CC" /> часть приложения. Backend выполнил [glebushnik](https://github.com/glebushnik). Проект лежит в репозитории https://github.com/glebushnik/documentApp.
 

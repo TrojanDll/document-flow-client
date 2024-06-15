@@ -13,7 +13,7 @@ import { lazy } from "react";
 const Loginpage = lazy(() => import("./pages/LoginPage/LoginPage"));
 const Adminpage = lazy(() => import("./pages/AdminPage/AdminPage"));
 const Documentspage = lazy(() => import("./pages/DocumentsPage/DocumentsPage"));
-const Profilepage = lazy(() => import("./pages/AdminPage/AdminPage"));
+const Profilepage = lazy(() => import("./pages/ProfilePage/ProfilePage"));
 const Taskspage = lazy(() => import("./pages/TasksPage/TasksPage"));
 const Userspage = lazy(() => import("./pages/UsersPage/UsersPage"));
 
