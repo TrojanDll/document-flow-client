@@ -1,30 +1,39 @@
-# React + TypeScript + Vite
+# Frontend часть fullstack приложения документооборота
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Приложение доступно по адресу - http://217.18.61.214/
 
-Currently, two official plugins are available:
+Данное приложение выполнено по заказу на фриланс бирже совместно с Java backend-разработчиком - https://github.com/glebushnik <br>
+Его backend часть можно просмотреть в репозитории - https://github.com/glebushnik/documentApp
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Приложение представляет собой платформу для обмена документами, организации сотрудников.
 
-## Expanding the ESLint configuration
+### Основные функции приложения
+Администрирование:
+  * Добавление нового пользователя и его редактирование через административную панель
+  * Фильтрация пользователей
+  * Блокировка / полное удаление пользователя
+  * Создание и редактирование групп пользователей
+  * Создание и редактирование групп документов
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Профиль: 
+  * Просмотр личной информации
 
-- Configure the top-level `parserOptions` property like this:
+Пользователи:
+  * Просмотр всех незабаненых пользователей
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+Документы:
+  * Отображение доступных документов (о принципах отображения будет описано далее)
+  * Создание и редактирование документов (редактировать документ может только владелец или администратор)
+  * Скачивание документа
+  * Добавлиение комментариев
+  * Фильтрация документов
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Задачи:
+  * Создание и редактирование задач
+  * Пометка задач различными статусами (выполнено, в работе ...)
+
+Отправка:
+  * Отправка выбранных документов из приложения на указанную почту
+
+#### Схема разделения доступа к документам
+![image.png](attachment:image.png)
