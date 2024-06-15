@@ -2,12 +2,12 @@ import { Route, Routes } from "react-router-dom";
 // import DocumentsPage from "./pages/DocumentsPage/DocumentsPage";
 // import LoginPage from "./pages/LoginPage/LoginPage";
 // import AdminPage from "./pages/AdminPage/AdminPage";
+// import TasksPage from "./pages/TasksPage/TasksPage";
+// import ProfilePage from "./pages/ProfilePage/ProfilePage";
+// import UsersPage from "./pages/UsersPage/UsersPage";
 import Layout from "./features/Layout";
 import RequireAuth from "./features/RequireAuth";
-// import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import AdminRoleRequired from "./features/AdminRoleRequired";
-// import TasksPage from "./pages/TasksPage/TasksPage";
-// import UsersPage from "./pages/UsersPage/UsersPage";
 import { lazy } from "react";
 
 const Loginpage = lazy(() => import("./pages/LoginPage/LoginPage"));
