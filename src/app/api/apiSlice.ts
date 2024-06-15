@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setCredentials } from "../../features/auth/authSlice";
 import axios from "axios";
 
-export const BASE_URL = "http://77.232.139.59:8080";
+export const BASE_URL = "http://87.249.53.115:8080";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,

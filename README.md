@@ -1,13 +1,12 @@
-# Frontend часть fullstack приложения документооборота
+# Приложение документооборота
 
 ### Приложение доступно по адресу - http://217.18.61.214/
 
-Данное приложение выполнено по заказу на фриланс бирже совместно с Java backend-разработчиком - https://github.com/glebushnik <br>
-Его backend часть можно просмотреть в репозитории - https://github.com/glebushnik/documentApp
+В данном репозитории представлена <img height="16" width="16" src="https://cdn.simpleicons.org/htmx/#3366CC" /> frontend <img height="16" width="16" src="https://cdn.simpleicons.org/htmx/#3366CC" /> часть приложения. Backend выполнил [glebushnik](https://github.com/glebushnik). Проект лежит в репозитории https://github.com/glebushnik/documentApp.
 
 Приложение представляет собой платформу для обмена документами, организации сотрудников.
 
-### Основные функции приложения
+## Основные функции приложения
 Администрирование:
   * Добавление нового пользователя и его редактирование через административную панель
   * Фильтрация пользователей
@@ -36,4 +35,14 @@
   * Отправка выбранных документов из приложения на указанную почту
 
 #### Схема разделения доступа к документам
-![image.png](attachment:image.png)
+![схема доступа к документам](https://github.com/TrojanDll/document-flow-client/assets/60787064/313d7c65-49e2-41f8-9b81-21ca181b421b)
+
+___
+
+### Стек технологий на frontend:
+  * TypeScript <img height="16" width="16" src="https://cdn.simpleicons.org/typescript/#3178C6" />
+  * React <img height="16" width="16" src="https://cdn.simpleicons.org/react/#61DAFB" />
+  * Redux Toolkit, RTK Query <img height="16" width="16" src="https://cdn.simpleicons.org/redux/#764ABC" />
+  * Bootstrap <img height="16" width="16" src="https://cdn.simpleicons.org/bootstrap/#7952B3" />
+  * Vite <img height="16" width="16" src="https://cdn.simpleicons.org/vite/#646CFF" />
+
